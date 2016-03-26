@@ -8,10 +8,15 @@
   http://www.springframework.org/schema/context/spring-context-4.0.xsd  
   http://www.springframework.org/schema/mvc  
   http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+  <!-- 引入属性文件 -->
+  <context:property-placeholder location="classpath:config.properties" />
   <!-- 注解扫描包 -->
   <context:component-scan base-package="pku.yang.controller" />
   <!-- 开启mvc注解 -->
   <mvc:annotation-driven />
+  <bean name="uploadController" class="pku.yang.controller.UploadController">
+  	<property name="filePath" value="F:/upload/"/>
+  </bean>
   
   <!-- 静态资源映射 -->
   <mvc:resources location="/resources/image/" mapping="/image/**"/> 

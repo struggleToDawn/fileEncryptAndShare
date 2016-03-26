@@ -12,8 +12,8 @@
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="${ctx }/user"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li>用户属性管理</li>
+				<li><a href="${ctx }"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li><a href="${ctx }/user">用户属性管理</a></li>
 				<li class="active">添加用户</li>
 			</ol>
 		</div><!--/.row-->

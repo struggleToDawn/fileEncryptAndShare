@@ -9,7 +9,7 @@ public interface IUserDao {
 	
 	User getByID(String id);
 	void save(User user);
-	void deleteUser(String pID);
+	void deleteUser(String userID);
 	void saveStudent(Student student);
 	void saveTeacher(Teacher teacher);
 	void deletestudent(String id);

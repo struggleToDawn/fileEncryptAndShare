@@ -12,8 +12,8 @@
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="${ctx }/user"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">用户属性管理</li>
+				<li><a href="${ctx }"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li class="active"><a href="${ctx }/user">用户属性管理</a></li>
 			</ol>
 		</div><!--/.row-->
 		
@@ -36,7 +36,7 @@
 							<input type="hidden" id ="pagesize" name="pagesize" value="${pagesize }">
 							<div class = "form-group col-lg-4">
 								<label>用户类型</label>
-								<select class="form-control" name ="type" id="type">
+								<select class="form-control" name ="type" id="type" >
 									<option value="">全部</option>
 									<option value="0">学生</option>
 									<option value="1">教师</option>
@@ -65,10 +65,11 @@
 						        <th width="200px">操作</th>
 						    </tr>
 						    </thead>
+						    
 						    <c:if test="${not empty userList }">
 						    <tbody>
 						    <c:forEach items="${userList }" var="user">
-						    <tr>
+						    <tr id ="item_${user.userID }">
 						    	<td>${user.userID }</td>
 						    	<td>${user.username }</td>
 						    	<td><c:if test="${user.type == '0' }">
@@ -81,7 +82,7 @@
 						    	<td >
 							    	<button class="btn btn-default" onclick="window.location.href='${ctx}/user/info/${user.userID}/${user.type}'">查看</button>&nbsp;&nbsp;&nbsp;
 							    	<button class="btn btn-primary" onclick="window.location.href='${ctx}/user/edit/${user.userID}/${user.type}'">修改</button>&nbsp;&nbsp;&nbsp;
-							    	<button class="btn btn-danger"  onclick="window.location.href='${ctx}/user/delete?id=${user.userID}'">删除</button>
+							    	<button class="btn btn-danger"  onclick="javascript:deleteusr('${user.userID}','${user.type}')">删除</button>
 						    	</td>
 						    </tr>
 						    </c:forEach>
@@ -98,4 +99,13 @@
 </html>
 <script>
 	$("#type").val("${type}");
+	function deleteusr(userID,type){
+		$.ajax({
+			url:"${ctx}/user/delete/"+userID+"/"+type,
+			type:"GET",
+			success:function(){
+				$("#item_"+userID).css("display","none");
+			}
+		});
+	}
 </script>

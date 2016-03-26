@@ -2,6 +2,8 @@ package pku.yang.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import pku.yang.model.Student;
@@ -61,14 +64,13 @@ public class UserController {
 	}
 
 	/**
-	 * ��ѯ�û��б�
-	 * 
+	 * find users by query
 	 * @param type
 	 * @param name
 	 * @param userID
 	 * @param page
 	 * @param size
-	 * @return
+	 * @return user list
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public String listUser(Model model, @RequestParam(defaultValue = "") String type,
@@ -107,7 +109,7 @@ public class UserController {
 	}
 
 	/**
-	 * �鿴�û���Ϣ
+	 * get user info by userID and user's type
 	 * 
 	 * @param userID
 	 * @param type
@@ -128,7 +130,7 @@ public class UserController {
 	}
 
 	/**
-	 * ����ѧ��������Ϣ
+	 * save student info
 	 * 
 	 * @param id
 	 * @param name
@@ -160,7 +162,7 @@ public class UserController {
 	}
 
 	/**
-	 * �����ʦ������Ϣ
+	 * save teacher info
 	 * 
 	 * @param id
 	 * @param name
@@ -190,16 +192,32 @@ public class UserController {
 	}
 
 	/**
-	 * ɾ���û���Ϣ
+	 * delete user
 	 * 
 	 * @param pid
 	 * @return
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView deleteUser(@RequestParam String id) {
-		System.out.println(id);
-		userService.deleteUser(id);
-		return null;
+	@ResponseBody
+	@RequestMapping(value = "/delete/{userID}/{type}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable String userID,@PathVariable String type) {
+		userService.deleteUser(userID,type);
+		JSONObject jsonData = new JSONObject();
+		jsonData.put("deleted", true);
+		System.out.println(jsonData.toString());
+		return jsonData.toString();
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/isExist/{userID}", method = RequestMethod.GET)
+	public String isExist(@PathVariable String userID){
+		JSONObject jsonData = new JSONObject();
+		if(userService.isExistUser(userID)){
+			jsonData.put("isExist", true);
+		}
+		else{
+			jsonData.put("isExist", false);
+		}
+		return jsonData.toString();
 	}
 
 

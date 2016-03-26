@@ -12,8 +12,8 @@
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="${ctx }/user"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li>用户属性管理</li>
+				<li><a href="${ctx }"><span class="glyphicon glyphicon-home"></span></a></li>
+				<li><a href="${ctx }/user">用户属性管理</a></li>
 				<li class="active">添加用户</li>
 			</ol>
 		</div><!--/.row-->
@@ -46,3 +46,35 @@
 	</div>	
 </body>
 </html>
+<script>
+function checkusr(userID,type){
+	if(userID!= null &&userID!=""){
+		$.ajax({
+			url:"${ctx}/user/isExist/"+userID,
+			type:"GET",
+			dataType: "json",
+			success:function(data){
+				if(data.isExist==true){
+					$("#id").focus();
+					$("#id").val("");
+					$("#id").attr("placeholder","用户已经存在");
+					$("#div_id_"+type).attr("class","form-group col-lg-6 has-error");
+					return false;
+				}
+				else
+					$("#div_id_"+type).attr("class","form-group col-lg-6");
+				return true;
+			}
+		});
+	}
+	else{
+		$("#id").attr("placeholder","输入不能为空");
+		$("#div_id_"+type).attr("class","form-group col-lg-6 has-error");
+		return false;
+	}
+}
+function submitForm(fom,type){
+	var id = fom.find("#id").val();
+	return checkusr(id,type);
+}
+</script>

@@ -33,9 +33,9 @@ public class UserDao implements IUserDao {
 	}
 
 	@Override
-	public void deleteUser(String id) {
-		hibernateTemplate.delete(hibernateTemplate.get(User.class, id));
-		
+	public void deleteUser(String userID) {
+		User user = this.getByID(userID);
+		hibernateTemplate.delete(user);
 	}
 
 	@Override
@@ -53,14 +53,15 @@ public class UserDao implements IUserDao {
 
 	@Override
 	public void deletestudent(String id) {
-		hibernateTemplate.delete(hibernateTemplate.get(Student.class, id));
+		Student student = this.getStudentByID(id);
+		hibernateTemplate.delete(student);
 		
 	}
 
 	@Override
 	public void deleteTeacher(String id) {
-		hibernateTemplate.delete(hibernateTemplate.get(Student.class, id));
-		
+		Teacher teacher = this.getTeacherByID(id);
+		hibernateTemplate.delete(teacher);
 	}
 
 	@Override

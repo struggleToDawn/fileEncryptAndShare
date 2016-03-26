@@ -30,7 +30,7 @@ public class UserService implements IUserService{
 			user =userdao.getByID(id); 
 		}
 		catch(Exception e){
-			throw new Exception("�û�������");
+			throw new Exception("no user found");
 		}
 		if(user!= null && password.equals(user.getPassword())){
 			return user;
@@ -38,6 +38,10 @@ public class UserService implements IUserService{
 		return null;	
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#findUsers(java.lang.String, java.lang.String, java.lang.String, int, int)
+	 */
 	@Override
 	public Pagination<User> findUsers(String type, String userID, String name,
 			int page, int pagesize) throws Exception {
@@ -46,16 +50,24 @@ public class UserService implements IUserService{
 			pagination = userdao.findUsers(type, userID, name,page,pagesize);
 		}catch(Exception e){
 			e.printStackTrace();
-			throw new Exception("���Ϸ���ҳ��");
+			throw new Exception("no user found");
 		}
 		return pagination;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#findStudentInfo(java.lang.String)
+	 */
 	@Override
 	public Student findStudentInfo(String userID) {
 			return userdao.getStudentByID(userID);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#findTeaherInfo(java.lang.String)
+	 */
 	@Override
 	public Teacher findTeaherInfo(String userID){
 		return userdao.getTeacherByID(userID);
@@ -101,29 +113,45 @@ public class UserService implements IUserService{
 		userdao.saveTeacher(teacher);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#deleteUser(java.lang.String, java.lang.String)
+	 */
 	@Override
-	public void deleteUser(String pid) {
-		// TODO Auto-generated method stub
-//		userdao.deleteUser(pid);
-//		userdao.deleteTeacher(pid);
-		userdao.deletestudent(pid);
-		
+	public void deleteUser(String userID,String type) {
+		if(type.equals("0")){
+			userdao.deletestudent(userID);
+		}
+		else if(type.equals("1")){
+			userdao.deleteTeacher(userID);
+		}
+		userdao.deleteUser(userID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#addStudent(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void addStudent(String id, String name, int age, String teacherID,
 			String department, String academy, String studyGroup,
 			String courses) {
+		//TODO  ID uniqueness֤
 		this.savestudent(id, name, age, teacherID, department, academy, studyGroup, courses);
 		this.addUser(id, name, "0");
 		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#addTeacher(java.lang.String, java.lang.String, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void addTeacher(String id, String name, int age, String title,
 			String duty, String department, String studyGroup,
 			String courses) {
-		this.addTeacher(id, name, age, title, duty, department, studyGroup, courses);
+		//TODO  ID uniqueness֤
+		this.saveTeacher(id, name, age, title, duty, department, studyGroup, courses);
 		this.addUser(id, name, "1");
 		
 	}
@@ -138,6 +166,10 @@ public class UserService implements IUserService{
 		userdao.save(user);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUserService#isExistUser(java.lang.String)
+	 */
 	@Override
 	public boolean isExistUser(String id) {
 		User user;
@@ -149,5 +181,4 @@ public class UserService implements IUserService{
 		}
 		return (user != null);
 	}
-
 }
