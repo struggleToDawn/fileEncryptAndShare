@@ -10,17 +10,15 @@ import javax.persistence.Table;
  * @author summer
  *
  */
-@Entity
-@Table(name="user_role")
+
 public class UserRole {
 	
 	/**用户ID*/
-	@Id
-	@Column(name="user_id")
+	
 	private String userID;
 	
 	/**用户角色*/
-	@Column(name="role")
+	
 	private Role role;
 	
 	public String getUserID() {
