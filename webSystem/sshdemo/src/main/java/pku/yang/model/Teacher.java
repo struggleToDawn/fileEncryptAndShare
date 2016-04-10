@@ -33,7 +33,7 @@ public class Teacher {
 	
 	@Column(name="age")
 	private int age;
-	public String getID() {
+	public String getId() {
 		return id;
 	}
 	public void setId(String id) {

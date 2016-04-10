@@ -53,7 +53,7 @@ public class Student {
 		return courses;
 	}
 
-	public void setCouses(String courses) {
+	public void setCourses(String courses) {
 		this.courses = courses;
 	}
 

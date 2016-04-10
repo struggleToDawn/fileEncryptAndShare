@@ -1,5 +1,7 @@
 package pku.yang.dao;
 
+import java.util.List;
+
 import pku.yang.model.User;
 import pku.yang.model.Student;
 import pku.yang.model.Teacher;
@@ -16,5 +18,8 @@ public interface IUserDao {
 	void deleteTeacher(String id);
 	Student getStudentByID(String id);
 	Teacher getTeacherByID(String id);
+	void saveStudents(List<Student> students);	
+	void saveTeachers(List<Teacher> teachers);
+	void saveUsers(List<User> users);
 	Pagination<User> findUsers(String type,String id,String name,int page, int pagesize);
 }

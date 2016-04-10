@@ -2,10 +2,14 @@ package pku.yang.dao.imp;
 
 import java.util.List;
 
+import org.apache.poi.ss.formula.functions.T;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,11 +24,17 @@ public class UserDao implements IUserDao {
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
 
+	@SuppressWarnings("unchecked")
 	public User getByID(String id) {
-		User user = new User();
-		user.setUserID(id);
-		User result = (User) hibernateTemplate.findByExample(user).get(0);
-		return result;
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+		criteria.add(Restrictions.eq("userID", id));
+		List<User> user = (List<User>) hibernateTemplate.findByCriteria(criteria);
+		if(user != null && user.size()>0){
+			return user.get(0);
+		}
+		return null;
+
 	}
 
 	@Override
@@ -102,6 +112,59 @@ public class UserDao implements IUserDao {
 		List<User> users = (List<User>) hibernateTemplate.findByCriteria(criteria, (page-1)*pagesize, pagesize);
 		pagination.setList(users);
 		return pagination;
+	}
+
+	@Override
+	public void saveStudents(final List<Student> students) {
+		hibernateTemplate.execute(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException {
+				for(int i = 0 ; i < students.size(); i++){
+					session.save(students.get(i));
+					if(i % 50 == 0){
+						session.flush();
+						session.clear();
+					}
+				}
+				return null;
+			}	
+		});
+	}
+
+	@Override
+	public void saveTeachers(final List<Teacher> teachers) {
+		hibernateTemplate.execute(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException {
+				for(int i = 0 ; i < teachers.size(); i++){
+					session.save(teachers.get(i));
+					if(i % 50 == 0){
+						session.flush();
+						session.clear();
+					}
+				}
+				return null;
+			}	
+		});
+	}
+
+	@Override
+	public void saveUsers(final List<User> users) {
+		//TODO FIX bug
+		hibernateTemplate.execute(new HibernateCallback<T>() {
+
+			@Override
+			public T doInHibernate(Session session) throws HibernateException {
+				for(int i = 0 ; i < users.size(); i++){
+					session.save(users.get(i));
+					if(i % 50 == 0){
+						session.flush();
+						session.clear();
+					}
+				}
+				return null;
+			}	
+		});
 	}	
 
 }

@@ -35,6 +35,27 @@ public class User{
 	@Column(name="type")
 	private String type;
 	
+	@Column(name = "role")
+	private int roleNum;
+	
+	public User(){
+		
+	}
+	
+	public User(Student student){
+		this.setUserID(student.getId());
+		this.setUsername(student.getName());
+		this.setType(UserType.Student.toString());
+		this.setPassword("666666");
+	}
+	
+	public User(Teacher teacher){
+		this.setUserID(teacher.getId());
+		this.setUsername(teacher.getName());
+		this.setType(UserType.Teacher.toString());
+		this.setPassword("666666");
+	}
+	
 	public String getStorageID() {
 		return storageID;
 	}
@@ -70,5 +91,14 @@ public class User{
 	}
 	public void setUser_pid(String user_pid) {
 		this.user_pid = user_pid;
+	}
+	public int getRoleNum() {
+		return roleNum;
+	}
+	public void setRoleNum(int roleNum) {
+		this.roleNum = roleNum;
+	}
+	public Role getRole(){
+		return new Role(this.roleNum);
 	}
 }

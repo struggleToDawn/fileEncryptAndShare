@@ -7,6 +7,7 @@ import pku.yang.dao.imp.UserDao;
 import pku.yang.model.Student;
 import pku.yang.model.Teacher;
 import pku.yang.model.User;
+import pku.yang.model.UserType;
 import pku.yang.service.IUserService;
 import pku.yang.tool.Pagination;
 
@@ -89,7 +90,7 @@ public class UserService implements IUserService{
 		student.setDepartment(department);
 		student.setStudygroup(studyGroup);
 		student.setAcademy(academy);
-		student.setCouses(courses);
+		student.setCourses(courses);
 		userdao.saveStudent(student);
 	}
 
@@ -119,10 +120,10 @@ public class UserService implements IUserService{
 	 */
 	@Override
 	public void deleteUser(String userID,String type) {
-		if(type.equals("0")){
+		if(type.equals(UserType.Student.toString())){
 			userdao.deletestudent(userID);
 		}
-		else if(type.equals("1")){
+		else if(type.equals(UserType.Teacher.toString())){
 			userdao.deleteTeacher(userID);
 		}
 		userdao.deleteUser(userID);

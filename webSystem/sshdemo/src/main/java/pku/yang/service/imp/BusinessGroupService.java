@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pku.yang.dao.IBusinessGroupDao;
 import pku.yang.dao.imp.BusinessGroupDao;
 import pku.yang.model.BusinessGroup;
 import pku.yang.model.Folder;
@@ -15,7 +16,7 @@ import pku.yang.service.IBusinessGroupService;
 public class BusinessGroupService implements IBusinessGroupService{
 
 	@Autowired
-	private BusinessGroupDao businessGroupDao;
+	private IBusinessGroupDao businessGroupDao;
 
 	@Override
 	public	void addGroup(String id, String name, String adminId, int storageId,
