@@ -50,7 +50,7 @@ public class User{
 	}
 	
 	public User(Teacher teacher){
-		this.setUserID(teacher.getID());
+		this.setUserID(teacher.getId());
 		this.setUsername(teacher.getName());
 		this.setType(UserType.Teacher.toString());
 		this.setPassword("666666");
@@ -97,5 +97,8 @@ public class User{
 	}
 	public void setRoleNum(int roleNum) {
 		this.roleNum = roleNum;
+	}
+	public Role getRole(){
+		return new Role(this.roleNum);
 	}
 }

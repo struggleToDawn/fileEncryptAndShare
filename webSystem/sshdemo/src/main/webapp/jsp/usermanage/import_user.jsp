@@ -42,7 +42,13 @@
 								</div>
 							</div>
 							<div class="tab-pane fade" id="add_teacher">
-								
+								<div class="row">
+								<form class="form-horizontal" enctype="multipart/form-data" id="Up_T" action="${ctx }/user/import/1" method="post" >
+									<label class="col-lg-3 control-label">上传文件 :</label>
+									<div class="col-lg-6"><input type="file" class="form-control" id="file" name="file"></div>
+									<div class="col-lg-3"><input type ="submit" value="提交" class=" btn btn-primary" ></div>
+								</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -51,8 +57,8 @@
 		</div>
 		
 		<div class = "row" >
-			<table  id="S_result">
-			</table>
+			<table  id="S_result"></table>
+			<table  id="T_result"></table>
 		</div>
 	</div>	
 </body>
@@ -65,7 +71,6 @@
                 type:"post",    
                 url:"${ctx}/user/import/0",  
                 success:function(result){
-                	alert(result);
     				$("#S_result").bootstrapTable({
     					columns: [{
     				        field: 'id',
@@ -86,11 +91,48 @@
     				    	field: 'academy',
     				        title: '所属学苑'
     				    },{
-    				    	field: 'studygroup',
+    				    	field: 'studyGroup',
     				        title: '所属研究组'
     				    },{
     				    	field: 'courses',
     				        title: '所选课程'
+    				    }],
+    				    data:result  
+    				});  
+                }  
+            });  
+            return false;   
+        });       
+        $("#Up_T").submit(function(){  
+            $(this).ajaxSubmit({  
+                type:"post",    
+                url:"${ctx}/user/import/1",  
+                success:function(result){
+    				$("#T_result").bootstrapTable({
+    					columns: [{
+    				        field: 'id',
+    				        title: '教师号'
+    				    }, {
+    				        field: 'name',
+    				        title: '姓名'
+    				    }, {
+    				        field: 'age',
+    				        title: '年龄'
+    				    },{
+    				    	field: 'title',
+    				        title: '职称'
+    				    },{
+    				    	field: 'duty',
+    				        title: '职务'
+    				    },{
+    				    	field: 'department',
+    				        title: '所属院系'
+    				    },{
+    				    	field: 'studyGroup',
+    				        title: '所属研究组'
+    				    },{
+    				    	field: 'courses',
+    				        title: '教授课程'
     				    }],
     				    data:result  
     				});  

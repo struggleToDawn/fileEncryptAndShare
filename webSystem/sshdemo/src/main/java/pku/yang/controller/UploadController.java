@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import pku.yang.model.UserType;
 import pku.yang.service.IUploadUserService;
 import pku.yang.tool.JsonUtil;
@@ -79,9 +76,6 @@ public class UploadController {
 		}
 		return JsonUtil.listToString(list);
 	}
-	
-	
-
 	/**
 	 * get timestamp and a random timestamp*1000+Random==>hex for new file name
 	 * 

@@ -90,7 +90,7 @@ public class UserService implements IUserService{
 		student.setDepartment(department);
 		student.setStudygroup(studyGroup);
 		student.setAcademy(academy);
-		student.setCouses(courses);
+		student.setCourses(courses);
 		userdao.saveStudent(student);
 	}
 
