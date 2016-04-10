@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,8 +26,27 @@ public class FileController {
 	@Autowired
 	private IFileService fileService;
 	
+	//-----‰ª•‰∏ãÊòØÊ≠£ÂºèÁöÑÊé•Âè£‰ª£Á†Å-----//
+	@ResponseBody
+	@RequestMapping(value = "/GetAllFileByUserId", method = RequestMethod.GET)
+	public String GetAllFilebyId(@RequestParam String user_id){
+			List<File> filelist = fileService.getFilesByUserId(user_id);
+			JSONObject result = new JSONObject();
+			JSONArray data = new JSONArray();
+			for(int i=0;i<filelist.size();i++){
+				JSONObject temp = new JSONObject();
+				temp.put("fileid", filelist.get(i).getFile_id());
+				temp.put("filename", filelist.get(i).getFile_name());
+				data.add(temp);
+			}
+			result.put("code",0);
+			result.put("data", data);
+			return result.toJSONString();
+	}
+	//-----‰ª•‰∏ãÊòØÊµãËØï‰ª£Á†Å-----//
+	
 	/**
-	 * ±£¥ÊŒƒº˛ Ù–‘–≈œ¢ 
+	 * ÔøΩÔøΩÔøΩÔøΩÔøΩƒºÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩœ¢ 
 	 * 
 	 * @param id
 	 * @param name
@@ -52,7 +72,7 @@ public class FileController {
 	}
 	
 	/**
-	 * ≤È—ØŒƒº˛¡–±Ì TODO
+	 * ÔøΩÔøΩ—ØÔøΩƒºÔøΩÔøΩ–±ÔøΩ TODO
 	 * 
 	 * @param id
 	 * @param name
@@ -83,7 +103,7 @@ public class FileController {
 	}
 	
 	/**
-	 * …æ≥˝Œƒº˛ TODO
+	 * …æÔøΩÔøΩÔøΩƒºÔøΩ TODO
 	 * 
 	 * @param id
 	 * @return

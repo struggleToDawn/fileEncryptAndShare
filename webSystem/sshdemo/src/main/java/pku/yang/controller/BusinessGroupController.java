@@ -28,7 +28,6 @@ public class BusinessGroupController {
 	@Autowired
 	private IBusinessGroupService businessGroup;
 	
-	
 	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
 	public String addGroup(@RequestParam String id,
 			@RequestParam String name,
@@ -38,7 +37,7 @@ public class BusinessGroupController {
 			) {
 		
 		
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
 		
 		businessGroup.addGroup(id,name,"3",storageId,adminAttrs,uAttrs,ctime);
@@ -59,7 +58,7 @@ public class BusinessGroupController {
 		
 		BusinessGroup groupModel = businessGroup.findGroupInfo(id);
 			
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String utime = df.format(new Date());
 		
 		groupModel.setName(name);
