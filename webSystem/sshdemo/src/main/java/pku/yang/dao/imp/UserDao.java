@@ -27,6 +27,7 @@ public class UserDao implements IUserDao {
 	public User getByID(String id) {
 		User user = new User();
 		user.setUserID(id);
+		List<User> list = hibernateTemplate.findByExample(user);
 		User result = (User) hibernateTemplate.findByExample(user).get(0);
 		return result;
 	}
