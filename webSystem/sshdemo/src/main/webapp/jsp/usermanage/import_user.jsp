@@ -56,21 +56,36 @@
 			</div>
 		</div>
 		
-		<div class = "row" >
-			<table  id="S_result"></table>
-			<table  id="T_result"></table>
+		<div class = "row" id="result">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="col-lg-6 col-md-6 col-xs-6">下表为上传保存的数据</div>
+						<div class="col-lg-4 col-md-4 col-xs-4"></div>
+						<div class="col-lg-2 col-md-2 col-xs-2"><button class="btn btn-primary" onclick="javascript:$('#result').hide();">关闭</button></div>
+					</div>
+					<div class="panel-body">
+						<table  id="S_result"></table>
+						<table  id="T_result"></table>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>	
 </body>
 </html>
 <script src="${ctx }/js/jquery.form.js"></script>
 <script type="text/javascript">  
+	$("#result").hide();
+	$("#T_result").hide();
     $(function() {  
-        $("#Up_S").submit(function(){  
+        $("#Up_S").submit(function(){
+        	$("#result").hide();
             $(this).ajaxSubmit({  
                 type:"post",    
                 url:"${ctx}/user/import/0",  
                 success:function(result){
+                	$("#result").show();
     				$("#S_result").bootstrapTable({
     					columns: [{
     				        field: 'id',
@@ -91,7 +106,7 @@
     				    	field: 'academy',
     				        title: '所属学苑'
     				    },{
-    				    	field: 'studyGroup',
+    				    	field: 'studygroup',
     				        title: '所属研究组'
     				    },{
     				    	field: 'courses',
@@ -99,15 +114,17 @@
     				    }],
     				    data:result  
     				});  
-                }  
+                }
             });  
             return false;   
         });       
-        $("#Up_T").submit(function(){  
+        $("#Up_T").submit(function(){
+        	$("#result").hide();
             $(this).ajaxSubmit({  
                 type:"post",    
                 url:"${ctx}/user/import/1",  
                 success:function(result){
+                	$("#result").show();
     				$("#T_result").bootstrapTable({
     					columns: [{
     				        field: 'id',
@@ -134,9 +151,9 @@
     				    	field: 'courses',
     				        title: '教授课程'
     				    }],
-    				    data:result  
+    				    data:result
     				});  
-                }  
+                }
             });  
             return false;   
         });       

@@ -72,7 +72,6 @@ public class UploadController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 		return JsonUtil.listToString(list);
 	}
