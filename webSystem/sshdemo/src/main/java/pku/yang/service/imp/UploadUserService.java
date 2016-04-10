@@ -62,7 +62,7 @@ public class UploadUserService implements IUploadUserService {
 	
 	private List<Teacher> analysisTeaSheet(Sheet sheet, List<User> users){
 		List<Teacher> teachers = new ArrayList<>();
-		for(int rowNum = 1;rowNum < sheet.getLastRowNum(); rowNum++){
+		for(int rowNum = 1;rowNum <= sheet.getLastRowNum(); rowNum++){
 			Row row = sheet.getRow(rowNum);
 			Teacher teacher = new Teacher();
 			teacher.setId(row.getCell(0).getStringCellValue());
@@ -70,7 +70,7 @@ public class UploadUserService implements IUploadUserService {
 			teacher.setAge((int)row.getCell(2).getNumericCellValue());
 			teacher.setTitle(row.getCell(3).getStringCellValue());
 			teacher.setDuty(row.getCell(4).getStringCellValue());
-			teacher.setTitle(row.getCell(5).getStringCellValue());
+			teacher.setDepartment(row.getCell(5).getStringCellValue());
 			teacher.setStudyGroup(row.getCell(6).getStringCellValue());
 			teacher.setCourses(row.getCell(7).getStringCellValue());
 			teachers.add(teacher);
@@ -82,7 +82,7 @@ public class UploadUserService implements IUploadUserService {
 	private List<Student> analysisStuSheet(Sheet sheet,
 			List<User> users) {
 		List<Student> students = new ArrayList<>();
-		for(int rowNum = 1;rowNum < sheet.getLastRowNum(); rowNum++){
+		for(int rowNum = 1;rowNum <= sheet.getLastRowNum(); rowNum++){
 			Row row = sheet.getRow(rowNum);
 			Student student = new Student();
 			student.setId(row.getCell(0).getStringCellValue());

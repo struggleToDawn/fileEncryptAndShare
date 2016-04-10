@@ -24,12 +24,17 @@ public class UserDao implements IUserDao {
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
 
+	@SuppressWarnings("unchecked")
 	public User getByID(String id) {
-		User user = new User();
-		user.setUserID(id);
-		List<User> list = hibernateTemplate.findByExample(user);
-		User result = (User) hibernateTemplate.findByExample(user).get(0);
-		return result;
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+		criteria.add(Restrictions.eq("userID", id));
+		List<User> user = (List<User>) hibernateTemplate.findByCriteria(criteria);
+		if(user != null && user.size()>0){
+			return user.get(0);
+		}
+		return null;
+
 	}
 
 	@Override
