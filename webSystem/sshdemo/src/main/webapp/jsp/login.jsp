@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div id="content" class="container">
-		<form class="form-horizontal" action="/sshdemo/user/login" style="margin: 20px auto; width: 430px;" method="post">
+		<form class="form-horizontal" action="/sshdemo/user/adminLogin" style="margin: 20px auto; width: 430px;" method="post">
 			<fieldset>
 				<legend>
 					用户登录
