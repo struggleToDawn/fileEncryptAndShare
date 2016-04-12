@@ -1,6 +1,8 @@
 package pku.yang.controller;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import pku.yang.model.Folder;
 import pku.yang.service.IFolderService;
@@ -21,9 +24,31 @@ import com.alibaba.fastjson.JSONObject;
 public class FolderController {
 	@Autowired
 	private IFolderService folderService;
-	
+	//-----add by shengxiaoran-----//
+	//-----ä»¥ä¸‹æ˜¯æ­£å¼çš„æ¥å£ä»£ç -----//
+	@ResponseBody
+	@RequestMapping(value = "/createFolder", method = RequestMethod.POST)
+	public String createFolder(@RequestParam String id,
+			@RequestParam String name,
+			@RequestParam String fatherId,
+			@RequestParam String storageId, 
+			@RequestParam String storageType,
+			@RequestParam String whetherRoot, 
+			@RequestParam String creater,
+			@RequestParam String shareType,
+			@RequestParam String integrityType) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String createDate = format.format(date);
+		folderService.addFolder(id, name, fatherId, storageId, storageType, whetherRoot, creater, createDate, shareType, integrityType);
+		JSONObject result = new JSONObject();
+		result.put("result", 0);
+		return result.toJSONString();
+	}
+	//-----ä»¥ä¸‹æ˜¯æµ‹è¯•ä»£ç -----//
+	//-----add by shengxiaoran-----//
 	/**
-	 * ±£´æÄ¿Â¼ÊôĞÔĞÅÏ¢ 
+	 * ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ 
 	 * 
 	 * @param id
 	 * @param name
@@ -57,7 +82,7 @@ public class FolderController {
 	}
 
 	/**
-	 * ²éÑ¯Ä¿Â¼ÁĞ±í TODO
+	 * ï¿½ï¿½Ñ¯Ä¿Â¼ï¿½Ğ±ï¿½ TODO
 	 * 
 	 * @param id
 	 * @param name
@@ -88,7 +113,7 @@ public class FolderController {
 
 	
 	/**
-	 * Ä¿Â¼ÖØÃüÃû TODO
+	 * Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TODO
 	 * 
 	 * @param id
 	 * @param name
@@ -106,7 +131,7 @@ public class FolderController {
 	}
 	
 	/**
-	 * Ä¿Â¼ÒÆ¶¯ TODO
+	 * Ä¿Â¼ï¿½Æ¶ï¿½ TODO
 	 * 
 	 * @param id
 	 * @param fatherID
@@ -124,7 +149,7 @@ public class FolderController {
 	}
 
 	/**
-	 * É¾³ıÄ¿Â¼ TODO
+	 * É¾ï¿½ï¿½Ä¿Â¼ TODO
 	 * 
 	 * @param id
 	 * @param page

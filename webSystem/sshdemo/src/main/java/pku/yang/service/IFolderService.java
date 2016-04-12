@@ -2,6 +2,7 @@ package pku.yang.service;
 
 import java.util.List;
 
+import pku.yang.model.File;
 import pku.yang.model.Folder;
 
 public interface IFolderService {
@@ -16,4 +17,7 @@ public interface IFolderService {
 	void deleteFolder(String folderID);
 	
 	List<Folder> FolderList();
+	//-----add by shengxiaoran-----//
+	List<Folder> getFoldersByUserId(String user_id);
+	//-----add by shengxiaoran-----//
 }

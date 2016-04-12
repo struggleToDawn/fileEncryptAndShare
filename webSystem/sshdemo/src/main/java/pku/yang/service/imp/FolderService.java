@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pku.yang.dao.imp.FolderDao;
+import pku.yang.model.File;
 import pku.yang.model.Folder;
 import pku.yang.service.IFolderService;
 
@@ -54,4 +55,12 @@ public class FolderService implements IFolderService{
 		System.out.println("FolderService:"+folderlist);
 		return folderlist;
 	}
+	//-----add by shengxiaoran-----//
+	@Override
+	public List<Folder> getFoldersByUserId(String user_id){
+		String hql = "from Folder where creater="+user_id;
+		List<Folder> filelist = folderdao.getList(hql);
+		return filelist;
+	}
+	//-----add by shengxiaoran-----//
 }
