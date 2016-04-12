@@ -74,4 +74,37 @@ public class TokenController {
 		
 		return "home";
 	}
+	
+	@ResponseBody 
+	@RequestMapping(value = "/checkToken", method = RequestMethod.GET)
+	public String checkToken(@RequestParam String token_id
+			) {
+		
+		String message ="";
+		int code =0;
+		Token token =tokenService.findTokenInfo(token_id);
+		
+		if(token ==null){
+			code = 1;
+			message = "not exist";
+		}else{
+			String time = token.getDeadLine();
+			code = 0;
+			message = "ok";
+		}
+		
+		JSONArray jsonarray = new JSONArray();		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("message", message);
+		
+			jsonarray.add(jsonObject);
+			JSONObject jsonData = new JSONObject();
+			
+			jsonData.put("code",code);
+			jsonData.put("data",jsonarray);
+					
+		return jsonData.toString();
+		
+//		return "home";
+	}
 }
