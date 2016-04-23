@@ -63,8 +63,13 @@ public class DESUtil {
      * @param key 密钥
      * @return 加密后的数据 
      */
-    public static String encrypt(String data, String key) throws Exception {
-        Key deskey = keyGenerator(key);
+    public static String encrypt(String data) throws Exception {
+        String key = "A1B2C3D4E5F60708";
+        int length = data.length() % 8;
+        for(;length<8;length++){
+        	data = " " + data;
+        }
+    	Key deskey = keyGenerator(key);
         // 实例化Cipher对象，它用于完成实际的加密操作
         Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         SecureRandom random = new SecureRandom();
@@ -86,23 +91,24 @@ public class DESUtil {
      * @param key 密钥 
      * @return 解密后的数据 
      */
-    public static String decrypt(String data, String key) throws Exception {
-        Key deskey = keyGenerator(key);
+    public static String getUidBytoken(String data) throws Exception {
+       String key = "A1B2C3D4E5F60708";
+    	Key deskey = keyGenerator(key);
         Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         //初始化Cipher对象，设置为解密模式
         cipher.init(Cipher.DECRYPT_MODE, deskey);
         // 执行解密操作
-        return new String(cipher.doFinal(Base64.decodeBase64(data)));
+        return new String(cipher.doFinal(Base64.decodeBase64(data))).trim();
     }
 
     public static void main(String[] args) throws Exception {
-        String source = "amigoxie";
+        String source = "1232";
         System.out.println("原文: " + source);
         String key = "A1B2C3D4E5F60708";
         String key1 = "A1B2C3D4E5F60708";
-        String encryptData = encrypt(source, key);
+        String encryptData = encrypt(source);
         System.out.println("加密后: " + encryptData);
-        String decryptData = decrypt(encryptData, key1);
+        String decryptData = getUidBytoken(encryptData);
         System.out.println("解密后: " + decryptData);
     }
 }

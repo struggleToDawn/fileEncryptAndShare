@@ -29,10 +29,10 @@ public class BusinessGroupController {
 	private IBusinessGroupService businessGroup;
 	
 	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
-	public String addGroup(@RequestParam String id,
+	public String addGroup(
 			@RequestParam String name,
 			@RequestParam String uAttrs,
-			@RequestParam int storageId, 
+//			@RequestParam int storageId, 
 			@RequestParam String adminAttrs
 			) {
 		
@@ -40,7 +40,7 @@ public class BusinessGroupController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
 		
-		businessGroup.addGroup(id,name,"3",storageId,adminAttrs,uAttrs,ctime);
+		businessGroup.addGroup(name,"3",22,adminAttrs,uAttrs,ctime);
 		
 		return "home";
 	}
@@ -110,8 +110,6 @@ public class BusinessGroupController {
 	public String update(Model model,@RequestParam String id){
 		
 		BusinessGroup groupModel = businessGroup.findGroupInfo(id);
-		System.out.println(groupModel.getID());
-		System.out.println("33333");
 		model.addAttribute("businessGroup",groupModel);
 		
 		return "groupmanage/update_group";

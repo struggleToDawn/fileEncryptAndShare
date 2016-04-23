@@ -26,6 +26,7 @@ import pku.yang.model.Token;
 import pku.yang.service.ITokenService;
 import pku.yang.service.IUserService;
 import pku.yang.tool.Pagination;
+import pku.yang.tool.DESUtil;
 
 
 @Controller
@@ -62,15 +63,15 @@ public class UserController {
 			user = userService.login(id, password);
 			if(user.getRole().isCommonUser||user.getRole().isGroupMng){
 				request.getSession().setAttribute("sessionname", id);
-				Token token = new Token();
-				token.setTokenId("aaaaa");
-				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-				String ctime = df.format(new Date());
-				token.setDeadLine(ctime);
+//				Token token = new Token();
+//				token.setTokenId("aaaaa");
+//				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//				String ctime = df.format(new Date());
+//				token.setDeadLine(ctime);
 				
 				JSONArray jsonarray = new JSONArray();
 				
-					String tken  = "aaaaa";
+					String tken  = DESUtil.encrypt(id);
 					jsonarray.add(tken);
 					JSONObject jsonData = new JSONObject();
 					
@@ -80,7 +81,7 @@ public class UserController {
 				return jsonData.toString();
 			}else{
 				
-				return "123123";
+				return "密码错误!";
 			}
 
 		} catch (Exception e) {
