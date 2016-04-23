@@ -1,5 +1,9 @@
 package pku.yang.service.imp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -181,5 +185,41 @@ public class UserService implements IUserService{
 			return false;
 		}
 		return (user != null);
+	}
+
+	@Override
+	public List<String> getUserGroup(String id) {
+		String groups = userdao.getUserGroup(id);
+		String[] groups_ = groups.split(",");
+		return Arrays.asList(groups_);
+	}
+
+	@Override
+	public boolean deleteUserGroup(String id, String group) {
+		List<String> groups = this.getUserGroup(id);
+		if( groups.remove(group)){
+			userdao.setUserGroup(id, this.ListtoString(groups));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean addUserGroup(String id, String group) {
+		List<String> groups = this.getUserGroup(id);
+		groups.add(group);
+		userdao.setUserGroup(id, this.ListtoString(groups));
+		return true;
+		
+	}
+	
+	private String ListtoString(List<String> list){
+		StringBuilder sb = new StringBuilder();
+		int i = 0;
+		for(i = 0; i<list.size()-1; i ++){
+			sb.append(list.get(i) +",");
+		}
+		sb.append(list.get(i));
+		return sb.toString();
 	}
 }

@@ -38,6 +38,9 @@ public class User{
 	@Column(name = "role")
 	private int roleNum;
 	
+	@Column(name = "groups")
+	private String gourps;
+	
 	public User(){
 		
 	}
@@ -101,4 +104,13 @@ public class User{
 	public Role getRole(){
 		return new Role(this.roleNum);
 	}
+
+	public String getGourps() {
+		return gourps;
+	}
+
+	public void setGourps(String gourps) {
+		this.gourps = gourps;
+	}
+	
 }

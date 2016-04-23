@@ -22,6 +22,13 @@
 				<h3 class="page-header">添加用户</h3>
 			</div>
 		</div><!--/.row-->
+		<div class = "row"><div class ="col-lg-12">
+		
+			<div class="alert alert-warning" role="alert">
+				上传前请确保上传的文件符合格式要求，参见<a href="${ctx}/template/Student_Template.xlsx" >学生信息模板</a>
+				或者<a href="${ctx}/template/Teacher_Template.xlsx">教师信息模板</a>
+			</div>
+		</div></div>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
@@ -33,6 +40,7 @@
 						
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="add_user">
+								
 								<div class="row">
 								<form class="form-horizontal" enctype="multipart/form-data" id="Up_S" action="${ctx }/user/import/0" method="post" >
 									<label class="col-lg-3 control-label">上传文件 :</label>
@@ -81,11 +89,13 @@
     $(function() {  
         $("#Up_S").submit(function(){
         	$("#result").hide();
+        	$("T_result").hide();
             $(this).ajaxSubmit({  
                 type:"post",    
                 url:"${ctx}/user/import/0",  
                 success:function(result){
                 	$("#result").show();
+                	$("#S_result").show();
     				$("#S_result").bootstrapTable({
     					columns: [{
     				        field: 'id',
@@ -120,11 +130,13 @@
         });       
         $("#Up_T").submit(function(){
         	$("#result").hide();
+        	$("#S_result").hide();
             $(this).ajaxSubmit({  
                 type:"post",    
                 url:"${ctx}/user/import/1",  
                 success:function(result){
                 	$("#result").show();
+                	$("#T_result").show();
     				$("#T_result").bootstrapTable({
     					columns: [{
     				        field: 'id',

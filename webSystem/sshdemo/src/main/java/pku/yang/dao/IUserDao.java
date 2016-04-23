@@ -22,4 +22,6 @@ public interface IUserDao {
 	void saveTeachers(List<Teacher> teachers);
 	void saveUsers(List<User> users);
 	Pagination<User> findUsers(String type,String id,String name,int page, int pagesize);
+	String getUserGroup(String id);
+	String setUserGroup(String id, String userGroup);
 }
