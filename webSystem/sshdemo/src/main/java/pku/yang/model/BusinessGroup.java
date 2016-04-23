@@ -2,8 +2,11 @@ package pku.yang.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="businessgroup")
@@ -13,6 +16,8 @@ public class BusinessGroup {
 
 	@Id
 	@Column(name="id")
+	@GenericGenerator(name="hibernate-uuid",strategy="uuid")
+	@GeneratedValue(generator="hibernate-uuid")
 	private String id;
 	
 	@Column(name="name")

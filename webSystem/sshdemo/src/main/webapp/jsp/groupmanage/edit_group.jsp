@@ -12,16 +12,16 @@
 	</div>
 	<div class="form-group col-lg-6">
 		<label class="col-lg-3 control-label">管理员属性：</label>
-		<div class="col-lg-9"><input type="number" class="form-control "  id ="adminAttrs" name ="adminAttrs"></div>
+		<div class="col-lg-9"><input type="text" class="form-control "  id ="adminAttrs" name ="adminAttrs"></div>
 	</div>
 	<div class="form-group col-lg-6">
 		<label class="col-lg-3 control-label">成员属性：</label>
 		<div class="col-lg-9"><input type="text" class="form-control " id = "uAttrs" name ="uAttrs"></div>
 	</div>
-	<div class="form-group col-lg-6">
+	<!-- <div class="form-group col-lg-6">
 		<label class="col-lg-3 control-label">空间ID：</label>
 		<div class="col-lg-9"><input type="text" class="form-control " id="storageId" name="storageId"></div>
-	</div>
+	</div> -->
 	<div class= "row col-lg-12"><p><br></p></div>
 	<div class = "col-lg-4 col-xs-4"></div>
 	<div class="form-group col-lg-4 col-xs-4">

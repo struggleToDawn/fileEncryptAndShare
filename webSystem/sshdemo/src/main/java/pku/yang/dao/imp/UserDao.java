@@ -26,6 +26,7 @@ public class UserDao implements IUserDao {
 
 	@SuppressWarnings("unchecked")
 	public User getByID(String id) {
+
 		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
 		criteria.add(Restrictions.eq("userID", id));
 		List<User> user = (List<User>) hibernateTemplate.findByCriteria(criteria);
@@ -33,6 +34,7 @@ public class UserDao implements IUserDao {
 			return user.get(0);
 		}
 		return null;
+
 	}
 
 	@Override

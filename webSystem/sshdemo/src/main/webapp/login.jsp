@@ -12,7 +12,7 @@
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">登录</div>
 					<div class="panel-body">
-						<form action="${ctx}/user/login" method="post">
+						<form action="${ctx}/user/adminLogin" method="post">
 							<fieldset>
 								<div class="form-group">
 									<input class="form-control" placeholder="用户账号" name="id" id = "id" >

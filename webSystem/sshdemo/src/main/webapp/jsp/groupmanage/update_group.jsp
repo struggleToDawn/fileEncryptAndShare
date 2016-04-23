@@ -14,12 +14,12 @@
 			<ol class="breadcrumb">
 				<li><a href="${ctx}/businessGroup"><span class="glyphicon glyphicon-home"></span></a></li>
 				<li>业务群组管理</li>
-				<li class="active">创建群组</li>
+				<li class="active">更新群组</li>
 			</ol>
 		</div><!--/.row-->
 		<div class="row">
 			<div class="col-lg-12">
-				<h3 class="page-header">创建群组</h3>
+				<h3 class="page-header">更新群组</h3>
 			</div>
 		</div><!--/.row-->
 		<div class="row">
@@ -33,11 +33,11 @@
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="add_group">
 								<form class="form-horizontal" action="${ctx}/businessGroup/updateGroup" method="post">
-									<div class="form-group col-lg-6">
-										<label class="col-lg-3 control-label">群组ID：</label>
-										<div class="col-lg-9">
-										<input type="text" class="form-control " id="id" name ="id" value="${businessGroup.getID()}" ></div>
-									</div>
+							<!-- 	<div class="form-group col-lg-6">
+							<!--  			<label class="col-lg-3 control-label">群组ID：</label>
+							<!--  			<div class="col-lg-9">  -->	
+										<input type="hidden" class="form-control " id="id" name ="id" value="${businessGroup.getID()}" ></div>
+							<!--  		</div> -->
 									<div class="form-group col-lg-6">
 										<label class="col-lg-3 control-label">群组名：</label>
 										<div class="col-lg-9"><input type="text" class="form-control " id="name" name="name" value="${businessGroup.getAdminAttrs()}"></div>
@@ -50,10 +50,10 @@
 										<label class="col-lg-3 control-label">成员属性：</label>
 										<div class="col-lg-9"><input type="text" class="form-control " id = "uAttrs" name ="uAttrs" value="${businessGroup.getUAttrs()}" ></div>
 									</div>
-									<div class="form-group col-lg-6">
-										<label class="col-lg-3 control-label">空间ID：</label>
-										<div class="col-lg-9"><input type="text" class="form-control " id="storageId" name="storageId" value="${businessGroup.getStorageId()}" ></div>
-									</div>
+								<!--  	<div class="form-group col-lg-6">
+								<!--  		<label class="col-lg-3 control-label">空间ID：</label>  -->	
+										<div class="col-lg-9"><input type="hidden" class="form-control " id="storageId" name="storageId" value="${businessGroup.getStorageId()}" ></div>
+								<!-- 	</div>  -->	
 									<div class= "row col-lg-12"><p><br></p></div>
 									<div class = "col-lg-4 col-xs-4"></div>
 									<div class="form-group col-lg-4 col-xs-4">

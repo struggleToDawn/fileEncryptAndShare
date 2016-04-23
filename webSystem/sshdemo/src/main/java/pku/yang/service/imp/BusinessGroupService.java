@@ -19,12 +19,12 @@ public class BusinessGroupService implements IBusinessGroupService{
 	private IBusinessGroupDao businessGroupDao;
 
 	@Override
-	public	void addGroup(String id, String name, String adminId, int storageId,
+	public	void addGroup(String name, String adminId, int storageId,
 			String adminAttrs, String uAttrs , String ctime){
 			
 			BusinessGroup businessGroup = new BusinessGroup();
 			businessGroup.setAdminAttrs(adminAttrs);
-			businessGroup.setID(id);
+//			businessGroup.setID(id);
 			businessGroup.setAdminId(adminId);
 			businessGroup.setUAttrs(uAttrs);
 			businessGroup.setName(name);

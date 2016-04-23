@@ -41,4 +41,10 @@ public class FileService implements IFileService{
 		List<File> filelist = fileDao.getList("from File");
 		return filelist;
 	}
+	@Override
+	public List<File> getFilesByUserId(String user_id){
+		String hql = "from File where owner="+user_id;
+		List<File> filelist = fileDao.getList(hql);
+		return filelist;
+	}
 }

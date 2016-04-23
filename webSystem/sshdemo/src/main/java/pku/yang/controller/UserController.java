@@ -1,5 +1,8 @@
 package pku.yang.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
@@ -14,11 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
+
 import pku.yang.model.Student;
 import pku.yang.model.Teacher;
 import pku.yang.model.User;
+import pku.yang.model.Token;
+import pku.yang.service.ITokenService;
 import pku.yang.service.IUserService;
 import pku.yang.tool.Pagination;
+import pku.yang.tool.DESUtil;
+
 
 @Controller
 @RequestMapping("/user")
@@ -26,18 +35,57 @@ public class UserController {
 
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private ITokenService tokenService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(Model model, String id, String password,
+	@RequestMapping(value = "/adminLogin", method = RequestMethod.POST)
+	public String adminLogin(Model model, String id, String password,
 			HttpServletRequest request) {
 		User user;
 		try {
 			user = userService.login(id, password);
 			model.addAttribute(user);
 			request.getSession().setAttribute("sessionname", id);
+						
 			return "home";
 		} catch (Exception e) {
 			model.addAttribute("error", e.getMessage());
+			return "error";
+		}
+	}
+	
+	@ResponseBody 
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login( String id, String password,
+			HttpServletRequest request) {
+		User user;
+		try {
+			user = userService.login(id, password);
+			if(user.getRole().isCommonUser||user.getRole().isGroupMng){
+				request.getSession().setAttribute("sessionname", id);
+//				Token token = new Token();
+//				token.setTokenId("aaaaa");
+//				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+//				String ctime = df.format(new Date());
+//				token.setDeadLine(ctime);
+				
+				JSONArray jsonarray = new JSONArray();
+				
+					String tken  = DESUtil.encrypt(id);
+					jsonarray.add(tken);
+					JSONObject jsonData = new JSONObject();
+					
+					jsonData.put("code",0);
+					jsonData.put("data",jsonarray);
+					
+				return jsonData.toString();
+			}else{
+				
+				return "密码错误!";
+			}
+
+		} catch (Exception e) {
+		
 			return "error";
 		}
 	}
