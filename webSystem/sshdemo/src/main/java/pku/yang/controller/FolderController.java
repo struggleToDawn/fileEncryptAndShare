@@ -55,7 +55,7 @@ public class FolderController {
 	
 	//-----以下是正式的接口代码-----//
 	@ResponseBody
-	@RequestMapping(value = "/createdirectory", method = RequestMethod.POST)
+	@RequestMapping(value = "/createdirectory", method = RequestMethod.GET)
 	public String createFolder(@RequestParam String token,
 			@RequestParam String filename,
 			@RequestParam String fatherId) {
@@ -65,12 +65,12 @@ public class FolderController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		String createDate = format.format(date);
-		folderService.createFolder(uid,filename,fatherId);
+		folderService.createFolder(uid,filename,fatherId,createDate);
 		JSONObject result = new JSONObject();
-		result.put("result", 0);
+		result.put("code", 0);
 		return result.toJSONString();
 	}
 	//-----以下是测试代码-----//

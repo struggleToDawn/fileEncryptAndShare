@@ -47,7 +47,7 @@ public class FolderService implements IFolderService{
 	}
 	
 	@Override
-	public String createFolder(String uid,String name,String parentid){
+	public String createFolder(String uid,String name,String parentid,String time){
 		Folder folder= new Folder();
 		String id = "0";
 	
@@ -62,6 +62,14 @@ public class FolderService implements IFolderService{
 		folder.setName(name);
 		folder.setFatherID(parentid);
 		folder.setCreater(uid);
+		folder.setCreateDate(time);
+		
+		folder.setStorageID("0");
+		folder.setStorageType("0");
+		folder.setWhetherRoot("0");
+
+		folder.setShareType("0");
+		folder.setIntegrityType("0");
 		this.saveFolder(folder);
 		return id;
 	}
