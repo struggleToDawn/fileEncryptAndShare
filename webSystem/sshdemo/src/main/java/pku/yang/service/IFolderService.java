@@ -20,4 +20,6 @@ public interface IFolderService {
 	//-----add by shengxiaoran-----//
 	List<Folder> getFoldersByUserId(String user_id);
 	//-----add by shengxiaoran-----//
+	
+	String createFolder(String uid,String name,String parentid,String time);
 }
