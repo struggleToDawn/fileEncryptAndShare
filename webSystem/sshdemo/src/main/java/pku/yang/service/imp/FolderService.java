@@ -1,6 +1,8 @@
 package pku.yang.service.imp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,26 @@ public class FolderService implements IFolderService{
 		folder.setShareType(shareType);
 		folder.setIntegrityType(integrityType);
 		this.saveFolder(folder);
+	}
+	
+	@Override
+	public String createFolder(String uid,String name,String parentid){
+		Folder folder= new Folder();
+		String id = "0";
+	
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Date date = new Date();
+		String unixtime = Long.toString(date.getTime());
+		id = id + unixtime;
+		int i = (int)Math.random()*1000;
+		String randomNumber = Integer.toString(i);
+		id = id + randomNumber;
+		folder.setFolderID(id);
+		folder.setName(name);
+		folder.setFatherID(parentid);
+		folder.setCreater(uid);
+		this.saveFolder(folder);
+		return id;
 	}
 	
 	@Override

@@ -56,19 +56,19 @@ public class FolderController {
 	//-----以下是正式的接口代码-----//
 	@ResponseBody
 	@RequestMapping(value = "/createdirectory", method = RequestMethod.POST)
-	public String createFolder(@RequestParam String id,
-			@RequestParam String name,
-			@RequestParam String fatherId,
-			@RequestParam String storageId, 
-			@RequestParam String storageType,
-			@RequestParam String whetherRoot, 
-			@RequestParam String creater,
-			@RequestParam String shareType,
-			@RequestParam String integrityType) {
+	public String createFolder(@RequestParam String token,
+			@RequestParam String filename,
+			@RequestParam String fatherId) {
+		String uid = new String();
+		try{
+			uid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String createDate = format.format(date);
-		folderService.addFolder(id, name, fatherId, storageId, storageType, whetherRoot, creater, createDate, shareType, integrityType);
+		folderService.createFolder(uid,filename,fatherId);
 		JSONObject result = new JSONObject();
 		result.put("result", 0);
 		return result.toJSONString();
@@ -363,18 +363,24 @@ public class FolderController {
 	 * @return
 	 */
 	
-	//删除文件，发送token，文件id以及“deletefile”关键字，返回删除文件之后的文件目录信息（删除文件后，请在数据表中删除记录）
-	@RequestMapping(value = "/deletefile", method = RequestMethod.POST)
+	//删除文件夹，发送文件夹id，token，“deleteDirctory”关键字，返回删除文件夹之后的文件目录，并将文件夹下的所有文件都删除掉
+	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.POST)
 	public String deleteFolder(@RequestParam String id,
 			@RequestParam String token) {
+		String uid = new String();
+		try{
+			 uid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
 		result.put("data", true);
 		Stack<String> stack = new Stack<String>();
 		stack.push(id);
 		String newid;
-		List<File> filelist = fileService.getFilesByUserId(token);
-		List<Folder> folderlist = folderService.getFoldersByUserId(token);
+		List<File> filelist = fileService.getFilesByUserId(uid);
+		List<Folder> folderlist = folderService.getFoldersByUserId(uid);
 		while((newid=stack.pop())!=null){
 			for(int i=0;i<filelist.size();i++){
 				if(filelist.get(i).getFolderId().equals(newid)){
