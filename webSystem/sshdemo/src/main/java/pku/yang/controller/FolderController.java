@@ -168,8 +168,18 @@ public class FolderController {
 					temp.put("type","file");
 					temp.put("date", filelist.get(i).getUpload_time());
 					temp.put("size",0);
-					temp.put("TPA",0);
-					temp.put("share",0);
+					//temp.put("TPA",0);
+					//temp.put("share",0);
+					if(filelist.get(i).getIntegrityType().equals("1")){
+						temp.put("TPA","TPA");
+					}else{
+						temp.put("TPA","normal");
+					}
+					if(filelist.get(i).getShareType().equals("1")){
+						temp.put("share","ABE");
+					}else{
+						temp.put("share","normal");
+					}
 					data.add(temp);
 				}
 				List<Folder> folderlist = folderService.getFoldersByUserId(token);
