@@ -37,7 +37,7 @@ public class FileController {
 	
 	//-----以下是正式的接口代码-----//
 	@ResponseBody
-	@RequestMapping(value = "/getAllFileByUserId", method = RequestMethod.GET)
+	@RequestMapping(value = "/listAllFile", method = RequestMethod.GET)
 	public String GetAllFilebyId(@RequestParam String  user_id){
 			JSONObject result = new JSONObject();
 			JSONArray data = new JSONArray();

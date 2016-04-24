@@ -12,4 +12,5 @@ public interface IFileService {
 	void deleteFile(String file_id);
 	List<File> FileList();
 	List<File> getFilesByUserId(String user_id);
+	void saveFile(File file);
 }
