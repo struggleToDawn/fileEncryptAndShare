@@ -116,4 +116,10 @@ public interface IUserService {
 	 * @return true for existed, false for no
 	 */
 	boolean isExistUser(String id);
+	
+	List<String> getUserGroup(String id);
+	
+	boolean deleteUserGroup(String id,String group);
+	
+	boolean addUserGroup(String id, String group);
 }

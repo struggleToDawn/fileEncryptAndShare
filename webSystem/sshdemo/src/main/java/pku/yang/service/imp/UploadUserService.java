@@ -1,17 +1,11 @@
 package pku.yang.service.imp;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,13 +19,16 @@ import pku.yang.model.Teacher;
 import pku.yang.model.User;
 import pku.yang.model.UserType;
 import pku.yang.service.IUploadUserService;
-import pku.yang.service.IUserService;
 
 @Service
 public class UploadUserService implements IUploadUserService {
 	@Autowired
 	private IUserDao userdao;
 
+	/*
+	 * (non-Javadoc)
+	 * @see pku.yang.service.IUploadUserService#saveExcelData(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<?> saveExcelData(String fileName, String type)
 			throws IOException {
@@ -39,7 +36,6 @@ public class UploadUserService implements IUploadUserService {
 		List<User> users = new ArrayList<>();
 		try{
 			Workbook workbook = WorkbookFactory.create(ins);
-			//TODO fix
 			//suppose only one sheet in the workbook, and it's the first
 			Sheet sheet = workbook.getSheetAt(0);
 			if (type.equals(UserType.Student.toString())) {
@@ -53,13 +49,23 @@ public class UploadUserService implements IUploadUserService {
 				userdao.saveTeachers(teachers);
 				return teachers;
 			}
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		finally{
+			ins.close();
+		}
 		return null;
 	}
 	
+	/**
+	 * read teacher info from sheet 
+	 * @param sheet	
+	 * @param users	user list for save
+	 * @return teacher list
+	 */
 	private List<Teacher> analysisTeaSheet(Sheet sheet, List<User> users){
 		List<Teacher> teachers = new ArrayList<>();
 		for(int rowNum = 1;rowNum <= sheet.getLastRowNum(); rowNum++){
@@ -79,6 +85,12 @@ public class UploadUserService implements IUploadUserService {
 		return teachers;
 	}
 
+	/**
+	 * read student info from sheet 
+	 * @param sheet	
+	 * @param users	user list for save
+	 * @return student list
+	 */
 	private List<Student> analysisStuSheet(Sheet sheet,
 			List<User> users) {
 		List<Student> students = new ArrayList<>();
@@ -98,6 +110,4 @@ public class UploadUserService implements IUploadUserService {
 		}
 		return students;
 	}
-	
-
 }

@@ -9,7 +9,7 @@ public interface IBusinessGroupService {
 
 
 	BusinessGroup findGroupInfo(String GroupID);
-	void addGroup(String id, String name, String adminId, int storageId,
+	void addGroup(String name, String adminId, int storageId,
 			String adminAttrs, String uAttrs ,String ctime);
 	
 	void saveGroup(BusinessGroup businessGroup);

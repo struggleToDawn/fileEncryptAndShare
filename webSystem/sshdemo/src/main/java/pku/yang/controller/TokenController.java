@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import net.sf.json.JSONObject;
 import pku.yang.model.Token;
 import pku.yang.service.ITokenService;
+import pku.yang.tool.DESUtil;
 
 @Controller
 @RequestMapping("/token")
@@ -24,7 +25,7 @@ public class TokenController {
 	private ITokenService tokenService;
 	
 	@ResponseBody 
-	@RequestMapping(value = "/getToken", method = RequestMethod.POST)
+	@RequestMapping(value = "/getToken", method = RequestMethod.GET)
 	public String getToken(
 			) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
