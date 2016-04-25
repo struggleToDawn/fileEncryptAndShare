@@ -24,6 +24,7 @@ import pku.yang.service.IFileService;
 
 import pku.yang.model.Folder;
 import pku.yang.service.IFolderService;
+import pku.yang.tool.DESUtil;
 
 @Controller
 @RequestMapping("/file")
@@ -36,57 +37,132 @@ public class FileController {
 	//-----这是临时代码-----//
 	
 	//-----以下是正式的接口代码-----//
+//	@ResponseBody
+//	@RequestMapping(value = "/listAllFile", method = RequestMethod.GET)
+//	public String GetAllFilebyId(@RequestParam String  user_id){
+//			JSONObject result = new JSONObject();
+//			JSONArray data = new JSONArray();
+//			result.put("code",0);
+//			//-----获取文件列表-----//
+//			List<File> filelist = fileService.getFilesByUserId(user_id);
+//			for(int i=0;i<filelist.size();i++){
+//				JSONObject temp = new JSONObject();
+//				temp.put("fileid", filelist.get(i).getFile_id());
+//				temp.put("parentid", filelist.get(i).getFolderId());
+//				temp.put("filename", filelist.get(i).getFile_name());
+//				temp.put("type","file");
+//				temp.put("date", filelist.get(i).getUpload_time());
+//				temp.put("size",0);
+//				temp.put("TPA",0);
+//				temp.put("share",0);
+//				data.add(temp);
+//			}
+//			//-----获取文件夹列表-----//
+//			List<Folder> folderlist = folderService.getFoldersByUserId(user_id);
+//			for(int i=0;i<folderlist.size();i++){
+//				JSONObject temp = new JSONObject();
+//				temp.put("fileid", folderlist.get(i).getFolderID());
+//				temp.put("parentid", folderlist.get(i).getFatherID());
+//				temp.put("filename", folderlist.get(i).getName());
+//				temp.put("type","directory");
+//				temp.put("date", folderlist.get(i).getCreateDate());
+//				temp.put("size",0);
+//				temp.put("TPA",0);
+//				temp.put("share",0);
+//				data.add(temp);
+//			}
+//			result.put("data", data);
+//			return result.toJSONString();
+//	}
 	@ResponseBody
-	@RequestMapping(value = "/listAllFile", method = RequestMethod.GET)
-	public String GetAllFilebyId(@RequestParam String  user_id){
-			JSONObject result = new JSONObject();
-			JSONArray data = new JSONArray();
-			result.put("code",0);
-			//-----获取文件列表-----//
-			List<File> filelist = fileService.getFilesByUserId(user_id);
-			for(int i=0;i<filelist.size();i++){
-				JSONObject temp = new JSONObject();
-				temp.put("fileid", filelist.get(i).getFile_id());
-				temp.put("parentid", filelist.get(i).getFolderId());
-				temp.put("filename", filelist.get(i).getFile_name());
-				temp.put("type","file");
-				temp.put("date", filelist.get(i).getUpload_time());
-				temp.put("size",0);
-				temp.put("TPA",0);
-				temp.put("share",0);
-				data.add(temp);
-			}
-			//-----获取文件夹列表-----//
-			List<Folder> folderlist = folderService.getFoldersByUserId(user_id);
-			for(int i=0;i<folderlist.size();i++){
-				JSONObject temp = new JSONObject();
-				temp.put("fileid", folderlist.get(i).getFolderID());
-				temp.put("parentid", folderlist.get(i).getFatherID());
-				temp.put("filename", folderlist.get(i).getName());
-				temp.put("type","directory");
-				temp.put("date", folderlist.get(i).getCreateDate());
-				temp.put("size",0);
-				temp.put("TPA",0);
-				temp.put("share",0);
-				data.add(temp);
-			}
-			result.put("data", data);
-			return result.toJSONString();
-	}
-	@ResponseBody
-	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-	public String uploadFile(@RequestParam String id,
-			@RequestParam String name,
-			@RequestParam String folder,
-			@RequestParam String owner,
-			@RequestParam String expname,
-			@RequestParam String cloudpath) {
+	@RequestMapping(value = "/uploadfile", method = RequestMethod.POST)
+	public String uploadFile(@RequestParam String token,
+			@RequestParam String folderId,
+			@RequestParam String fullname) {
+		//--generate upload time--//
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String uploadtime = format.format(date);
-		fileService.addFile(id, name, folder, owner, uploadtime,expname, cloudpath);
+		//--generate file id--//
+		String fileId = "1";
+		fileId = fileId + Long.toString(date.getTime());
+		int randomNumber = (int)(Math.random()*1000);
+		fileId = fileId + Integer.toString(randomNumber);
+		//--get user id--//
+		String userId = "";
+		try{
+			userId = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		//--parse file name--//
+		String[] nameStr = fullname.split("\\.");
+		fileService.addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "");
 		JSONObject result = new JSONObject();
-		result.put("result", 0);
+		JSONArray data = new JSONArray();
+		result.put("code",0);
+		//-----获取文件列表-----//
+//		List<File> filelist = fileService.getFilesByUserId(userId);
+//		for(int i=0;i<filelist.size();i++){
+//			JSONObject temp = new JSONObject();
+//			temp.put("fileid", filelist.get(i).getFile_id());
+//			temp.put("parentid", filelist.get(i).getFolderId());
+//			temp.put("filename", filelist.get(i).getFile_name());
+//			temp.put("type","file");
+//			temp.put("date", filelist.get(i).getUpload_time());
+//			temp.put("size",0);
+//			temp.put("TPA",0);
+//			temp.put("share",0);
+//			data.add(temp);
+//		}
+//		//-----获取文件夹列表-----//
+//		List<Folder> folderlist = folderService.getFoldersByUserId(userId);
+//		for(int i=0;i<folderlist.size();i++){
+//			JSONObject temp = new JSONObject();
+//			temp.put("fileid", folderlist.get(i).getFolderID());
+//			temp.put("parentid", folderlist.get(i).getFatherID());
+//			temp.put("filename", folderlist.get(i).getName());
+//			temp.put("type","directory");
+//			temp.put("date", folderlist.get(i).getCreateDate());
+//			temp.put("size",0);
+//			temp.put("TPA",0);
+//			temp.put("share",0);
+//			data.add(temp);
+//		}
+//		result.put("data", data);
+		return result.toJSONString();
+	}
+	@ResponseBody
+	@RequestMapping(value = "/deletefile", method = RequestMethod.GET)
+	public String deleteFile(@RequestParam String token,
+			@RequestParam String fileId) {
+		JSONObject result = new JSONObject();
+		//--get user id--//
+		String userId = "";
+		try{
+			userId = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		fileService.deleteFile(fileId);
+		result.put("code", 0);
+		result.put("data", "success");
+		return result.toJSONString();
+	}
+	@ResponseBody
+	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST)
+	public String downloadFile(@RequestParam String token,
+			@RequestParam String fileId) {
+		JSONObject result = new JSONObject();
+		//--get user id--//
+		String userId = "";
+		try{
+			userId = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		result.put("code", 0);
+		result.put("data", "success");
 		return result.toJSONString();
 	}
 	//-----以下是测试代码-----//

@@ -12,6 +12,48 @@ public class File {
 	@Column(name="file_id")
 	private String file_id;
 	
+	
+
+	@Column(name="file_name")
+	private String file_name;
+	
+	@Column(name="folderId")
+	private String folderId;
+	
+	@Column(name="exp_name")
+	private String exp_name;
+	
+	@Column(name="owner")
+	private String owner;
+	
+	@Column(name="upload_time")
+	private String upload_time;
+	
+	@Column(name="cloud_path")
+	private String cloud_path;
+	
+	@Column(name="share_type")
+	private String shareType;
+	
+	public String getShareType() {
+		return shareType;
+	}
+
+	public void setShareType(String shareType) {
+		this.shareType = shareType;
+	}
+
+	public String getIntegrityType() {
+		return integrityType;
+	}
+
+	public void setIntegrityType(String integrityType) {
+		this.integrityType = integrityType;
+	}
+
+	@Column(name="integrity_type")
+	private String integrityType; 
+	
 	public String getFile_id() {
 		return file_id;
 	}
@@ -67,22 +109,4 @@ public class File {
 	public void setCloud_path(String cloud_path) {
 		this.cloud_path = cloud_path;
 	}
-
-	@Column(name="file_name")
-	private String file_name;
-	
-	@Column(name="folderId")
-	private String folderId;
-	
-	@Column(name="exp_name")
-	private String exp_name;
-	
-	@Column(name="owner")
-	private String owner;
-	
-	@Column(name="upload_time")
-	private String upload_time;
-	
-	@Column(name="cloud_path")
-	private String cloud_path;
 }
