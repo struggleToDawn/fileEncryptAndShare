@@ -11,6 +11,6 @@
 	<div class="form-group col-lg-4 col-xs-4">
 		<input type="reset" value="重置" class="btn btn-default ">
 		&nbsp;&nbsp;&nbsp;
-		<input type="submit" value="删除" class="btn btn-primary ">
+		<input type="submit" value="保存" class="btn btn-primary ">
 	</div>
 </form>

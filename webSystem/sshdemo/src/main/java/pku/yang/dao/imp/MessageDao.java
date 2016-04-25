@@ -19,6 +19,7 @@ public class MessageDao implements IMessageDao{
 	
 	@Override
 	public void save(Message mess) {
+		hibernateTemplate.saveOrUpdate(mess);
 }
 	
 	@Override
