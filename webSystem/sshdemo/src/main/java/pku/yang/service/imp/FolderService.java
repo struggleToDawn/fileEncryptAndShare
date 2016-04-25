@@ -47,7 +47,7 @@ public class FolderService implements IFolderService{
 	}
 	
 	@Override
-	public String createFolder(String uid,String name,String parentid,String time){
+	public String addRootFolder(String uid,String name,String parentid,String time){
 		Folder folder= new Folder();
 		String id = "0";
 	
@@ -58,6 +58,7 @@ public class FolderService implements IFolderService{
 		int i = (int)Math.random()*1000;
 		String randomNumber = Integer.toString(i);
 		id = id + randomNumber;
+		System.out.println(id);
 		folder.setFolderID(id);
 		folder.setName(name);
 		folder.setFatherID(parentid);
@@ -70,7 +71,7 @@ public class FolderService implements IFolderService{
 
 		folder.setShareType("0");
 		folder.setIntegrityType("0");
-		this.saveFolder(folder);
+		folderdao.save(folder);
 		return id;
 	}
 	
