@@ -167,6 +167,7 @@ public class UserService implements IUserService{
 		user.setUserID(id);
 		user.setUsername(name);
 		user.setType(type);
+		user.setRoleNum(1);
 		user.setPassword("666666");
 		userdao.save(user);
 	}
@@ -206,9 +207,10 @@ public class UserService implements IUserService{
 
 	@Override
 	public boolean addUserGroup(String id, String group) {
-		List<String> groups = this.getUserGroup(id);
-		groups.add(group);
-		userdao.setUserGroup(id, this.ListtoString(groups));
+//		List<String> groups = this.getUserGroup(id);
+//		groups.add(group);
+		
+		userdao.setUserGroup(id, group);
 		return true;
 		
 	}

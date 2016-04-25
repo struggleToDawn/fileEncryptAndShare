@@ -6,7 +6,7 @@ import pku.yang.model.Space;
 
 public interface ISpaceDao {
 	void saveSpace(Space space);
-	void addSpace(Space space);
+	String addSpace(Space space);
 	void deleteSpaceByID(String spaceId);
 	Space getSpaceByID(String spaceId);
 	List<Space> getSpaceList(String hql);

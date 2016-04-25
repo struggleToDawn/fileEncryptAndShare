@@ -21,8 +21,9 @@ public class SpaceDao implements ISpaceDao{
 	}
 
 	@Override
-	public void addSpace(Space space) {
+	public String addSpace(Space space) {
 		hibernateTemplate.saveOrUpdate(space);
+		return space.getID();
 	}
 	
 	

@@ -42,7 +42,8 @@ public class SystemInterceptor extends HandlerInterceptorAdapter {
   
         
         // 后台session控制  
-        String[] noFilters = new String[] { "businessGroup","groupmanage"};  
+        String[] noFilters = new String[] { };  
+//        String[] noFilters = new String[] { "businessGroup","groupmanage"};  
         String uri = request.getRequestURI();  
   
             boolean beFilter = false;  
