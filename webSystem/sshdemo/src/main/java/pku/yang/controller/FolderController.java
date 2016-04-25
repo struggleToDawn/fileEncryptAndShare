@@ -35,7 +35,7 @@ public class FolderController {
 	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。
 	@ResponseBody
 	@RequestMapping(value = "/setTPA", method = RequestMethod.POST)
-	public String createFolder(@RequestParam String token,
+	public String setTPA(@RequestParam String token,
 			@RequestParam String fileid) {
 		List<File> filelist = fileService.getFilesByUserId(token);
 		for(int i=0;i<filelist.size();i++){
@@ -68,7 +68,20 @@ public class FolderController {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		String createDate = format.format(date);
-		folderService.createFolder(uid,filename,fatherId,createDate);
+		
+		String id = "0";
+		
+		String unixtime = Long.toString(date.getTime());
+		id = id + unixtime;
+		int i = (int)Math.random()*1000;
+		String randomNumber = Integer.toString(i);
+		id = id + randomNumber;
+		String storageID = "0";
+		String storageType = "0";
+		String whetherRoot = "0";
+		String shareType = "0";
+		String integrityType = "0";
+		folderService.addFolder(id, filename, fatherId, storageID, storageType, whetherRoot, uid, createDate, shareType, integrityType);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
 		return result.toJSONString();
@@ -115,7 +128,7 @@ public class FolderController {
 	@RequestMapping(value = "/Canuploadfile", method = RequestMethod.GET)
 	public String Canuploadfile(@RequestParam String token,
 			@RequestParam String parentid) {
-		JSONObject result = new JSONObject();
+		JSONObject result = new JSONObject();//全都没有判错
 		Folder folder = folderService.findFolderInfo(parentid);
 		String TPA = folder.getIntegrityType();
 		result.put("code", 0);
@@ -141,7 +154,7 @@ public class FolderController {
 	
 	//文件完整性验证权限检查，发送文件id，token，“checkfile”关键字，返回该文件是否支持完整性验证
 	@ResponseBody
-	@RequestMapping(value = "/checkfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkfile", method = RequestMethod.GET)
 	public String checkfile(@RequestParam String token,
 			@RequestParam String Fileid) {
 		JSONObject result = new JSONObject();
@@ -152,13 +165,14 @@ public class FolderController {
 	
 	//通过token以及“listAllFile”，返回该用户所有文件（包含所有空间文件）
 		@ResponseBody
-		@RequestMapping(value = "/listAllFile", method = RequestMethod.POST)
+		@RequestMapping(value = "/listAllFile", method = RequestMethod.GET)
 		public String listAllFile(@RequestParam String token) {
 			JSONObject result = new JSONObject();
 			JSONArray data = new JSONArray();
 			result.put("code",0);
 			try{
 				String uid = DESUtil.getUidBytoken(token);
+				System.out.println(uid);
 				List<File> filelist = fileService.getFilesByUserId(uid);
 				for(int i=0;i<filelist.size();i++){
 					JSONObject temp = new JSONObject();
@@ -172,7 +186,7 @@ public class FolderController {
 					temp.put("share",0);
 					data.add(temp);
 				}
-				List<Folder> folderlist = folderService.getFoldersByUserId(token);
+				List<Folder> folderlist = folderService.getFoldersByUserId(uid);
 				for(int i=0;i<folderlist.size();i++){
 					JSONObject temp = new JSONObject();
 					temp.put("fileid", folderlist.get(i).getFolderID());
@@ -194,7 +208,7 @@ public class FolderController {
 					data.add(temp);
 					
 				}
-				result.put("data", true);
+				result.put("data", data);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -205,14 +219,20 @@ public class FolderController {
 	
 	//发送文件id，“listfile”和token，返回文件id下的所有文件
 	@ResponseBody
-	@RequestMapping(value = "/listfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/listfile", method = RequestMethod.GET)
 	public String listfile(@RequestParam String token,
 			@RequestParam String Fileid) {
+		String uid = new String();
+		try{
+			uid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		JSONObject result = new JSONObject();
 		JSONArray data = new JSONArray();
 		result.put("code",0);
 		//-----获取文件列表-----//
-		List<File> filelist = fileService.getFilesByUserId(token);
+		List<File> filelist = fileService.getFilesByUserId(uid);
 		for(int i=0;i<filelist.size();i++){
 			if(filelist.get(i).getFolderId().equals(Fileid)){
 				JSONObject temp = new JSONObject();
@@ -227,7 +247,7 @@ public class FolderController {
 				data.add(temp);
 			}
 		}
-		List<Folder> folderlist = folderService.getFoldersByUserId(token);
+		List<Folder> folderlist = folderService.getFoldersByUserId(uid);
 		for(int i=0;i<folderlist.size();i++){
 			if(folderlist.get(i).getFatherID().equals(Fileid)){
 				JSONObject temp = new JSONObject();
@@ -250,7 +270,7 @@ public class FolderController {
 				data.add(temp);
 			}	
 		}
-		result.put("data", true);
+		result.put("data", data);
 		return result.toJSONString();
 	}
 	/**

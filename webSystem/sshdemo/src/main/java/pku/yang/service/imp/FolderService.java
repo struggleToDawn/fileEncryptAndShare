@@ -58,6 +58,7 @@ public class FolderService implements IFolderService{
 		int i = (int)Math.random()*1000;
 		String randomNumber = Integer.toString(i);
 		id = id + randomNumber;
+		System.out.println(id);
 		folder.setFolderID(id);
 		folder.setName(name);
 		folder.setFatherID(parentid);
@@ -70,7 +71,7 @@ public class FolderService implements IFolderService{
 
 		folder.setShareType("0");
 		folder.setIntegrityType("0");
-		this.saveFolder(folder);
+		folderdao.save(folder);
 		return id;
 	}
 	
