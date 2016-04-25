@@ -47,7 +47,7 @@ public class FolderService implements IFolderService{
 	}
 	
 	@Override
-	public String createFolder(String uid,String name,String parentid,String time){
+	public String addRootFolder(String uid,String name,String parentid,String time){
 		Folder folder= new Folder();
 		String id = "0";
 	

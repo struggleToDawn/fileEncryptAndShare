@@ -53,6 +53,15 @@ public class FolderController {
 		return result.toJSONString();
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String addRootFolder(@RequestParam String token,
+			@RequestParam String filename,
+			@RequestParam String fatherId) {
+		folderService.addRootFolder(token, filename, fatherId, "123456");
+		return "1231";
+	}
+	
 	//-----以下是正式的接口代码-----//
 	@ResponseBody
 	@RequestMapping(value = "/createdirectory", method = RequestMethod.GET)
@@ -394,7 +403,7 @@ public class FolderController {
 	 */
 	
 	//删除文件夹，发送文件夹id，token，“deleteDirctory”关键字，返回删除文件夹之后的文件目录，并将文件夹下的所有文件都删除掉
-	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.GET)
 	public String deleteFolder(@RequestParam String id,
 			@RequestParam String token) {
 		String uid = new String();
@@ -411,7 +420,10 @@ public class FolderController {
 		String newid;
 		List<File> filelist = fileService.getFilesByUserId(uid);
 		List<Folder> folderlist = folderService.getFoldersByUserId(uid);
-		while((newid=stack.pop())!=null){
+		while(!stack.empty()){
+			newid=stack.pop();
+			System.out.println(newid);
+			folderService.deleteFolder(newid);
 			for(int i=0;i<filelist.size();i++){
 				if(filelist.get(i).getFolderId().equals(newid)){
 					fileService.deleteFile(filelist.get(i).getFile_id());
@@ -419,8 +431,8 @@ public class FolderController {
 			}
 			for(int i=0;i<folderlist.size();i++){
 				if(folderlist.get(i).getFatherID().equals(newid)){
+					System.out.println("folderlist.get(i).getFolderID():"+folderlist.get(i).getFolderID());
 					stack.push(folderlist.get(i).getFolderID());
-					folderService.deleteFolder(folderlist.get(i).getFolderID());
 				}	
 			}
 		}
