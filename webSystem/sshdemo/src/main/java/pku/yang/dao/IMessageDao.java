@@ -11,6 +11,8 @@ public interface IMessageDao {
 	void delete(String mess_id);
 	Message getByID(String mess_id);
 	List<Message> getList(String hql);
-	List<Message> usermess(String user_id);
+	List<Message> userMessofNOrespond(String user_id);
+	List<Message> userMessResponded(String user_id);
+	List<Message> mess_of_fg(String fg_id);
 	
 }
