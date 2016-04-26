@@ -36,6 +36,9 @@ public class BusinessGroup {
 	@Column(name="uAttrs")
 	private String uAttrs;
 	
+	@Column(name="uids")
+	private String uids;
+	
 	@Column(name="ctime")
 	private String ctime;
 	
@@ -88,6 +91,14 @@ public class BusinessGroup {
 
 	public void setAdminId(String adminId) {
 		this.adminId = adminId;
+	}
+
+	public String getUids() {
+		return uids;
+	}
+
+	public void setUids(String uids) {
+		this.uids = uids;
 	}
 
 	public String getAdminAttrs() {

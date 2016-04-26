@@ -19,6 +19,7 @@ public class MessageDao implements IMessageDao{
 	
 	@Override
 	public void save(Message mess) {
+		hibernateTemplate.saveOrUpdate(mess);
 }
 	
 	@Override
@@ -60,7 +61,7 @@ public class MessageDao implements IMessageDao{
 	}
 
 	@Override
-	public List<Message> usermess(String user_id) {
+	public List<Message> userMessofNOrespond(String user_id) {
 		// TODO Auto-generated method stub
 		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
 		try{
@@ -75,4 +76,35 @@ public class MessageDao implements IMessageDao{
 		}
 	}
 
+	@Override
+	public List<Message> userMessResponded(String user_id) {
+		// TODO Auto-generated method stub
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		try{
+			String hql = "FROM Message where user_id="+user_id+" and state='1'";		
+			//Query q = session.createQuery(hql);
+			List<Message>list_usermess=session.createQuery(hql).list();
+			//System.out.println("FolderDao:"+list);
+			return list_usermess;
+			}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<Message> mess_of_fg(String fg_id) {
+		// TODO Auto-generated method stub
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		try{
+			String hql = "FROM Message where fg_id="+fg_id;		
+			//Query q = session.createQuery(hql);
+			List<Message>list_usermess=session.createQuery(hql).list();
+			//System.out.println("FolderDao:"+list);
+			return list_usermess;
+			}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
