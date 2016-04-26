@@ -26,6 +26,16 @@ public class SpaceService implements ISpaceService{
 			space.setRoot(root);
 			spaceDao.addSpace(space);
 	}
+	
+	
+	@Override
+	public String addSpace(String name, int size ,String root){
+			Space space = new Space();
+			space.setName(name);
+			space.setSize(size);
+			space.setRoot(root);
+			return   spaceDao.addSpace(space);
+	}
 
 	@Override
 	public void deleteSpace(String spaceID) {
@@ -38,6 +48,13 @@ public class SpaceService implements ISpaceService{
 		// TODO Auto-generated method stub
 		List<Space> spacelist = spaceDao.getSpaceList("from Space");
 		return spacelist;
+	}
+
+
+	@Override
+	public Space findById(String id) {
+		// TODO Auto-generated method stub
+		return spaceDao.getSpaceByID(id);
 	}
 
 

@@ -176,9 +176,13 @@ public class UserDao implements IUserDao {
 	@Override
 	public String setUserGroup(String id, String userGroup) {
 		User user = this.getByID(id);
+		System.out.println(1);
 		user.setGourps(userGroup);
+		System.out.println(2);
 		hibernateTemplate.saveOrUpdate(user);
+		System.out.println(3);
 		return user.getGourps();
+//		return "123";
 	}	
 
 }

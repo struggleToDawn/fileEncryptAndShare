@@ -44,6 +44,10 @@ public class UserController {
 		User user;
 		try {
 			user = userService.login(id, password);
+			
+			if(user.getRoleNum()==1){
+				return "loginError";
+			}
 			model.addAttribute(user);
 			request.getSession().setAttribute("sessionname", id);
 						
@@ -63,15 +67,11 @@ public class UserController {
 			user = userService.login(id, password);
 			if(user.getRole().isCommonUser||user.getRole().isGroupMng){
 				request.getSession().setAttribute("sessionname", id);
-//				Token token = new Token();
-//				token.setTokenId("aaaaa");
-//				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-//				String ctime = df.format(new Date());
-//				token.setDeadLine(ctime);
 				
 				JSONArray jsonarray = new JSONArray();
 				
 					String tken  = DESUtil.encrypt(id);
+					
 					jsonarray.add(tken);
 					JSONObject jsonData = new JSONObject();
 					
@@ -81,7 +81,12 @@ public class UserController {
 				return jsonData.toString();
 			}else{
 				
-				return "密码错误!";
+				JSONObject jsonData = new JSONObject();
+				
+				jsonData.put("code",1);
+				jsonData.put("data","密码错误!");
+				
+				return  jsonData.toString();
 			}
 
 		} catch (Exception e) {

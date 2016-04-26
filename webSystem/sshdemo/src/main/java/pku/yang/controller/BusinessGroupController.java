@@ -1,6 +1,7 @@
 package pku.yang.controller;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,12 @@ import com.alibaba.fastjson.JSONObject;
 
 
 import pku.yang.model.BusinessGroup;
+import pku.yang.model.User;
 import pku.yang.service.IBusinessGroupService;
+import pku.yang.service.ISpaceService;
+import pku.yang.service.ITokenService;
+import pku.yang.service.IUserService;
+import pku.yang.tool.DESUtil;
 
 
 @Controller
@@ -27,6 +33,85 @@ public class BusinessGroupController {
 
 	@Autowired
 	private IBusinessGroupService businessGroup;
+	@Autowired
+	private ISpaceService spaceService;
+	@Autowired
+	private IUserService userService;
+	
+	@ResponseBody 
+	@RequestMapping(value = "/ttt", method = RequestMethod.GET)
+	public String ttt(
+			@RequestParam String token
+//			@RequestParam String uAttrs,
+////			@RequestParam int storageId, 
+//			@RequestParam String adminAttrs
+			) throws Exception {
+		
+		
+		String groupId ="";
+		
+		String uid = DESUtil.getUidBytoken("As6VkJPshb2AfJediKXVbQ==");
+		
+		return uid;
+		
+//		userService.addUserGroup("1501211004", "3,4,5");
+		
+//		
+//		List<String> list = new ArrayList<String>();
+//				
+//		list = userService.getUserGroup("1501211004");
+//		
+//		for(int i= 0; i< list.size();i++){
+//			groupId += "," + list.get(i);
+		
+//		}
+//		return groupId.substring(1);
+		
+		
+//		return "123";
+//		return spaceService.findById("402881fb54433ecd0154433ed4d00000").getRoot();
+		
+		
+//		return	spaceService.addSpace("ttt", 23, "12");
+
+		
+		
+		//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		String ctime = df.format(new Date());
+//		
+//		businessGroup.addGroup(name,"3",22,adminAttrs,uAttrs,ctime);
+		
+//		return "home";
+	}
+	
+	
+	
+	
+	
+	@ResponseBody 
+	@RequestMapping(value="getServiceGroupFile",method=RequestMethod.GET)
+	public String getServiceGroupFile(@RequestParam String token){
+		
+		
+		
+		JSONArray dorjsonarray = new JSONArray();
+		JSONObject jsonData = new JSONObject();
+		
+		
+		
+		JSONObject obj = new JSONObject();
+		
+		obj.put("name", "java");
+		obj.put("root", 10);
+		dorjsonarray.add(obj);
+		jsonData.put("code", 0);
+		jsonData.put("data", dorjsonarray);
+		
+		return jsonData.toJSONString();
+	
+//		return "aaa";
+	}
+	
 	
 	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
 	public String addGroup(
@@ -40,10 +125,16 @@ public class BusinessGroupController {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
 		
+		
+		
+		
 		businessGroup.addGroup(name,"3",22,adminAttrs,uAttrs,ctime);
 		
 		return "home";
 	}
+	
+	
+	
 	
 
 	@RequestMapping(value = "/updateGroup", method = RequestMethod.POST)

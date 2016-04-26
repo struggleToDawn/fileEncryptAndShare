@@ -2,14 +2,21 @@ package pku.yang.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="space")
 public class Space {
 	@Id
 	@Column(name="id")
+	@GenericGenerator(name="hibernate-uuid",strategy="uuid")
+	@GeneratedValue(generator="hibernate-uuid")
 	private String spaceID;
 	
 	@Column(name="name")
