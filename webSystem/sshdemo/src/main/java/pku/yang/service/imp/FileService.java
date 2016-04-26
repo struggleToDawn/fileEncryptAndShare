@@ -24,7 +24,7 @@ public class FileService implements IFileService{
 	@Override
 	public void addFile(String id,String name,String folder,
 			String owner, String uploadtime,String expname,
-			String cloudpath){
+			String cloudpath,String integrity_type,String share_type){
 		System.out.println("Testlog: addFile of FileService");
 		File file = new File();
 		file.setFile_id(id);
@@ -34,6 +34,8 @@ public class FileService implements IFileService{
 		file.setUpload_time(uploadtime);
 		file.setExp_name(expname);
 		file.setCloud_path(cloudpath);
+		file.setIntegrityType(integrity_type);
+		file.setShareType(share_type);
 		fileDao.save(file);
 	}
 	
