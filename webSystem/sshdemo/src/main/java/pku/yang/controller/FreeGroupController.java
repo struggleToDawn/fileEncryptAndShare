@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import pku.yang.model.FreeGroup;
 import pku.yang.model.Message;
+import pku.yang.model.Space;
 import pku.yang.service.IFileService;
 import pku.yang.service.IFolderService;
 import pku.yang.service.IFreeGroupService;
@@ -47,15 +48,14 @@ public class FreeGroupController {
 	// 创建自由群组
 	@ResponseBody
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String add_fg(String token,String fg_name, String fg_userlist, String storageid,
+	public String add_fg(String token,String fg_name, String fg_userlist,
 			HttpServletRequest request) throws Exception {
 		//String uuid=DESUtil.getUidBytoken(token);
 		String uuid="12";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
-		String rootid=folderService.createFolder(uuid, fg_name, "2", ctime);
-		spaceservice.addSpace("storageid", fg_name, 200, rootid);
-		String storage_id="111";
+		String rootid=folderService.addRootFolder(uuid, fg_name, "2", ctime);
+		String storageid=spaceservice.addSpace(fg_name, 200, rootid);
 		String fg_id=freeGroupService.add_fg(fg_name, uuid, fg_userlist, storageid);
 		System.out.println(fg_id);
 		messageservice.add_mess(uuid, fg_id, "1");//将创建者加入到消息表，状态设置为1
@@ -67,8 +67,6 @@ public class FreeGroupController {
 			messageservice.add_mess(user_id[i], fg_id, "0");
 			// 增加消息列表
 		}
-
-	//	return "freegroupmanage/add_fg";
 		int code=0;
 		JSONObject resultjson = new JSONObject();
 		JSONObject datajson = new JSONObject();
@@ -78,6 +76,7 @@ public class FreeGroupController {
 		resultjson.put("code", code);
 		resultjson.put("data",datajson );
 		return resultjson.toJSONString();
+//		return "freegroupmanage/add_fg";
 	}
 
 	// 添加自由群组用户
@@ -92,7 +91,8 @@ public class FreeGroupController {
 	@RequestMapping(value = "/fgOfUser", method = RequestMethod.GET)
 	public String fgOfUser(@RequestParam String token) throws Exception 
 	{
-		String uuid=DESUtil.getUidBytoken(token);
+		//String uuid=DESUtil.getUidBytoken(token);
+		String uuid=token;
 		//找到用户id为uuid且状态为1的message
 		List<Message> list=messageservice.search_user_fg(uuid);
 		int code=0;
@@ -105,8 +105,8 @@ public class FreeGroupController {
 			FreeGroup fg= freeGroupService.search_fg_info(fg_id);
 			json1.put("fg_name",fg.getFg_name());
 			json1.put("storageid",fg.getStorgeid());
-			//spaceservice.fg.getStorgeid()
-			String rootid="abc";
+			Space space=spaceservice.findById(fg.getStorgeid());     //fg.getStorgeid()
+			String rootid=space.getRoot();
 			json1.put("rootid",rootid);
 			dorjsonarray.add(json1);
 		}
@@ -145,20 +145,26 @@ public class FreeGroupController {
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete_fg(String fg_id) {
 		
-		freeGroupService.delete_fg(fg_id);//删除群组信息
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
+		
+
+		
+		//删除根目录 ，此接口应该已经实现了删除文件夹下内容的功能
+		Space space=spaceservice.findById(fg.getStorgeid());		
+		folderService.deleteFolder(space.getRoot());
 		
 		//删除空间信息
 		spaceservice.deleteSpace(fg.getStorgeid());
 		
-		//删除根目录
-		folderService.deleteFolder(fg.getStorgeid());
+		freeGroupService.delete_fg(fg_id);//删除群组信息
+		
 		
 		//删除消息表中的成员记录
 		List<Message> list_fgmess = messageservice.search_mess_byfg(fg_id);
 		JSONObject resultjson = new JSONObject();
 		for (int i = 0; i < list_fgmess.size(); i++) {
 			String mess_id=list_fgmess.get(i).getMess_id();
+			System.out.println(mess_id);
 			messageservice.delete_mess(mess_id);		
 		}	
 		int code=0;
@@ -214,6 +220,7 @@ public class FreeGroupController {
 		}
 		return "freegroupmanage/respond_mess";
 	}
+	
 	
 	//文件夹和文件？？？
 	//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录

@@ -82,8 +82,8 @@ public class MessageService implements IMessageService{
 	@Override
 	public List<Message> search_mess_byfg(String fg_id) {
 		// TODO Auto-generated method stub
-		List<Message> list_fmess=messagedao.userMessofNOrespond(fg_id);
-		return list_fmess;
+		List<Message> list_fgmess=messagedao.mess_of_fg(fg_id);
+		return list_fgmess;
 	}
 
 

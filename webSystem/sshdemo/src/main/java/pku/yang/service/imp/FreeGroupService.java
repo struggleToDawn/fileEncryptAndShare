@@ -30,8 +30,8 @@ public class FreeGroupService implements IFreeGroupService {
 	@Override
 	public FreeGroup search_fg_info(String fg_id) {
 		// TODO Auto-generated method stub
-		freegroupdao.getByID(fg_id);
-		return null;
+		FreeGroup fg=freegroupdao.getByID(fg_id);
+		return fg;
 	}
 
 	@Override
