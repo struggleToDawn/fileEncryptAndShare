@@ -180,9 +180,9 @@ public class FolderController {
 			JSONArray data = new JSONArray();
 			result.put("code",0);
 			try{
-				String uid = DESUtil.getUidBytoken(token);
-				System.out.println(uid);
-				List<File> filelist = fileService.getFilesByUserId(uid);
+				/*String uid = DESUtil.getUidBytoken(token);
+				System.out.println(uid);*/
+				List<File> filelist = fileService.FileList();
 				for(int i=0;i<filelist.size();i++){
 					JSONObject temp = new JSONObject();
 					temp.put("fileid", filelist.get(i).getFile_id());
@@ -205,7 +205,7 @@ public class FolderController {
 					}
 					data.add(temp);
 				}
-				List<Folder> folderlist = folderService.getFoldersByUserId(uid);
+				List<Folder> folderlist = folderService.FolderList();
 				for(int i=0;i<folderlist.size();i++){
 					JSONObject temp = new JSONObject();
 					temp.put("fileid", folderlist.get(i).getFolderID());
@@ -241,17 +241,17 @@ public class FolderController {
 	@RequestMapping(value = "/listfile", method = RequestMethod.GET)
 	public String listfile(@RequestParam String token,
 			@RequestParam String Fileid) {
-		String uid = new String();
+		/*String uid = new String();
 		try{
 			uid = DESUtil.getUidBytoken(token);
 		}catch(Exception e){
 			e.printStackTrace();
-		}
+		}*/
 		JSONObject result = new JSONObject();
 		JSONArray data = new JSONArray();
 		result.put("code",0);
 		//-----获取文件列表-----//
-		List<File> filelist = fileService.getFilesByUserId(uid);
+		List<File> filelist = fileService.FileList();
 		for(int i=0;i<filelist.size();i++){
 			if(filelist.get(i).getFolderId().equals(Fileid)){
 				JSONObject temp = new JSONObject();
@@ -266,7 +266,7 @@ public class FolderController {
 				data.add(temp);
 			}
 		}
-		List<Folder> folderlist = folderService.getFoldersByUserId(uid);
+		List<Folder> folderlist = folderService.FolderList();
 		for(int i=0;i<folderlist.size();i++){
 			if(folderlist.get(i).getFatherID().equals(Fileid)){
 				JSONObject temp = new JSONObject();
@@ -406,20 +406,19 @@ public class FolderController {
 	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.GET)
 	public String deleteFolder(@RequestParam String id,
 			@RequestParam String token) {
-		String uid = new String();
+		/*String uid = new String();
 		try{
 			 uid = DESUtil.getUidBytoken(token);
 		}catch(Exception e){
 			e.printStackTrace();
-		}
+		}*/
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
-		result.put("data", true);
 		Stack<String> stack = new Stack<String>();
 		stack.push(id);
 		String newid;
-		List<File> filelist = fileService.getFilesByUserId(uid);
-		List<Folder> folderlist = folderService.getFoldersByUserId(uid);
+		List<File> filelist = fileService.FileList();
+		List<Folder> folderlist = folderService.FolderList();
 		while(!stack.empty()){
 			newid=stack.pop();
 			System.out.println(newid);
