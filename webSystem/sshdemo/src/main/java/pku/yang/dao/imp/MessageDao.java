@@ -19,12 +19,13 @@ public class MessageDao implements IMessageDao{
 	
 	@Override
 	public void save(Message mess) {
+		hibernateTemplate.saveOrUpdate(mess);
 }
 	
 	@Override
 	public void save_state(String mess_id,String state) {
 		// TODO Auto-generated method stub
-		Message mess=(Message)hibernateTemplate.get(Message.class,mess_id);
+		Message mess=hibernateTemplate.get(Message.class,mess_id);
 		if(mess != null){
 			mess.setState(state);
 			hibernateTemplate.saveOrUpdate(mess);
@@ -41,7 +42,7 @@ public class MessageDao implements IMessageDao{
 	@Override
 	public Message getByID(String mess_id) {
 		// TODO Auto-generated method stub
-		Message mess=(Message)hibernateTemplate.get(Message.class,mess_id);
+		Message mess=hibernateTemplate.get(Message.class,mess_id);
 		return mess;
 	}
 
@@ -60,11 +61,29 @@ public class MessageDao implements IMessageDao{
 	}
 
 	@Override
-	public List<Message> usermess(String user_id) {
+	public List<Message> userMessofNOrespond(String user_id) {
 		// TODO Auto-generated method stub
 		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
 		try{
 			String hql = "FROM Message where user_id="+user_id+" and state='0'";		
+			//Query q = session.createQuery(hql);
+			
+
+			List<Message>list_usermess=session.createQuery(hql).list();
+			//System.out.println("FolderDao:"+list);
+			return list_usermess;
+			}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public List<Message> userMessResponded(String user_id) {
+		// TODO Auto-generated method stub
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		try{
+			String hql = "FROM Message where user_id="+user_id+" and state='1'";		
 			//Query q = session.createQuery(hql);
 			List<Message>list_usermess=session.createQuery(hql).list();
 			//System.out.println("FolderDao:"+list);
@@ -75,4 +94,19 @@ public class MessageDao implements IMessageDao{
 		}
 	}
 
+	@Override
+	public List<Message> mess_of_fg(String fg_id) {
+		// TODO Auto-generated method stub
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		try{
+			String hql = "FROM Message where fg_id='"+fg_id+"'";		
+			//Query q = session.createQuery(hql);
+
+			List<Message>list_fgmess=session.createQuery(hql).list();
+			return list_fgmess;
+			}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

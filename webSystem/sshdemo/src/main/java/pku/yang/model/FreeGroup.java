@@ -6,8 +6,11 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
@@ -15,6 +18,8 @@ import javax.persistence.Table;
 public class FreeGroup {
 	@Id
 	@Column(name="fg_id")
+	@GenericGenerator(name="hibernate-uuid",strategy="uuid")
+	@GeneratedValue(generator="hibernate-uuid")
 	private String fg_id;
 	
 	@Column(name="fg_name")

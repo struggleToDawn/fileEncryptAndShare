@@ -8,7 +8,7 @@ import pku.yang.model.File;
 public interface IFileService {
 	void addFile(String id,String name,String folder,
 			String owner, String uploadtime,String expname,
-			String cloudpath);
+			String cloudpath,String integrity_type,String share_type);
 	void deleteFile(String file_id);
 	List<File> FileList();
 	List<File> getFilesByUserId(String user_id);

@@ -31,10 +31,10 @@ public class MessageService implements IMessageService{
 	}
 
 	@Override
-	public void add_mess(String mess_id, String user_id, String fg_id, String state) {
+	public void add_mess(String user_id, String fg_id, String state) {
 		// TODO Auto-generated method stub
 		Message mess=new Message();
-		mess.setMess_id(mess_id);
+//		mess.setMess_id(mess_id);
 		mess.setUser_id(user_id);
 		mess.setFg_id(fg_id);
 		mess.setState(state);
@@ -68,8 +68,22 @@ public class MessageService implements IMessageService{
 	@Override
 	public List<Message> search_mess_byuser(String user_id) {
 		// TODO Auto-generated method stub
-		List<Message> list_usermess=messagedao.usermess(user_id);
+		List<Message> list_usermess=messagedao.userMessofNOrespond(user_id);
 		return list_usermess;
+	}
+
+	@Override
+	public List<Message> search_user_fg(String user_id) {
+		// TODO Auto-generated method stub
+		List<Message> list_user_fg=messagedao.userMessResponded(user_id);
+		return list_user_fg;
+	}
+
+	@Override
+	public List<Message> search_mess_byfg(String fg_id) {
+		// TODO Auto-generated method stub
+		List<Message> list_fgmess=messagedao.mess_of_fg(fg_id);
+		return list_fgmess;
 	}
 
 

@@ -30,20 +30,21 @@ public class FreeGroupService implements IFreeGroupService {
 	@Override
 	public FreeGroup search_fg_info(String fg_id) {
 		// TODO Auto-generated method stub
-		freegroupdao.getByID(fg_id);
-		return null;
+		FreeGroup fg=freegroupdao.getByID(fg_id);
+		return fg;
 	}
 
 	@Override
-	public String add_fg(String fg_id, String fg_name, String fg_manager, String fg_userlist, String storgeid) {
+	public String add_fg( String fg_name, String fg_manager, String fg_userlist, String storgeid) {
 		// TODO Auto-generated method stub
 		FreeGroup freegroup=new FreeGroup();
-		freegroup.setFg_id(fg_id);
+//  	freegroup.setFg_id(fg_id);
 		freegroup.setFg_name(fg_name);
 		freegroup.setFg_manager(fg_manager);
 		freegroup.setFg_userlist(fg_userlist);
 		freegroup.setStorgeid(storgeid);
 		this.save_fg(freegroup);
+		String fg_id=freegroup.getFg_id();
 		return fg_id;
 	}
 

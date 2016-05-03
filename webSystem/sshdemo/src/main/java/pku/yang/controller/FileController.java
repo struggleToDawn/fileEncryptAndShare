@@ -97,7 +97,11 @@ public class FileController {
 		}
 		//--parse file name--//
 		String[] nameStr = fullname.split("\\.");
-		fileService.addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "");
+		Folder folder = new Folder();
+		folder = folderService.findFolderInfo(folderId);
+		String integrity_type = folder.getIntegrityType();
+		String share_type = folder.getShareType();
+		fileService.addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "",integrity_type,share_type);
 		JSONObject result = new JSONObject();
 		JSONArray data = new JSONArray();
 		result.put("code",0);
@@ -188,7 +192,8 @@ public class FileController {
 			@RequestParam String expname,
 			@RequestParam String cloudpath) {
 		System.out.println("Testlog: 111---addFile of FileController");
-		fileService.addFile(id, name, folder, owner, uploadtime,expname, cloudpath);
+		String integrity_type = "0";String share_type = "0";
+		fileService.addFile(id, name, folder, owner, uploadtime,expname, cloudpath,integrity_type,share_type);
 		System.out.println("Testlog: 222---addFile of FileController");
 		return "filemanage/add_file";
 	}

@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<form class="form-horizontal" action="${ctx}/freegroup/delete" method="get">
+<form class="form-horizontal" action="${ctx}/freegroup/fgOfUser" method="get">
 	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">自由群组ID：</label>
+		<label class="col-lg-3 control-label">用户token：</label>
 		<div class="col-lg-9">
-		<input type="text" class="form-control " id="fg_id" name ="fg_id"></div>
+		<input type="text" class="form-control " id="token" name ="token"></div>
 	</div>
 	<div class= "row col-lg-12"><p><br></p></div>
 	<div class = "col-lg-4 col-xs-4"></div>
