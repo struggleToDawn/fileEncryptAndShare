@@ -1,5 +1,6 @@
 package pku.yang.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pku.yang.model.Student;
@@ -71,7 +72,7 @@ public interface IUserService {
 	 */
 	void addStudent(String id, String name, int age, String teacherID,
 			String department, String academy, String studyGroup,
-			String courses);
+			String courses,String storage_id);
 
 	/**
 	 * save teacher info
@@ -101,7 +102,7 @@ public interface IUserService {
 	 */
 	void addTeacher(String id, String name, int age, String title,
 			String duty, String department, String studyGroup,
-			String courses);
+			String courses , String storage_id);
 
 	/**
 	 * delete userInfo
@@ -117,7 +118,11 @@ public interface IUserService {
 	 */
 	boolean isExistUser(String id);
 	
-	List<String> getUserGroup(String id);
+	ArrayList<String> getUserGroup(String id);
+	
+	String getUserGroupString(String id);
+	
+	String getStorageId(String id);
 	
 	boolean deleteUserGroup(String id,String group);
 	

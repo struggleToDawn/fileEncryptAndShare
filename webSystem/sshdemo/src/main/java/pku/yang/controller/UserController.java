@@ -23,6 +23,8 @@ import pku.yang.model.Student;
 import pku.yang.model.Teacher;
 import pku.yang.model.User;
 import pku.yang.model.Token;
+import pku.yang.service.IFolderService;
+import pku.yang.service.ISpaceService;
 import pku.yang.service.ITokenService;
 import pku.yang.service.IUserService;
 import pku.yang.tool.Pagination;
@@ -34,7 +36,11 @@ import pku.yang.tool.DESUtil;
 public class UserController {
 
 	@Autowired
+	private ISpaceService spaceService;
+	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IFolderService folderService;
 	@Autowired
 	private ITokenService tokenService;
 
@@ -197,18 +203,27 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/student", method = RequestMethod.POST)
 	public String saveStudent(Model model,@RequestParam String id,
+			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam(defaultValue = "0") int age,
 			@RequestParam String teacherID, @RequestParam String department,
 			@RequestParam String academy, @RequestParam String studyGroup,
 			@RequestParam String courses) {
+	
 
 		if (userService.isExistUser(id)) {
 			userService.savestudent(id, name, age, teacherID, department,
 					academy, studyGroup, courses);
 		} else {
+			
+			String  uid = 	(String) request.getSession().getAttribute("sessionname");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ctime = df.format(new Date());
+			String FolderId =  folderService.addRootFolder(uid, name, "0", ctime);
+			String storage_id  = spaceService.addSpace(name, 23, FolderId);
+			
 			userService.addStudent(id, name, age, teacherID, department,
-					academy, studyGroup, courses);
+					academy, studyGroup, courses , storage_id);
 		}
 
 		return listUser(model, "", "", "", 1, 10);
@@ -229,17 +244,27 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/teacher", method = RequestMethod.POST)
 	public String saveTeacher(Model model,@RequestParam String id,
+			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam(defaultValue = "0") int age,
 			@RequestParam String title, @RequestParam String duty,
 			@RequestParam String department, @RequestParam String studyGroup,
 			@RequestParam String courses) {
+		
+		
+		
 		if (userService.isExistUser(id)) {
 			userService.saveTeacher(id, name, age, title, duty, department,
 					studyGroup, courses);
 		} else {
+			
+			String  uid = 	(String) request.getSession().getAttribute("sessionname");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ctime = df.format(new Date());
+			String FolderId =  folderService.addRootFolder(uid, name, "0", ctime);
+			String storage_id  = spaceService.addSpace(name, 23, FolderId);
 			userService.addTeacher(id, name, age, title, duty, department,
-					studyGroup, courses);
+					studyGroup, courses ,storage_id);
 		}
 		return listUser(model, "", "", "", 1, 10);
 	}

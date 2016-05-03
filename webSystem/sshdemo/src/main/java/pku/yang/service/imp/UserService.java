@@ -140,10 +140,10 @@ public class UserService implements IUserService{
 	@Override
 	public void addStudent(String id, String name, int age, String teacherID,
 			String department, String academy, String studyGroup,
-			String courses) {
+			String courses,String storage_id) {
 		//TODO  ID uniqueness֤
 		this.savestudent(id, name, age, teacherID, department, academy, studyGroup, courses);
-		this.addUser(id, name, "0");
+		this.addUser(id, name, "0",storage_id);
 		
 	}
 
@@ -154,19 +154,20 @@ public class UserService implements IUserService{
 	@Override
 	public void addTeacher(String id, String name, int age, String title,
 			String duty, String department, String studyGroup,
-			String courses) {
+			String courses,String storage_id) {
 		//TODO  ID uniqueness֤
 		this.saveTeacher(id, name, age, title, duty, department, studyGroup, courses);
-		this.addUser(id, name, "1");
+		this.addUser(id, name, "1" , storage_id);
 		
 	}
 	
-	private void addUser(String id,String name,String type){
+	private void addUser(String id,String name,String type,String storage_id){
 		//TODO  password strategy
 		User user = new User();
 		user.setUserID(id);
 		user.setUsername(name);
 		user.setType(type);
+		user.setStorageID(storage_id);
 		user.setRoleNum(1);
 		user.setPassword("666666");
 		userdao.save(user);
@@ -189,10 +190,15 @@ public class UserService implements IUserService{
 	}
 
 	@Override
-	public List<String> getUserGroup(String id) {
+	public ArrayList<String> getUserGroup(String id) {
 		String groups = userdao.getUserGroup(id);
 		String[] groups_ = groups.split(",");
-		return Arrays.asList(groups_);
+		ArrayList<String> list = new ArrayList<String>();
+		for(String group : groups_){
+			list.add(group);
+		}
+		
+		return list;
 	}
 
 	@Override
@@ -224,4 +230,17 @@ public class UserService implements IUserService{
 		sb.append(list.get(i));
 		return sb.toString();
 	}
+
+	@Override
+	public String getUserGroupString(String id) {
+		return  userdao.getUserGroup(id);
+	}
+
+	@Override
+	public String getStorageId(String id) {
+		// TODO Auto-generated method stub
+		return userdao.getStorageId(id);
+	}
+
+	
 }

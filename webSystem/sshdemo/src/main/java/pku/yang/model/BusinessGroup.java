@@ -26,8 +26,8 @@ public class BusinessGroup {
 	@Column(name="adminId")
 	private String adminId;
 	
-	@Column(name="storageId")
-	private int storageId;
+	@Column(name="storageId",length=128)
+	private String storageId;
 	
 	
 	@Column(name="adminAttrs")
@@ -69,11 +69,11 @@ public class BusinessGroup {
 		this.name = name;
 	}
 	
-	public int getStorageId(){
+	public String getStorageId(){
 		return storageId;
 	}
 	
-	public void setStorageId(int storageId){
+	public void setStorageId(String storageId){
 		this.storageId = storageId;
 	}
 	

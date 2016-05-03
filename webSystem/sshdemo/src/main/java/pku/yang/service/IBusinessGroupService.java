@@ -9,8 +9,8 @@ public interface IBusinessGroupService {
 
 
 	BusinessGroup findGroupInfo(String GroupID);
-	void addGroup(String name, String adminId, int storageId,
-			String adminAttrs, String uAttrs ,String ctime);
+	String addGroup(String name, String adminId, String storageId,
+			String adminAttrs, String uAttrs ,String uids,String ctime);
 	
 	void saveGroup(BusinessGroup businessGroup);
 	void deleteGroup(String groupID);

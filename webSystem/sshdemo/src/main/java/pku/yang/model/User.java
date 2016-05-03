@@ -29,7 +29,7 @@ public class User{
 	@Column(name="password")
 	private String password;
 	
-	@Column(name="storage_id")
+	@Column(name="storage_id",length=128)
 	private String storageID;
 	
 	@Column(name="type")
@@ -38,7 +38,7 @@ public class User{
 	@Column(name = "role")
 	private int roleNum;
 	
-	@Column(name = "groups")
+	@Column(name = "groups",length=512)
 	private String gourps;
 	
 	public User(){

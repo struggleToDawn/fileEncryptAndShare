@@ -3,11 +3,20 @@ package pku.yang.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.text.SimpleDateFormat;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,14 +26,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-
+import pku.yang.dao.IBusinessGroupDao;
+import pku.yang.dao.IUserDao;
 import pku.yang.model.BusinessGroup;
+import pku.yang.model.Student;
+import pku.yang.model.Teacher;
 import pku.yang.model.User;
 import pku.yang.service.IBusinessGroupService;
+import pku.yang.service.IFolderService;
 import pku.yang.service.ISpaceService;
 import pku.yang.service.ITokenService;
 import pku.yang.service.IUserService;
-import pku.yang.tool.DESUtil;
+import pku.yang.tool.*;
 
 
 @Controller
@@ -37,29 +50,49 @@ public class BusinessGroupController {
 	private ISpaceService spaceService;
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IFolderService folderService;
+	@Autowired
+	private IUserDao userDao;
+	@Autowired
+	private SessionFactory sessionFactory;
+
+
 	
 	@ResponseBody 
 	@RequestMapping(value = "/ttt", method = RequestMethod.GET)
 	public String ttt(
-			@RequestParam String token
+//			@RequestParam String token
 //			@RequestParam String uAttrs,
-////			@RequestParam int storageId, 
+//			@RequestParam int storageId, 
 //			@RequestParam String adminAttrs
 			) throws Exception {
-		
-		
-		String groupId ="";
-		
-		String uid = DESUtil.getUidBytoken("As6VkJPshb2AfJediKXVbQ==");
-		
-		return uid;
-		
-//		userService.addUserGroup("1501211004", "3,4,5");
+	
+//		AttributeToSql adminAttributeToSql = new AttributeToSql();
+//		adminAttributeToSql.getAdminIds("" , sessionFactory.getCurrentSession());
+//		List<Student> list = sessionFactory.getCurrentSession().createSQLQuery("select * from student where courses='java' ").addEntity(Student.class).list();
+//		userDao.excute("select * from user");
+//		System.out.println(list.get(0).getCourses());
+//		String groupId ="";
+//		
+//		String uid = DESUtil.getUidBytoken("As6VkJPshb2AfJediKXVbQ==");
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Date date = new Date();
+//		String createDate = format.format(date);
+//		
+//		uid =  folderService.addRootFolder("123", "java", "1", createDate);
+//		
+		userService.addUserGroup("1501211004", "3,4,5");
 		
 //		
 //		List<String> list = new ArrayList<String>();
-//				
-//		list = userService.getUserGroup("1501211004");
+//			
+		String a = "";
+		String userGroups = userService.getUserGroupString("1501211004");
+
+		return userGroups + ",12";
+		
+//		return "";
 //		
 //		for(int i= 0; i< list.size();i++){
 //			groupId += "," + list.get(i);
@@ -91,45 +124,128 @@ public class BusinessGroupController {
 	@ResponseBody 
 	@RequestMapping(value="getServiceGroupFile",method=RequestMethod.GET)
 	public String getServiceGroupFile(@RequestParam String token){
-		
-		
-		
-		JSONArray dorjsonarray = new JSONArray();
-		JSONObject jsonData = new JSONObject();
-		
-		
-		
-		JSONObject obj = new JSONObject();
-		
-		obj.put("name", "java");
-		obj.put("root", 10);
-		dorjsonarray.add(obj);
-		jsonData.put("code", 0);
-		jsonData.put("data", dorjsonarray);
-		
-		return jsonData.toJSONString();
+		String uid = new String();
+		try{
+			uid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		uid = "1501211004";		
+		String userGroups = userService.getUserGroupString(uid);
 	
-//		return "aaa";
+		JSONArray dorjsonarray = new JSONArray();
+		JSONArray dorjsonarray1 = new JSONArray();
+		JSONObject jsonData = new JSONObject();
+	
+		if(userGroups.isEmpty()){
+			jsonData.put("code", 1);
+			jsonData.put("data", dorjsonarray1);	
+			return jsonData.toJSONString();
+		}else{
+			String groups[] = userGroups.split(",");	
+			for(String group : groups){
+				BusinessGroup bg = businessGroup.findGroupInfo(group);
+				if(bg != null){
+					JSONObject obj = new JSONObject();
+					obj.put("name", bg.getName());
+					obj.put("root", bg.getStorageId());
+					dorjsonarray1.add(obj);			
+				}
+			}
+			
+			String storageId = userService.getStorageId(uid);
+			JSONArray dorjsonarray2 = new JSONArray();
+			JSONObject json = new JSONObject();
+			json.put("name", "person space");
+			json.put("root", storageId);
+			dorjsonarray2.add(json);
+			
+			dorjsonarray.add(dorjsonarray1);
+			dorjsonarray.add(dorjsonarray2);
+			
+			jsonData.put("code", 0);
+			jsonData.put("data", dorjsonarray);
+			
+			return jsonData.toJSONString();	
+		}
+		
 	}
 	
 	
 	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
 	public String addGroup(
+			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam String uAttrs,
-//			@RequestParam int storageId, 
+			@RequestParam int storageSize, 
 			@RequestParam String adminAttrs
 			) {
-		
-		
+	
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
 		
+		HashSet<String> set = new HashSet();
+		String  uid = 	(String) request.getSession().getAttribute("sessionname");
+		String  adminIds ="";
+		String  uids ="";
+					
+		AttributeToSql adminAttributeToSql = new AttributeToSql();
+		AttributeToSql userAttributeToSql = new AttributeToSql();
 		
+		String adminAttrss[] = adminAttrs.split("&");
+		for(int i = 0; i< adminAttrss.length;i++){
+			if(adminAttrss[i] != null){
+				if(adminAttributeToSql.check(adminAttrss[i])){
+					String	sql = adminAttributeToSql.getSql();
+					adminIds += "," + adminAttributeToSql.getAdminIds(sql,sessionFactory.getCurrentSession());
+				}else{
+					// 输入错误
+				}
+			}
+		}
+		adminIds = adminIds.substring(1);
 		
+		String uAttrss[] = uAttrs.split("&");
+		for(int i = 0 ; i< uAttrss.length;i++){
+			if(uAttrss[i]!=null){
+				if(userAttributeToSql.check(uAttrss[i])){
+					String 	sql = userAttributeToSql.getSql();
+					uids += "," + adminAttributeToSql.getUids(sql,sessionFactory.getCurrentSession());
+				}else{
+					// 输入错误
+				}	
+			}
+		}
+		uids = uids.substring(1);
+	
+		String FolderId =  folderService.addRootFolder(uid, name, "1", ctime);
+		String storageId = spaceService.addSpace(name, storageSize, FolderId);
+		String groupId =  businessGroup.addGroup(name,adminIds,storageId,adminAttrs,uAttrs,uids,ctime);
 		
-		businessGroup.addGroup(name,"3",22,adminAttrs,uAttrs,ctime);
+		for(String u : adminIds.split(",")){
+			if(!set.contains(u)){
+				set.add(u);
+			}
+		}
 		
+		for(String u: uids.split(",")){
+			if(!set.contains(u)){
+				set.add(u);
+			}
+		}
+		Iterator<String> iterator=set.iterator();
+		while(iterator.hasNext()){
+			String u = iterator.next();
+			String userGroups = userService.getUserGroupString(u);
+			System.out.println(userGroups);
+			if(userGroups =="null" || userGroups=="" || userGroups =="NULL" ){
+				userGroups = groupId;
+			}else{
+				userGroups += "," + groupId;
+			}
+			userService.addUserGroup(u, userGroups);
+		}
+
 		return "home";
 	}
 	
@@ -141,24 +257,111 @@ public class BusinessGroupController {
 	public String updateGroup(@RequestParam String id,
 			@RequestParam String name,
 			@RequestParam String uAttrs,
-			@RequestParam int storageId, 
+			@RequestParam String storageId, 
 			@RequestParam String adminAttrs
 			) {
-		
-		
 		
 		BusinessGroup groupModel = businessGroup.findGroupInfo(id);
 			
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String utime = df.format(new Date());
+	
+		HashSet<String> set = new HashSet();
+		String  adminIds ="";
+		String  uids ="";
+					
+		AttributeToSql adminAttributeToSql = new AttributeToSql();
+		AttributeToSql userAttributeToSql = new AttributeToSql();
 		
+		String adminAttrss[] = adminAttrs.split("&");
+		for(int i = 0; i< adminAttrss.length;i++){
+			if(adminAttrss[i] != null){
+				if(adminAttributeToSql.check(adminAttrss[i])){
+					String	sql = adminAttributeToSql.getSql();
+					adminIds += "," + adminAttributeToSql.getAdminIds(sql,sessionFactory.getCurrentSession());
+				}else{
+					// 输入错误
+				}
+			}
+		}
+		adminIds = adminIds.substring(1);
+		
+		String uAttrss[] = uAttrs.split("&");
+		for(int i = 0 ; i< uAttrss.length;i++){
+			if(uAttrss[i]!=null){
+				if(userAttributeToSql.check(uAttrss[i])){
+					String 	sql = userAttributeToSql.getSql();
+					uids += "," + adminAttributeToSql.getUids(sql,sessionFactory.getCurrentSession());
+				}else{
+					// 输入错误
+				}	
+			}
+		}
+		uids = uids.substring(1);
+		
+		
+		String oldAdminId = groupModel.getAdminId();
+		String oldUid = groupModel.getUids();
+
 		groupModel.setName(name);
 		groupModel.setUAttrs(uAttrs);
-		groupModel.setStorageId(storageId);
 		groupModel.setAdminAttrs(adminAttrs);
 		groupModel.setUptime(utime);
-		
+		groupModel.setAdminId(adminIds);
+		groupModel.setUids(uids);
 		businessGroup.saveGroup(groupModel);
+		
+		//在旧用户中删除groupId
+		String[] oldAdminIds = oldAdminId.split(",");
+		for(String uid : oldAdminIds){
+			String oldGroupId = userService.getUserGroupString(uid);
+			if(oldGroupId != null || oldGroupId !="" || oldGroupId != "NULL"){
+				String tem = oldGroupId.replaceAll(","+id, "");	
+				if(tem == oldGroupId){
+					oldGroupId = oldGroupId.replaceAll(id, "");	
+				}
+			}
+			userService.addUserGroup(uid, oldGroupId);
+		}
+		String[] oldUids = oldUid.split(",");
+		for(String uid : oldUids){
+			String oldGroupId = userService.getUserGroupString(uid);
+			if(oldGroupId !="" && oldGroupId !=null && oldGroupId != "NULL"){
+				System.out.println(oldGroupId + "ADF");
+				String tem = oldGroupId.replaceAll(","+id, "");	
+				if(tem == oldGroupId){
+					oldGroupId = oldGroupId.replaceAll(id, "");	
+				}
+			}
+			
+			userService.addUserGroup(uid, oldGroupId);
+		}
+		
+		//在新用户中添加groupId
+		for(String u : adminIds.split(",")){
+			if(!set.contains(u)){
+				set.add(u);
+			}
+		}
+		
+		for(String u: uids.split(",")){
+			if(!set.contains(u)){
+				set.add(u);
+			}
+		}
+		Iterator<String> iterator=set.iterator();
+		while(iterator.hasNext()){
+			String u = iterator.next();
+			System.out.println(u);
+			String userGroups = userService.getUserGroupString(u);
+			System.out.println(userGroups);
+			if(userGroups =="" || userGroups == null ||userGroups=="NULL"){
+				userGroups = id;
+			}else{
+				userGroups += "," + id;
+			}
+			userService.addUserGroup(u, userGroups);
+		}
 		
 		return "home";
 	}

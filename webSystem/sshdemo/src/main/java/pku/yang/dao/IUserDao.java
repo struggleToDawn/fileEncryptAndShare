@@ -24,4 +24,5 @@ public interface IUserDao {
 	Pagination<User> findUsers(String type,String id,String name,int page, int pagesize);
 	String getUserGroup(String id);
 	String setUserGroup(String id, String userGroup);
+	String getStorageId(String id);
 }

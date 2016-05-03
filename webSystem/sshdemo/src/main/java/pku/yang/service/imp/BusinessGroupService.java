@@ -19,8 +19,8 @@ public class BusinessGroupService implements IBusinessGroupService{
 	private IBusinessGroupDao businessGroupDao;
 
 	@Override
-	public	void addGroup(String name, String adminId, int storageId,
-			String adminAttrs, String uAttrs , String ctime){
+	public	String addGroup(String name, String adminId, String storageId,
+			String adminAttrs, String uAttrs , String uids,String ctime){
 			
 			BusinessGroup businessGroup = new BusinessGroup();
 			businessGroup.setAdminAttrs(adminAttrs);
@@ -28,9 +28,11 @@ public class BusinessGroupService implements IBusinessGroupService{
 			businessGroup.setAdminId(adminId);
 			businessGroup.setUAttrs(uAttrs);
 			businessGroup.setName(name);
+			businessGroup.setUids(uids);
 			businessGroup.setStorageId(storageId);
 			businessGroup.setCtime(ctime);
 			businessGroupDao.addGroup(businessGroup);
+			return businessGroup.getID();
 	}
 
 	
