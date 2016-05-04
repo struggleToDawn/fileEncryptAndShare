@@ -1,5 +1,7 @@
 package pku.yang.service.imp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import pku.yang.model.File;
 import pku.yang.model.Folder;
 import pku.yang.service.IFileService;
+import pku.yang.tool.DESUtil;
 import pku.yang.dao.imp.FileDao;
 
 @Service
@@ -59,5 +62,32 @@ public class FileService implements IFileService{
 	@Override
 	public File findFileInfo(String fileID){
 		return fileDao.getByID(fileID);
+	}
+	
+	@Override
+	public void shareFile(String token,String folderId,String fullname){
+		//--generate upload time--//
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String uploadtime = format.format(date);
+		//--generate file id--//
+		String fileId = "1";
+		fileId = fileId + Long.toString(date.getTime());
+		int randomNumber = (int)(Math.random()*1000);
+		fileId = fileId + Integer.toString(randomNumber);
+		//--get user id--//
+		String userId = "";
+		try{
+			userId = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		//--parse file name--//
+		String[] nameStr = fullname.split("\\.");
+//		Folder folder = new Folder();
+//		folder = folderService.findFolderInfo(folderId);
+//		String integrity_type = folder.getIntegrityType();
+//		String share_type = folder.getShareType();
+		addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "","","");
 	}
 }
