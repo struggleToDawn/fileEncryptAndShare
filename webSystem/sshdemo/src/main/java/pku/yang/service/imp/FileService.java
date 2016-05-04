@@ -55,4 +55,9 @@ public class FileService implements IFileService{
 		List<File> filelist = fileDao.getList(hql);
 		return filelist;
 	}
+	
+	@Override
+	public File findFileInfo(String fileID){
+		return fileDao.getByID(fileID);
+	}
 }

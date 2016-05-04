@@ -34,20 +34,12 @@ public class FolderController {
 	
 	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。
 	@ResponseBody
-	@RequestMapping(value = "/setTPA", method = RequestMethod.POST)
+	@RequestMapping(value = "/setTPA", method = RequestMethod.GET)
 	public String setTPA(@RequestParam String token,
 			@RequestParam String fileid) {
-		List<File> filelist = fileService.getFilesByUserId(token);
-		for(int i=0;i<filelist.size();i++){
-			if(filelist.get(i).getFolderId().equals(fileid)){
-				
-			}
-		}
-		try{
-			String uid = DESUtil.getUidBytoken(token);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		File file = fileService.findFileInfo(fileid);
+		file.setIntegrityType("1");
+		fileService.saveFile(file);
 		JSONObject result = new JSONObject();
 		result.put("result", 0);
 		return result.toJSONString();
@@ -140,13 +132,18 @@ public class FolderController {
 		JSONObject result = new JSONObject();//全都没有判错
 		Folder folder = folderService.findFolderInfo(parentid);
 		String TPA = folder.getIntegrityType();
+		String ABE = folder.getShareType();
 		result.put("code", 0);
 		if(TPA.equals("1")){
-			result.put("data", "TPA");
+			result.put("TPA", "TPA");
 		}else{
-			result.put("data", "normal");
+			result.put("TPA", "normal");
 		}
-		
+		if(ABE.equals("1")){
+			result.put("ABE", "ABE");
+		}else{
+			result.put("ABE", "normal");
+		}
 		return result.toJSONString();
 	}
 	
@@ -156,8 +153,14 @@ public class FolderController {
 	public String Candownloadfile(@RequestParam String token,
 			@RequestParam String Fileid) {
 		JSONObject result = new JSONObject();
+		File file = fileService.findFileInfo(Fileid);
+		String abe = file.getShareType();
 		result.put("code", 0);
-		result.put("data", "ABE");
+		if(abe.equals("1")){
+			result.put("data", "ABE");
+		}else{
+			result.put("data", "normal");
+		}
 		return result.toJSONString();
 	}
 	
@@ -168,7 +171,14 @@ public class FolderController {
 			@RequestParam String Fileid) {
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
-		result.put("data", true);
+		File file = fileService.findFileInfo(Fileid);
+		String inter = file.getIntegrityType();
+		result.put("code", 0);
+		if(inter.equals("1")){
+			result.put("data", "TPA");
+		}else{
+			result.put("data", "normal");
+		}
 		return result.toJSONString();
 	}
 	
