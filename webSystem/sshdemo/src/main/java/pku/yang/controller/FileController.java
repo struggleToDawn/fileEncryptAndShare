@@ -105,6 +105,11 @@ public class FileController {
 		JSONObject result = new JSONObject();
 		JSONArray data = new JSONArray();
 		result.put("code",0);
+		JSONObject subData = new JSONObject();
+		subData.put("fileid", fileId);
+		subData.put("filename", fullname);
+		subData.put("uid", userId);
+		data.add(subData);
 		//-----获取文件列表-----//
 //		List<File> filelist = fileService.getFilesByUserId(userId);
 //		for(int i=0;i<filelist.size();i++){
@@ -133,7 +138,7 @@ public class FileController {
 //			temp.put("share",0);
 //			data.add(temp);
 //		}
-//		result.put("data", data);
+		result.put("data", data);
 		return result.toJSONString();
 	}
 	@ResponseBody
