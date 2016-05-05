@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import pku.yang.model.File;
 import pku.yang.model.FreeGroup;
 import pku.yang.model.Message;
 import pku.yang.model.Space;
@@ -39,6 +40,7 @@ public class FreeGroupController {
 	// 将需要的服务注解进来
 	@Autowired
 	private IFolderService folderService;
+	
 	@Autowired
 	private ISpaceService spaceservice;
 	
@@ -50,8 +52,8 @@ public class FreeGroupController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add_fg(String token,String fg_name, String fg_userlist,
 			HttpServletRequest request) throws Exception {
-		//String uuid=DESUtil.getUidBytoken(token);
-		String uuid="12";
+		String uuid=DESUtil.getUidBytoken(token);
+		//String uuid="12";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String ctime = df.format(new Date());
 		String rootid=folderService.addRootFolder(uuid, fg_name, "2", ctime);
@@ -212,11 +214,14 @@ public class FreeGroupController {
 			System.out.println("messid=======" + mess_id);
 			//更新状态
 			messageservice.save_mess_state(mess_id, state);
+			
+			//为该用户创建目录
 
 		}
 		if (state.equals("0")) {
 			//删除该用户消息，代表该用户不在该群组
 			messageservice.delete_mess(mess_id);
+			//String rootid=folderService.addRootFolder(uuid, fg_name, "2", ctime);
 		}
 		return "freegroupmanage/respond_mess";
 	}
@@ -224,13 +229,24 @@ public class FreeGroupController {
 	
 	//文件夹和文件？？？
 	//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
+	@ResponseBody
+	@RequestMapping(value = "/sharefile", method = RequestMethod.GET)
+	public String sharefile(@RequestParam String token,@RequestParam String folderid,
+			@RequestParam String fileid) {
+		
+		fileService.shareFile(token, folderid, fileid);
+		JSONObject result = new JSONObject();
+		result.put("code", 0);
+		result.put("data", "success");
+		return result.toJSONString();	
+	}
 	
 	
 	//删除文件 token,fileid（判断文件owner），提供service根据fileid找到file对象
 	@ResponseBody
 	@RequestMapping(value = "/deletefile", method = RequestMethod.GET)
 	public String deleteFile(@RequestParam String token,
-			@RequestParam String fileId) {
+			@RequestParam String fileId,@RequestParam String fg_id) {
 		JSONObject result = new JSONObject();
 		//--get user id--//
 		String uuid = "";
@@ -239,10 +255,21 @@ public class FreeGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		fileService.deleteFile(fileId);
-		result.put("code", 0);
-		result.put("data", "success");
+		File file=fileService.findFileInfo(fileId);
+		String file_owner=file.getOwner();
+		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
+		String fg_manager=fg.getFg_manager();
+		if(uuid.endsWith(file_owner)||uuid.endsWith(fg_manager))
+		{
+			fileService.deleteFile(fileId);
+			result.put("code", 0);
+			result.put("data", "success");
+		}
+		else
+		{
+			result.put("code", 1);
+			result.put("data", "can not delete");
+		}
 		return result.toJSONString();
 	}
 	
@@ -265,5 +292,4 @@ public class FreeGroupController {
 		result.put("data", "success");
 		return result.toJSONString();
 	}
-
 }
