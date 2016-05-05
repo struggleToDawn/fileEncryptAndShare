@@ -33,6 +33,7 @@ public class FileController {
 	private IFileService fileService;
 	
 	//-----这是临时代码-----//
+	@Autowired
 	private IFolderService folderService;
 	//-----这是临时代码-----//
 	
@@ -75,7 +76,7 @@ public class FileController {
 //			return result.toJSONString();
 //	}
 	@ResponseBody
-	@RequestMapping(value = "/uploadfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadfile", method = RequestMethod.GET)
 	public String uploadFile(@RequestParam String token,
 			@RequestParam String folderId,
 			@RequestParam String fullname) {
