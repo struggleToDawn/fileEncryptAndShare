@@ -41,7 +41,7 @@ public class FolderController {
 		file.setIntegrityType("1");
 		fileService.saveFile(file);
 		JSONObject result = new JSONObject();
-		result.put("result", 0);
+		result.put("code", 0);
 		return result.toJSONString();
 	}
 	
