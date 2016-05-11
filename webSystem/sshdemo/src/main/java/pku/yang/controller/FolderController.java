@@ -37,9 +37,9 @@ public class FolderController {
 	@RequestMapping(value = "/setTPA", method = RequestMethod.GET)
 	public String setTPA(@RequestParam String token,
 			@RequestParam String fileid) {
-		File file = fileService.findFileInfo(fileid);
-		file.setIntegrityType("1");
-		fileService.saveFile(file);
+		Folder folder = folderService.findFolderInfo(fileid);
+		folder.setIntegrityType("1");
+		folderService.saveFolder(folder);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
 		return result.toJSONString();
