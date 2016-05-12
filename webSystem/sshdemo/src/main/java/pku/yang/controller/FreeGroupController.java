@@ -19,11 +19,13 @@ import com.alibaba.fastjson.JSONObject;
 
 import pku.yang.model.File;
 import pku.yang.model.FreeGroup;
+import pku.yang.model.FreegroupFile;
 import pku.yang.model.Message;
 import pku.yang.model.Space;
 import pku.yang.service.IFileService;
 import pku.yang.service.IFolderService;
 import pku.yang.service.IFreeGroupService;
+import pku.yang.service.IFreegroupFileService;
 import pku.yang.service.IMessageService;
 import pku.yang.service.ISpaceService;
 import pku.yang.tool.*;
@@ -46,7 +48,11 @@ public class FreeGroupController {
 	
 	@Autowired
 	private IFileService fileService;
+	
+	@Autowired
+	private IFreegroupFileService fgfileService;
 
+	
 	// 创建自由群组
 	@ResponseBody
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -230,23 +236,31 @@ public class FreeGroupController {
 	//文件夹和文件？？？
 	//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
 	@ResponseBody
-	@RequestMapping(value = "/sharefile", method = RequestMethod.GET)
-	public String sharefile(@RequestParam String token,@RequestParam String folderid,
-			@RequestParam String fileid) {
+	@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET)
+	public String sharefile(@RequestParam String token,@RequestParam String fileid,
+			@RequestParam String folderid) {
 		
-		fileService.shareFile(token, folderid, fileid);
+		//fileService.shareFile(token, folderid, fileid);
+/*		String uuid = "";
+		try{
+			uuid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		*/
+		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
-		result.put("data", "success");
+		result.put("data", "");
 		return result.toJSONString();	
 	}
 	
 	
 	//删除文件 token,fileid（判断文件owner），提供service根据fileid找到file对象
 	@ResponseBody
-	@RequestMapping(value = "/deletefile", method = RequestMethod.GET)
+	@RequestMapping(value = "/deletefgfile", method = RequestMethod.GET)
 	public String deleteFile(@RequestParam String token,
-			@RequestParam String fileId,@RequestParam String fg_id) {
+			@RequestParam String fgfile_id,@RequestParam String fg_id) {
 		JSONObject result = new JSONObject();
 		//--get user id--//
 		String uuid = "";
@@ -255,6 +269,8 @@ public class FreeGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
+		String fileId=fgfile.getFile_id();
 		File file=fileService.findFileInfo(fileId);
 		String file_owner=file.getOwner();
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
@@ -279,7 +295,7 @@ public class FreeGroupController {
 	@ResponseBody
 	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST)
 	public String downloadFile(@RequestParam String token,
-			@RequestParam String fileId) {
+			@RequestParam String fgfile_id) {
 		JSONObject result = new JSONObject();
 		//--get user id--//
 		String userId = "";
@@ -288,6 +304,8 @@ public class FreeGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
+		String fileId=fgfile.getFile_id();
 		result.put("code", 0);
 		result.put("data", "success");
 		return result.toJSONString();
