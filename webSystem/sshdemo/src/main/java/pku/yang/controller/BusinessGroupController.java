@@ -130,7 +130,7 @@ public class BusinessGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		uid = "1501211004";		
+//		uid = "1501211004";		
 		String userGroups = userService.getUserGroupString(uid);
 	
 		JSONArray dorjsonarray = new JSONArray();
