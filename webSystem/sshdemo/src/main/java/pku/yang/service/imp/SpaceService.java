@@ -13,7 +13,6 @@ import pku.yang.service.ISpaceService;
 
 @Service
 public class SpaceService implements ISpaceService{
-
 	@Autowired
 	private ISpaceDao spaceDao;
 
