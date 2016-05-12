@@ -190,9 +190,9 @@ public class FolderController {
 			JSONArray data = new JSONArray();
 			result.put("code",0);
 			try{
-				/*String uid = DESUtil.getUidBytoken(token);
-				System.out.println(uid);*/
-				List<File> filelist = fileService.FileList();
+				String uid = DESUtil.getUidBytoken(token);
+				System.out.println(uid);
+				List<File> filelist = fileService.getFilesByUserId(uid);
 				for(int i=0;i<filelist.size();i++){
 					JSONObject temp = new JSONObject();
 					temp.put("fileid", filelist.get(i).getFile_id());
@@ -215,7 +215,7 @@ public class FolderController {
 					}
 					data.add(temp);
 				}
-				List<Folder> folderlist = folderService.FolderList();
+				List<Folder> folderlist = folderService.getFoldersByUserId(uid);
 				for(int i=0;i<folderlist.size();i++){
 					JSONObject temp = new JSONObject();
 					temp.put("fileid", folderlist.get(i).getFolderID());
