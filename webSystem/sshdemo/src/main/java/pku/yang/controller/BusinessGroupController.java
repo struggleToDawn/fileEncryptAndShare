@@ -127,47 +127,55 @@ public class BusinessGroupController {
 		String uid = new String();
 		try{
 			uid = DESUtil.getUidBytoken(token);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-//		uid = "1501211004";		
-		String userGroups = userService.getUserGroupString(uid);
-	
-		JSONArray dorjsonarray = new JSONArray();
-		JSONArray dorjsonarray1 = new JSONArray();
-		JSONObject jsonData = new JSONObject();
-	
-		if(userGroups.isEmpty()){
-			jsonData.put("code", 1);
-			jsonData.put("data", dorjsonarray1);	
-			return jsonData.toJSONString();
-		}else{
-			String groups[] = userGroups.split(",");	
-			for(String group : groups){
-				BusinessGroup bg = businessGroup.findGroupInfo(group);
-				if(bg != null){
-					JSONObject obj = new JSONObject();
-					obj.put("name", bg.getName());
-					obj.put("root", bg.getStorageId());
-					dorjsonarray1.add(obj);			
+
+			String userGroups = userService.getUserGroupString(uid);
+			
+		
+			JSONArray dorjsonarray = new JSONArray();
+			JSONArray dorjsonarray1 = new JSONArray();
+			JSONObject jsonData = new JSONObject();
+		
+			if(userGroups.isEmpty()){
+				jsonData.put("code", 1);
+				jsonData.put("data", dorjsonarray1);	
+				return jsonData.toJSONString();
+			}else{
+				String groups[] = userGroups.split(",");	
+				for(String group : groups){
+					BusinessGroup bg = businessGroup.findGroupInfo(group);
+					if(bg != null){
+						JSONObject obj = new JSONObject();
+						obj.put("name", bg.getName());
+						obj.put("root", bg.getStorageId());
+						dorjsonarray1.add(obj);			
+					}
 				}
+				
+				String storageId = userService.getStorageId(uid);
+				JSONArray dorjsonarray2 = new JSONArray();
+				JSONObject json = new JSONObject();
+				json.put("name", "person space");
+				json.put("root", storageId);
+				dorjsonarray2.add(json);
+				
+				dorjsonarray.add(dorjsonarray1);
+				dorjsonarray.add(dorjsonarray2);
+				
+				jsonData.put("code", 0);
+				jsonData.put("data", dorjsonarray);
+				
+				return jsonData.toJSONString();	
 			}
-			
-			String storageId = userService.getStorageId(uid);
-			JSONArray dorjsonarray2 = new JSONArray();
-			JSONObject json = new JSONObject();
-			json.put("name", "person space");
-			json.put("root", storageId);
-			dorjsonarray2.add(json);
-			
-			dorjsonarray.add(dorjsonarray1);
-			dorjsonarray.add(dorjsonarray2);
-			
-			jsonData.put("code", 0);
-			jsonData.put("data", dorjsonarray);
+		}catch(Exception e){
+			JSONObject jsonData = new JSONObject();
+			jsonData.put("code", 1);
+			jsonData.put("data", "用户id不存在");
 			
 			return jsonData.toJSONString();	
+		
+			
 		}
+		
 		
 	}
 	
@@ -236,9 +244,10 @@ public class BusinessGroupController {
 		Iterator<String> iterator=set.iterator();
 		while(iterator.hasNext()){
 			String u = iterator.next();
+			System.out.println(u);
 			String userGroups = userService.getUserGroupString(u);
 			System.out.println(userGroups);
-			if(userGroups =="null" || userGroups=="" || userGroups =="NULL" ){
+			if( userGroups == null ){
 				userGroups = groupId;
 			}else{
 				userGroups += "," + groupId;
