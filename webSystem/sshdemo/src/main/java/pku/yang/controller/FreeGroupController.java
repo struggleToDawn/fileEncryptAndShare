@@ -240,7 +240,7 @@ public class FreeGroupController {
 	public String sharefile(@RequestParam String token,@RequestParam String fileid,
 			@RequestParam String folderid) {
 		
-		//fileService.shareFile(token, folderid, fileid);
+		fileService.shareFile(token, folderid, fileid);
 /*		String uuid = "";
 		try{
 			uuid = DESUtil.getUidBytoken(token);
@@ -248,10 +248,10 @@ public class FreeGroupController {
 			e.printStackTrace();
 		}
 		*/
-		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
+//		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
-		result.put("data", fgfile_id);
+		result.put("data", "");
 		return result.toJSONString();	
 	}
 	
