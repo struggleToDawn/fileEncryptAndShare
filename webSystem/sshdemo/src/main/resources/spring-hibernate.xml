@@ -88,7 +88,7 @@ http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
       <tx:method name="update*" propagation="REQUIRED"/>
       <tx:method name="delete*" propagation="REQUIRED"/>
 
-      <tx:method name="*" propagation="SUPPORTS"  read-only="true"/>
+      <tx:method name="*" propagation="SUPPORTS"  read-only="false"/>
     </tx:attributes>
   </tx:advice>
   <aop:config>
