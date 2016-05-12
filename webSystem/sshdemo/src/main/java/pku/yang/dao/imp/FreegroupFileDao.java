@@ -2,12 +2,15 @@ package pku.yang.dao.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.stereotype.Repository;
 
 import pku.yang.dao.IFreeGroupDao;
 import pku.yang.dao.IFreegroupFileDao;
 import pku.yang.model.FreeGroup;
 import pku.yang.model.FreegroupFile;
 
+
+@Repository
 public class FreegroupFileDao implements IFreegroupFileDao{
 
 	@Autowired

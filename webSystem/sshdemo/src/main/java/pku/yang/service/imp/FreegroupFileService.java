@@ -1,6 +1,7 @@
 package pku.yang.service.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pku.yang.dao.imp.FreeGroupDao;
 import pku.yang.dao.imp.FreegroupFileDao;
@@ -9,6 +10,8 @@ import pku.yang.model.FreegroupFile;
 import pku.yang.service.IFreeGroupService;
 import pku.yang.service.IFreegroupFileService;
 
+
+@Service
 public class FreegroupFileService implements IFreegroupFileService{
 
 	@Autowired

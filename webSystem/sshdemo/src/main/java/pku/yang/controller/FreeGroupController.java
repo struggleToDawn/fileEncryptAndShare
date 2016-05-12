@@ -49,10 +49,10 @@ public class FreeGroupController {
 	@Autowired
 	private IFileService fileService;
 	
-	
 	@Autowired
 	private IFreegroupFileService fgfileService;
 
+	
 	// 创建自由群组
 	@ResponseBody
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -251,7 +251,7 @@ public class FreeGroupController {
 		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
-		result.put("data", fgfile_id);
+		result.put("data", "");
 		return result.toJSONString();	
 	}
 	
