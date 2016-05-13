@@ -127,7 +127,9 @@ public class BusinessGroupController {
 		String uid = new String();
 		try{
 			uid = DESUtil.getUidBytoken(token);
-
+			
+//			uid = "1501211004";
+			
 			String userGroups = userService.getUserGroupString(uid);
 			
 		
@@ -145,8 +147,9 @@ public class BusinessGroupController {
 					BusinessGroup bg = businessGroup.findGroupInfo(group);
 					if(bg != null){
 						JSONObject obj = new JSONObject();
+						String sid = bg.getStorageId();
 						obj.put("name", bg.getName());
-						obj.put("root", bg.getStorageId());
+						obj.put("root", spaceService.findById(sid).getRoot());
 						dorjsonarray1.add(obj);			
 					}
 				}
@@ -155,7 +158,7 @@ public class BusinessGroupController {
 				JSONArray dorjsonarray2 = new JSONArray();
 				JSONObject json = new JSONObject();
 				json.put("name", "person space");
-				json.put("root", storageId);
+				json.put("root", spaceService.findById(storageId).getRoot());
 				dorjsonarray2.add(json);
 				
 				dorjsonarray.add(dorjsonarray1);
