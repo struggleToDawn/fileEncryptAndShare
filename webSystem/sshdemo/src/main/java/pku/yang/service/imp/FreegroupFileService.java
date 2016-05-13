@@ -1,5 +1,7 @@
 package pku.yang.service.imp;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,13 @@ public class FreegroupFileService implements IFreegroupFileService{
 		this.save_fgfile(fgfile);
 		String fgfile_id=fgfile.getFgfile_id();
 		return fgfile_id;
+	}
+
+	@Override
+	public List<FreegroupFile> search_by_folder(String folder_id) {
+		// TODO Auto-generated method stub
+		List<FreegroupFile> list=fgfilepdao.getList(folder_id);
+		return list;
 	}
 
 }
