@@ -241,28 +241,7 @@ public class FreeGroupController {
 		return "freegroupmanage/respond_mess";
 	}
 	
-	
-	//文件夹和文件？？？
-	//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
-	@ResponseBody
-	@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET)
-	public String sharefile(@RequestParam String token,@RequestParam String fileid,
-			@RequestParam String folderid) {
-		
-	
-		String fgfile_id=fileService.shareFile(token, folderid, fileid);//返回fileid存到fgfile或者将fgfilr_id存到file表
-		String uuid = "";
-		try{
-			uuid = DESUtil.getUidBytoken(token);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		fgfileService.add_fgfile(fgfile_id,fileid, folderid);
-		JSONObject result = new JSONObject();
-		result.put("code", 0);
-		result.put("data", fgfile_id);
-		return result.toJSONString();	
-	}
+
 	
 	
 	//删除文件 token,fileid（判断文件owner），提供service根据fileid找到file对象

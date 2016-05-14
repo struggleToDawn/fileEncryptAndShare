@@ -189,8 +189,82 @@
     	<version>2.4</version>
     	<classifier>jdk15</classifier>
 	</dependency> 
+	
+	<!-- add by chenbin start-->
+	<!-- 二级缓存 -->
+    
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.2.1</version>
+    </dependency>
+    
+     <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>mchange-commons-java</artifactId>
+      <version>0.2.3.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>4.2.5.Final</version>
+    </dependency>
+	
+	<!-- JPA+SpringData -->
+	<dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>1.8.2.RELEASE</version>
+    </dependency>
+	
+	<!-- Json -->
+    <dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.1.5</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.1.5</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-annotations</artifactId>
+		<version>2.1.5</version>
+	</dependency>
+
+	<!-- add by chenbin end-->
+	
     </dependencies>
-  <build>
-    <finalName>sshdemo</finalName>
-  </build>
+  
+  <!-- add by chenbin start-->
+  <properties>  
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+    </properties>
+  
+  	<repositories>
+  		<repository>
+  			<id>osChina</id>
+  			<name>osChina repository</name>
+  			<url>http://maven.oschina.net/content/groups/public/</url>
+  		</repository>
+  	</repositories>
+  	
+    <build>
+     <finalName>sshdemo Maven Webapp</finalName>
+     <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+    </plugins>
+	</build>
+	
+	<!-- add by chenbin end-->
 </project>

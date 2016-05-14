@@ -259,46 +259,57 @@ public class FolderController {
 		}*/
 		JSONObject result = new JSONObject();
 		JSONArray data = new JSONArray();
+		Stack<String> stack = new Stack<String>();
+		stack.push(Fileid);
 		result.put("code",0);
 		//-----获取文件列表-----//
 		List<File> filelist = fileService.FileList();
-		for(int i=0;i<filelist.size();i++){
-			if(filelist.get(i).getFolderId().equals(Fileid)){
-				JSONObject temp = new JSONObject();
-				temp.put("fileid", filelist.get(i).getFile_id());
-				temp.put("parentid", filelist.get(i).getFolderId());
-				temp.put("filename", filelist.get(i).getFile_name());
-				temp.put("type","file");
-				temp.put("date", filelist.get(i).getUpload_time());
-				temp.put("size",0);
-				temp.put("TPA",0);
-				temp.put("share",0);
-				data.add(temp);
+		List<Folder> folderlist = folderService.FolderList();
+		while(!stack.empty()){
+			String id = stack.pop();
+			System.out.println("id"+id);
+			for(int i=0;i<filelist.size();i++){
+				if(filelist.get(i).getFolderId().equals(id)){
+					JSONObject temp = new JSONObject();
+					temp.put("fileid", filelist.get(i).getFile_id());
+					temp.put("parentid", filelist.get(i).getFolderId());
+					temp.put("filename", filelist.get(i).getFile_name());
+					temp.put("type","file");
+					temp.put("date", filelist.get(i).getUpload_time());
+					temp.put("size",0);
+					temp.put("TPA",0);
+					temp.put("share",0);
+					data.add(temp);
+				}
+			}
+			for(int i=0;i<folderlist.size();i++){
+				System.out.println("fatherid"+folderlist.get(i).getFatherID());
+				if(folderlist.get(i).getFatherID().equals(id)){
+					JSONObject temp = new JSONObject();
+					temp.put("fileid", folderlist.get(i).getFolderID());
+					temp.put("parentid", folderlist.get(i).getFatherID());
+					temp.put("filename", folderlist.get(i).getName());
+					temp.put("type","directory");
+					temp.put("date", folderlist.get(i).getCreateDate());
+					temp.put("size",0);
+					if(folderlist.get(i).getIntegrityType().equals("1")){
+						temp.put("TPA","TPA");
+					}else{
+						temp.put("TPA","normal");
+					}
+					if(folderlist.get(i).getShareType().equals("1")){
+						temp.put("share","ABE");
+					}else{
+						temp.put("share","normal");
+					}
+					System.out.println("push"+folderlist.get(i).getFolderID());
+					stack.push(folderlist.get(i).getFolderID());
+					data.add(temp);
+				}	
 			}
 		}
-		List<Folder> folderlist = folderService.FolderList();
-		for(int i=0;i<folderlist.size();i++){
-			if(folderlist.get(i).getFatherID().equals(Fileid)){
-				JSONObject temp = new JSONObject();
-				temp.put("fileid", folderlist.get(i).getFolderID());
-				temp.put("parentid", folderlist.get(i).getFatherID());
-				temp.put("filename", folderlist.get(i).getName());
-				temp.put("type","directory");
-				temp.put("date", folderlist.get(i).getCreateDate());
-				temp.put("size",0);
-				if(folderlist.get(i).getIntegrityType().equals("1")){
-					temp.put("TPA","TPA");
-				}else{
-					temp.put("TPA","normal");
-				}
-				if(folderlist.get(i).getShareType().equals("1")){
-					temp.put("share","ABE");
-				}else{
-					temp.put("share","normal");
-				}
-				data.add(temp);
-			}	
-		}
+		
+		
 		result.put("data", data);
 		return result.toJSONString();
 	}
