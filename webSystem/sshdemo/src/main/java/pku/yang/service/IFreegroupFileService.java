@@ -10,7 +10,7 @@ public interface IFreegroupFileService {
 	void save_fgfile(FreegroupFile fgfile);
 	void delete_fgfile(String fgfile_id);
 	FreegroupFile search_fgfile_info(String fgfile_id);
-	String add_fgfile(String fileid,String folderid);
+	void add_fgfile(String fgfile_id,String fileid,String folderid);
 	List<FreegroupFile> search_by_folder(String folder_id);
 
 }

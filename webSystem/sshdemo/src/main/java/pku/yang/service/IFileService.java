@@ -16,5 +16,5 @@ public interface IFileService {
 	List<File> getFilesByUserId(String user_id);
 	void saveFile(File file);
 	File findFileInfo(String fileID);
-	void shareFile(String token,String folderId,String fullname);
+	String shareFile(String token,String folderId,String fullname);
 }

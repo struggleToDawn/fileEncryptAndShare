@@ -40,14 +40,13 @@ public class FreegroupFileService implements IFreegroupFileService{
 	}
 
 	@Override
-	public String add_fgfile(String fileid, String folderid) {
+	public void add_fgfile(String fgfile_id,String fileid, String folderid) {
 		// TODO Auto-generated method stub
 		FreegroupFile fgfile=new FreegroupFile();
+		fgfile.setFgfile_id(fgfile_id);
 		fgfile.setFile_id(fileid);
 		fgfile.setFolder_id(folderid);
 		this.save_fgfile(fgfile);
-		String fgfile_id=fgfile.getFgfile_id();
-		return fgfile_id;
 	}
 
 	@Override

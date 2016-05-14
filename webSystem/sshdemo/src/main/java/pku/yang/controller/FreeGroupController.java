@@ -249,14 +249,15 @@ public class FreeGroupController {
 	public String sharefile(@RequestParam String token,@RequestParam String fileid,
 			@RequestParam String folderid) {
 		
-		//fileService.shareFile(token, folderid, fileid);
+	
+		String fgfile_id=fileService.shareFile(token, folderid, fileid);//返回fileid存到fgfile或者将fgfilr_id存到file表
 		String uuid = "";
 		try{
 			uuid = DESUtil.getUidBytoken(token);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
+		fgfileService.add_fgfile(fgfile_id,fileid, folderid);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
 		result.put("data", fgfile_id);
@@ -279,10 +280,10 @@ public class FreeGroupController {
 		}
 	//	FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
 	//	String fileId=fgfile.getFile_id();
-		File file=fileService.findFileInfo(fgfile_id);
+		File thesharefile=fileService.findFileInfo(fgfile_id);
 		
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
-		String file_owner=file.getOwner();
+		String file_owner=thesharefile.getOwner();
 		
 		String fg_manager=fg.getFg_manager();
 		
