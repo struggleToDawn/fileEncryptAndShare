@@ -240,7 +240,7 @@ public class FreeGroupController {
 	public String sharefile(@RequestParam String token,@RequestParam String fileid,
 			@RequestParam String folderid) {
 		
-		//fileService.shareFile(token, folderid, fileid);
+		fileService.shareFile(token, folderid, fileid);
 /*		String uuid = "";
 		try{
 			uuid = DESUtil.getUidBytoken(token);
@@ -248,7 +248,7 @@ public class FreeGroupController {
 			e.printStackTrace();
 		}
 		*/
-		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
+//		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
 		JSONObject result = new JSONObject();
 		result.put("code", 0);
 		result.put("data", "");
@@ -278,6 +278,7 @@ public class FreeGroupController {
 		if(uuid.endsWith(file_owner)||uuid.endsWith(fg_manager))
 		{
 			fileService.deleteFile(fileId);
+			fgfileService.delete_fgfile(fgfile_id);
 			result.put("code", 0);
 			result.put("data", "success");
 		}
@@ -293,7 +294,7 @@ public class FreeGroupController {
 	//下载文件token,fileid
 	//
 	@ResponseBody
-	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/downloadfile", method = RequestMethod.GET)
 	public String downloadFile(@RequestParam String token,
 			@RequestParam String fgfile_id) {
 		JSONObject result = new JSONObject();
@@ -307,7 +308,8 @@ public class FreeGroupController {
 		FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
 		String fileId=fgfile.getFile_id();
 		result.put("code", 0);
-		result.put("data", "success");
+		result.put("file_id", fileId);
+		
 		return result.toJSONString();
 	}
 }

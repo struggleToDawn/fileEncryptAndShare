@@ -43,6 +43,7 @@ public class FreegroupFileService implements IFreegroupFileService{
 		FreegroupFile fgfile=new FreegroupFile();
 		fgfile.setFile_id(fileid);
 		fgfile.setFolder_id(folderid);
+		this.save_fgfile(fgfile);
 		String fgfile_id=fgfile.getFgfile_id();
 		return fgfile_id;
 	}
