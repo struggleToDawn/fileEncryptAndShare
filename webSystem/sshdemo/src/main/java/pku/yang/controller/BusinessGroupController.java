@@ -148,8 +148,9 @@ public class BusinessGroupController {
 					if(bg != null){
 						JSONObject obj = new JSONObject();
 						String sid = bg.getStorageId();
-						obj.put("name", bg.getName());
-						obj.put("root", spaceService.findById(sid).getRoot());
+						obj.put("parentid", "1");
+						obj.put("filename", bg.getName());
+						obj.put("fileid", spaceService.findById(sid).getRoot());
 						dorjsonarray1.add(obj);			
 					}
 				}
@@ -157,8 +158,9 @@ public class BusinessGroupController {
 				String storageId = userService.getStorageId(uid);
 				JSONArray dorjsonarray2 = new JSONArray();
 				JSONObject json = new JSONObject();
-				json.put("name", "person space");
-				json.put("root", spaceService.findById(storageId).getRoot());
+				json.put("parentid", "3");
+				json.put("filename", "person space");
+				json.put("fileid", spaceService.findById(storageId).getRoot());
 				dorjsonarray2.add(json);
 				
 				dorjsonarray.add(dorjsonarray1);
