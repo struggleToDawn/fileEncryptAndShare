@@ -143,6 +143,10 @@ public class BusinessGroupController {
 				return jsonData.toJSONString();
 			}else{
 				String groups[] = userGroups.split(",");	
+				
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+				String time = df.format(new Date());
+				
 				for(String group : groups){
 					BusinessGroup bg = businessGroup.findGroupInfo(group);
 					if(bg != null){
@@ -151,6 +155,10 @@ public class BusinessGroupController {
 						obj.put("parentid", "1");
 						obj.put("filename", bg.getName());
 						obj.put("fileid", spaceService.findById(sid).getRoot());
+						obj.put("date", time);
+						obj.put("size", 0);
+						obj.put("type", "folder");
+						
 						dorjsonarray.add(obj);			
 					}
 				}
@@ -160,6 +168,9 @@ public class BusinessGroupController {
 				json.put("parentid", "3");
 				json.put("filename", "person space");
 				json.put("fileid", spaceService.findById(storageId).getRoot());
+				json.put("date", time);
+				json.put("size", 0);
+				json.put("type", "folder");
 				dorjsonarray.add(json);
 				
 				jsonData.put("code", 0);

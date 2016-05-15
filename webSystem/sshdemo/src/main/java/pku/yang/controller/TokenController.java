@@ -1,5 +1,6 @@
 package pku.yang.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,20 +28,23 @@ public class TokenController {
 	@ResponseBody 
 	@RequestMapping(value = "/getToken", method = RequestMethod.GET)
 	public String getToken(
-			) {
+			) throws Exception {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 		String ctime = df.format(new Date());
 		
-		String md5 = "ABCDEFG";
-		
-		Token token = new Token();
-		token.setTokenId(md5);
-		token.setDeadLine(ctime);
-		
-		tokenService.save(token);
 		
 		
-		String tken  = "aaaaa";
+		
+//		String md5 = "ABCDEFG";
+		
+//		Token token = new Token();
+//		token.setTokenId(md5);
+//		token.setDeadLine(ctime);
+//		
+//		tokenService.save(token);
+		
+		
+		String tken  = DESUtil.encrypt(ctime);
 		JSONArray jsonarray = new JSONArray();
 		
 		JSONObject jsonObject = new JSONObject();
@@ -79,30 +83,36 @@ public class TokenController {
 	@ResponseBody 
 	@RequestMapping(value = "/checkToken", method = RequestMethod.GET)
 	public String checkToken(@RequestParam String token_id
-			) {
+			) throws Exception {
+		
+		 SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		    String time=DESUtil.getUidBytoken(token_id);  
+		    Date date = format.parse(time);  
+		    Long tokenTime = date.getTime();
+		    
+		    
+		    
+		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+			String newTime = df.format(new Date());
+		    date = format.parse(newTime);  
+		    Long nnewTime = date.getTime();
+		    System.out.println(date.getTime());
 		
 		String message ="";
 		int code =0;
-		Token token =tokenService.findTokenInfo(token_id);
 		
-		if(token ==null){
+		if(nnewTime > tokenTime + 5*60*1000){
 			code = 1;
-			message = "not exist";
+			message = "time out";
 		}else{
-			String time = token.getDeadLine();
 			code = 0;
 			message = "ok";
 		}
 		
-		JSONArray jsonarray = new JSONArray();		
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("message", message);
 		
-			jsonarray.add(jsonObject);
 			JSONObject jsonData = new JSONObject();
-			
 			jsonData.put("code",code);
-			jsonData.put("data",jsonarray);
+			jsonData.put("data",message);
 					
 		return jsonData.toString();
 		
