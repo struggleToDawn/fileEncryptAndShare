@@ -13,8 +13,6 @@ import org.hibernate.annotations.GenericGenerator;
 public class FreegroupFile  {
 	@Id
 	@Column(name="fgfile_id")
-	@GenericGenerator(name="hibernate-uuid",strategy="uuid")
-	@GeneratedValue(generator="hibernate-uuid")
 	private String fgfile_id;
 	
 	@Column(name="file_id")

@@ -20,6 +20,8 @@ public interface IAccessControlDao {
 	
 	public void saveStratege(Strategy strategy);
 	
+	public void mergeStratege(Strategy strategy);
+	
 	public void saveAccessControl(AccessControl accessControl);
 	
 	public void saveAccessControlAndStrategy(AccessControl accessControl,Strategy strategy);

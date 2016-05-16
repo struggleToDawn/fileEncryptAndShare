@@ -68,7 +68,10 @@ public class AccessControlService implements IAccessControlService {
 		Map<String,String> resultMap= new HashMap<String, String>();
 		if(checkParams(id,groupId,path)){
 			beforeAction();
-			resultMap.put(privilege, queryPrivileges(id,groupId,path,privilege).get(privilege));
+			Map<String,String> privilegeMap = queryPrivileges(id,groupId,path,privilege);
+			if(privilegeMap != null){
+				resultMap.put(privilege, privilegeMap.get(privilege));
+			}
 			afterAction();
 		}
 		return resultMap;	
@@ -83,10 +86,10 @@ public class AccessControlService implements IAccessControlService {
 		return null;
 	}
 	
-	public Map<String,String> queryPolicy(String id,Integer groupId,String path){
+	public List<Map<String,String>> queryPolicy(String id,Integer groupId,String path,String function){
 		errorMsg.clear();
 		if(checkParams(id,groupId,path)){
-			return queryStrategys(id,groupId,path);
+			return queryStrategys(id,groupId,path,function);
 		}
 		return null;
 	}
@@ -105,27 +108,54 @@ public class AccessControlService implements IAccessControlService {
 			List<AccessControl> accessControls = new ArrayList<AccessControl>();
 			
 			Strategy strategy = new Strategy();
-			strategy.setAllowCreateFloder(accessControlParams.getAllowCreateFloder());
-			strategy.setAllowShareFloder(accessControlParams.getAllowShareFloder());
-			strategy.setAllowDeleteFloder(accessControlParams.getAllowDeleteFloder());
-			strategy.setAllowUploadFile(accessControlParams.getAllowUploadFile());
-			strategy.setAllowDownloadFile(accessControlParams.getAllowDownloadFile());
-			strategy.setAllowDeleteFile(accessControlParams.getAllowDeleteFile());
-			strategy.setOperateWays(accessControlParams.getOperateWays());
-			strategy.setIntegrity(accessControlParams.getIntegrity());
+			Integer strategyID = null;
+			Strategy oldStrategy = null;
+			if((strategyID  = accessControlParams.getStrategyID()) != null){
+				 oldStrategy = strategyRepository.getOne(strategyID);
+				 
+			}
+			
+			Integer allowCreateFloder = accessControlParams.getAllowCreateFloder();	
+			Integer allowShareFloder = accessControlParams.getAllowShareFloder();	
+			Integer allowDeleteFloder = accessControlParams.getAllowDeleteFloder();	
+			Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
+			Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
+			Integer allowDeleteFile = accessControlParams.getAllowDeleteFile();	
+			Integer operateWays = accessControlParams.getOperateWays();	
+			Integer integrity = accessControlParams.getIntegrity();	
+			
+			strategy.setStrategyID(strategyID);
+			strategy.setAllowCreateFloder(allowCreateFloder);
+			strategy.setAllowShareFloder(allowShareFloder);
+			strategy.setAllowDeleteFloder(allowDeleteFloder);
+			strategy.setAllowUploadFile(allowUploadFile);
+			strategy.setAllowDownloadFile(allowDownloadFile);
+			strategy.setAllowDeleteFile(allowDeleteFile);
+			strategy.setOperateWays(operateWays);
+			strategy.setIntegrity(integrity);
 			strategy.setPropertyExpression(accessControlParams.getPropertyExpression());
-			strategies.add(strategy);
 			
 			AccessControl accessControl = new AccessControl();
-			accessControl.setGroupId(accessControlParams.getGroupId());
-			accessControl.setPath(accessControlParams.getFileFolderId());
-			accessControl.getStrategys().add(strategy);
-			strategy.getAccessControls().add(accessControl);
-			accessControls.add(accessControl);
 			
-			accessControlDao.saveStratege(strategy);
-			accessControlDao.saveAccessControl(accessControl);
+			if(oldStrategy != null){
+				strategy.setAccessControls(oldStrategy.getAccessControls());
+			}else{
+				
+				accessControl.setGroupId(accessControlParams.getGroupId());
+				accessControl.setPath(accessControlParams.getFileFolderId());
+				accessControl.getStrategys().add(strategy);
+				strategy.getAccessControls().add(accessControl);
+				accessControls.add(accessControl);
+			}
+			strategies.add(strategy);
 			
+			
+			if(oldStrategy == null){
+				accessControlDao.saveStratege(strategy);
+				accessControlDao.saveAccessControl(accessControl);
+			}else{
+				accessControlDao.mergeStratege(strategy);
+			}
 			return 1;
 		}
 		return 0;
@@ -324,11 +354,10 @@ public class AccessControlService implements IAccessControlService {
 	}
 	
 	
-	private Map<String,String>  queryStrategys(String id,int groupId,String path){
+	private List<Map<String,String>>  queryStrategys(String id,int groupId,String path,String function){
 		
 		List<AccessControl> accessControls = accessControlRepository.getByGroupIdAndPath(groupId, path);
-		Map<String,String> policys = new HashMap<String, String>();
-	
+		List<Map<String,String>> policys = new ArrayList<Map<String,String>>();
 		User newUser = userRepository.getByUser_pid(id);
 		if(newUser == null){
 			setErrorMsg("40001", "用户不存在");
@@ -341,10 +370,28 @@ public class AccessControlService implements IAccessControlService {
 				List<User> userList = getUsersByAttrExpressinon(strategy.getPropertyExpression());
 				for(User user : userList){
 					if(user.getUser_pid().equals(newUser.getUser_pid())){
-						policys.put(strategy.getStrategyID()+"", strategy.getPropertyExpression());	
+						Map<String,String> policy = new HashMap<String, String>();
+						if("queryattrexpress".equals(function)){
+							policy.put(strategy.getStrategyID()+"", strategy.getPropertyExpression());	
+						}else{
+							policy.put("strategyID",strategy.getStrategyID()+"");
+							policy.put("allowCreateFloder",strategy.getAllowCreateFloder()+"");
+							policy.put("allowShareFloder", strategy.getAllowShareFloder()+"");
+							policy.put("allowDeleteFloder", strategy.getAllowDeleteFloder()+"");
+							policy.put("allowUploadFile", strategy.getAllowUploadFile()+"");
+							policy.put("allowDownloadFile", strategy.getAllowDownloadFile()+"");
+							policy.put("allowDeleteFile", strategy.getAllowDeleteFile()+"");
+							policy.put("operateWays", strategy.getOperateWays()+"");
+							policy.put("integrity", strategy.getIntegrity()+"");
+							policy.put("propertyExpression", strategy.getPropertyExpression());
+						}
+						policys.add(policy);
 					}
+					
 				}
+				
 			}
+			
 		}
 		return policys;
 	}

@@ -30,6 +30,7 @@ public class AccessControlHandler {
 	
 	private Map<String,String> errorMsg = new HashMap<String, String>();
 	Map<String,Map<String,String>> resultMap = new HashMap<String, Map<String,String>>();
+	Map<String,List<Map<String,String>>> resultMapList = new HashMap<String, List<Map<String,String>>>();
 	Map<String,String> state = new HashMap<String, String>();
 	
 
@@ -86,25 +87,39 @@ public class AccessControlHandler {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/querypolicy/{userId}/{groupId}/{fileFolderId}")
-	public Map<String,Map<String,String>> queryPolicy(
+	@RequestMapping("/queryattrexpress/{userId}/{groupId}/{fileFolderId}")
+	public Map<String,List<Map<String,String>>> queryAttrExpress(
 			@PathVariable("userId") 		String id,
 			@PathVariable("groupId") 	Integer groupid,
 			@PathVariable("fileFolderId") 		String path)
 	{
 		beforeAction();
-		Map<String,String> policys = accessControlService.queryPolicy(id,groupid,path);
+		List<Map<String,String>> policys = accessControlService.queryPolicy(id,groupid,path,"queryattrexpress");
+		return afterAction(policys);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/queryattrexpress")
+	public Map<String,List<Map<String,String>>> queryAttrExpress(AccessControlParams accessControlParams){
+		beforeAction();
+		List<Map<String,String>> policys = accessControlService.queryPolicy(
+													 accessControlParams.getUserId(), 
+													 accessControlParams.getGroupId(), 
+													 accessControlParams.getFileFolderId(),
+													 "queryattrexpress");
+		
 		return afterAction(policys);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/querypolicy")
-	public Map<String,Map<String,String>> queryPolicy(AccessControlParams accessControlParams){
+	public Map<String,List<Map<String,String>>> querypolicy(AccessControlParams accessControlParams){
 		beforeAction();
-		Map<String,String> policys = accessControlService.queryPolicy(
+		List<Map<String,String>> policys = accessControlService.queryPolicy(
 													 accessControlParams.getUserId(), 
 													 accessControlParams.getGroupId(), 
-													 accessControlParams.getFileFolderId());
+													 accessControlParams.getFileFolderId(),
+													 "querypolicy");
 		
 		return afterAction(policys);
 	}
@@ -112,6 +127,17 @@ public class AccessControlHandler {
 	@ResponseBody
 	@RequestMapping(value="/insertpolicy")
 	public Map<String,Map<String,String>> insertPolicy(AccessControlParams accessControlParams){
+		 beforeAction();
+		 int num = accessControlService.insertPolicy(accessControlParams);
+		 Map<String,String> ret = new HashMap<String, String>();
+		 if(num == 0) ret.put("40003", "数据库操作失败，插入/更新失败");
+		 else ret.put("20000", "插入/更新成功");
+		 return afterAction(ret);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/modifypolicy")
+	public Map<String,Map<String,String>> modifyPolicy(AccessControlParams accessControlParams){
 		 beforeAction();
 		 int num = accessControlService.insertPolicy(accessControlParams);
 		 Map<String,String> ret = new HashMap<String, String>();
@@ -152,6 +178,7 @@ public class AccessControlHandler {
 		errorMsg.clear();
 		state.clear();
 		resultMap.clear(); 
+		resultMapList.clear();
 	}
 	private Map<String, Map<String,String>> afterAction(Map<String, String> retMap){
 		errorMsg = accessControlService.getErrorMsg();
@@ -165,5 +192,24 @@ public class AccessControlHandler {
 			resultMap.put("ret",errorMsg);
 		}
 		 return resultMap;
+	}
+	
+	private Map<String, List<Map<String,String>>> afterAction(List<Map<String, String>> retList){
+		errorMsg = accessControlService.getErrorMsg();
+		List<Map<String, String>> stateList = new ArrayList<Map<String,String>>();
+		if(errorMsg.size() == 0){
+			state.put("20000", "ok");
+			stateList.add(state);
+			resultMapList.put("code", stateList);
+			resultMapList.put("ret",retList);
+		}else{
+			state.put("40000", "error");
+			stateList.add(state);
+			resultMapList.put("code", stateList);
+			List<Map<String, String>> errorList = new ArrayList<Map<String,String>>();
+			errorList.add(errorMsg);
+			resultMapList.put("ret",errorList);
+		}
+		 return resultMapList;
 	}
 }

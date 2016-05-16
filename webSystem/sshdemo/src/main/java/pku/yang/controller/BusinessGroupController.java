@@ -134,35 +134,44 @@ public class BusinessGroupController {
 			
 		
 			JSONArray dorjsonarray = new JSONArray();
-			JSONArray dorjsonarray1 = new JSONArray();
+			
 			JSONObject jsonData = new JSONObject();
 		
 			if(userGroups.isEmpty()){
 				jsonData.put("code", 1);
-				jsonData.put("data", dorjsonarray1);	
+				jsonData.put("data", dorjsonarray);	
 				return jsonData.toJSONString();
 			}else{
 				String groups[] = userGroups.split(",");	
+				
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+				String time = df.format(new Date());
+				
 				for(String group : groups){
 					BusinessGroup bg = businessGroup.findGroupInfo(group);
 					if(bg != null){
 						JSONObject obj = new JSONObject();
 						String sid = bg.getStorageId();
-						obj.put("name", bg.getName());
-						obj.put("root", spaceService.findById(sid).getRoot());
-						dorjsonarray1.add(obj);			
+						obj.put("parentid", "1");
+						obj.put("filename", bg.getName());
+						obj.put("fileid", spaceService.findById(sid).getRoot());
+						obj.put("date", time);
+						obj.put("size", 0);
+						obj.put("type", "folder");
+						
+						dorjsonarray.add(obj);			
 					}
 				}
 				
 				String storageId = userService.getStorageId(uid);
-				JSONArray dorjsonarray2 = new JSONArray();
 				JSONObject json = new JSONObject();
-				json.put("name", "person space");
-				json.put("root", spaceService.findById(storageId).getRoot());
-				dorjsonarray2.add(json);
-				
-				dorjsonarray.add(dorjsonarray1);
-				dorjsonarray.add(dorjsonarray2);
+				json.put("parentid", "3");
+				json.put("filename", "person space");
+				json.put("fileid", spaceService.findById(storageId).getRoot());
+				json.put("date", time);
+				json.put("size", 0);
+				json.put("type", "folder");
+				dorjsonarray.add(json);
 				
 				jsonData.put("code", 0);
 				jsonData.put("data", dorjsonarray);

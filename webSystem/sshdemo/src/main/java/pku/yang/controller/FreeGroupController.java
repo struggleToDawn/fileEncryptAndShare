@@ -40,6 +40,7 @@ public class FreeGroupController {
 	@Autowired
 	private IMessageService messageservice;
 	// 将需要的服务注解进来
+	
 	@Autowired
 	private IFolderService folderService;
 	
@@ -158,9 +159,17 @@ public class FreeGroupController {
 
 		
 		//删除根目录 ，此接口应该已经实现了删除文件夹下内容的功能
-		Space space=spaceservice.findById(fg.getStorgeid());		
-		folderService.deleteFolder(space.getRoot());
+		Space space=spaceservice.findById(fg.getStorgeid());	
+		String root_id=space.getRoot();
+		folderService.deleteFolder(root_id);
 		
+		//删除fgfile中的关联信息
+		List<FreegroupFile> list=fgfileService.search_by_folder(root_id); //root_id即folder_id
+		for(int i=0;i<list.size();i++)
+		{
+			String fgfile_id=list.get(i).getFgfile_id();
+			fgfileService.delete_fgfile(fgfile_id);
+		}
 		//删除空间信息
 		spaceservice.deleteSpace(fg.getStorgeid());
 		
@@ -232,28 +241,27 @@ public class FreeGroupController {
 		return "freegroupmanage/respond_mess";
 	}
 	
-	
 	//文件夹和文件？？？
-	//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
-	@ResponseBody
-	@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET)
-	public String sharefile(@RequestParam String token,@RequestParam String fileid,
-			@RequestParam String folderid) {
-		
-		fileService.shareFile(token, folderid, fileid);
-/*		String uuid = "";
-		try{
-			uuid = DESUtil.getUidBytoken(token);
-		}catch(Exception e){
-			e.printStackTrace();
+		//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
+		@ResponseBody
+		@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET)
+		public String sharefile(@RequestParam String token,@RequestParam String fileid,
+				@RequestParam String folderid) {
+			String uuid = "";
+			try{
+				uuid = DESUtil.getUidBytoken(token);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			String fgfile_id=fileService.shareFile(token, folderid, fileid);//返回fileid存到fgfile或者将fgfilr_id存到file表
+			fgfileService.add_fgfile(fgfile_id,fileid, folderid);
+			JSONObject result = new JSONObject();
+			result.put("code", 0);
+			result.put("data", "");
+			return result.toJSONString();	
 		}
-		*/
-//		String fgfile_id=fgfileService.add_fgfile(fileid, folderid);
-		JSONObject result = new JSONObject();
-		result.put("code", 0);
-		result.put("data", "");
-		return result.toJSONString();	
-	}
+
+
 	
 	
 	//删除文件 token,fileid（判断文件owner），提供service根据fileid找到file对象
@@ -269,15 +277,19 @@ public class FreeGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
-		String fileId=fgfile.getFile_id();
-		File file=fileService.findFileInfo(fileId);
-		String file_owner=file.getOwner();
+	//	FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
+	//	String fileId=fgfile.getFile_id();
+		File thesharefile=fileService.findFileInfo(fgfile_id);
+		
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
+		String file_owner=thesharefile.getOwner();
+		
 		String fg_manager=fg.getFg_manager();
-		if(uuid.endsWith(file_owner)||uuid.endsWith(fg_manager))
+		
+		System.out.println(file_owner+" "+fg_manager);
+		if(uuid.equals(file_owner)||uuid.equals(fg_manager))
 		{
-			fileService.deleteFile(fileId);
+			fileService.deleteFile(fgfile_id);
 			fgfileService.delete_fgfile(fgfile_id);
 			result.put("code", 0);
 			result.put("data", "success");

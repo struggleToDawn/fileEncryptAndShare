@@ -65,7 +65,7 @@ public class FileService implements IFileService{
 	}
 	
 	@Override
-	public void shareFile(String token,String folderId,String fileId){
+	public String shareFile(String token,String folderId,String fileId){
 		//--get file info--//
 		File oldFile = findFileInfo(fileId);
 		//--generate upload time--//
@@ -78,5 +78,6 @@ public class FileService implements IFileService{
 		int randomNumber = (int)(Math.random()*1000);
 		newFileId = newFileId + Integer.toString(randomNumber);
 		addFile(newFileId, oldFile.getFile_name(), folderId, oldFile.getOwner(), uploadtime,oldFile.getExp_name(),oldFile.getCloud_path(),oldFile.getIntegrityType(),oldFile.getShareType());
+		return newFileId;
 	}
 }
