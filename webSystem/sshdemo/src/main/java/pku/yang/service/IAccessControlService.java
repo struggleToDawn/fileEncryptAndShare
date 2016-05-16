@@ -19,7 +19,7 @@ public interface IAccessControlService {
 	
 	public Map<String,String> queryAccess(String id,Integer groupId,String path);
 	
-	public Map<String,String> queryPolicy(String id,Integer groupId,String path);
+	public List<Map<String,String>> queryPolicy(String id,Integer groupId,String path,String function);
 	
 	public int insertPolicy(AccessControlParams accessControlParams);
 	

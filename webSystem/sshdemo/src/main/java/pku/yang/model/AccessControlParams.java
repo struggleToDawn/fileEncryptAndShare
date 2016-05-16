@@ -14,6 +14,7 @@ public class AccessControlParams {
 	private Integer groupId;
 	private String fileFolderId;
 	private String privilege;
+	private Integer strategyID;
 	private String 	propertyExpression;	
 	private Integer allowCreateFloder;	
 	private Integer allowShareFloder;	
@@ -24,6 +25,8 @@ public class AccessControlParams {
 	private Integer operateWays;		
 	private Integer integrity;	
 	private String policyId;
+	
+	
 	
 	public String getPolicyId() {
 		return policyId;
@@ -43,7 +46,13 @@ public class AccessControlParams {
 	public void setFileFolderId(String fileFolderId) {
 		this.fileFolderId = fileFolderId;
 	}
-
+	
+	public Integer getStrategyID() {
+		return strategyID;
+	}
+	public void setStrategyID(Integer strategyID) {
+		this.strategyID = strategyID;
+	}
 	public String getUsername() {
 		return username;
 	}

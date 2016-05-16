@@ -44,6 +44,11 @@ public class AccessControlDao implements IAccessControlDao{
 	private HibernateTemplate hibernateTemplate;
 
 	@Override
+	public void mergeStratege(Strategy strategy) {
+		hibernateTemplate.merge(strategy);
+	}
+	
+	@Override
 	public void saveStratege(Strategy strategy) {
 		hibernateTemplate.saveOrUpdate(strategy);
 	}
