@@ -24,6 +24,14 @@
 | group_id | int(11) | 组ID | |
 | path | varchar(225) | 文件/目录ID |本来存完整路劲的，鉴于目前其他模块都用ID，此处也存ID |
 
+
++数据表样例 
+
+| access_control_id | group_id | path            |
+|-------------------|----------|-----------------|
+|                 2 |      123 | 24325435435344f |
+
+
 ###strategy
 
 | Field | Type | Description | Remarks |
@@ -39,6 +47,12 @@
 | operate_ways        | int(11) | 对文件操作方式   |通用方式为0，ABE加密方式为1|
 | property_expression | varchar(255) | 属性表达式 |定义和规则见具体说明|
 
++数据表样例
+
+| strategy_id | allow_create_floder | allow_delete_file | allow_delete_floder | allow_download_file | allow_share_floder | allow_upload_file | integrity | operate_ways | property_expression                                      |
+|-------------|---------------------|-------------------|---------------------|---------------------|--------------------|-------------------|-----------|--------------|----------------------------------------------------------|
+|           1 |                   1 |                 1 |                   0 |                   0 |                  1 |                 0 |         1 |            1 | #username='a'&(password='12' $ ty pe='2')$!userID = '1'# |
+
 ###access_control_strategy
 
 | Field | Type | Description | Remarks |
@@ -46,13 +60,33 @@
 | access_control_id | int(11) | 访问控制ID | primary key, index field |
 | strategy_id | int(11) | 策略ID | primary key |
 
++数据表样例
+
+| access_control_id | strategy_id |
+|-------------------|-------------|
+|                 2 |           1 |
 
 
 + 该表维持访问控制表和策略表多对多的关联
 + access_control_id关联访问控制表的access_control_id
 + strategy_id关联策略表的strategy_id
 
+###其他相关表
+1、用户表需要有数据，样例如下
+
+| pid | groups | password | role | storage_id | type | user_id | username |
+|-----|--------|----------|------|------------|------|---------|----------|
+| 1   | 123    | 12       |    1 | 1324       | 0    | 3       | a        |
+
+2、用户对应的实际表（要么Student，要么Teacher），样例如下
+
+| student_id | academy | age  | courses | department | student_name | study_group | teacher_id |
+|------------|---------|------|---------|------------|--------------|-------------|------------|
+| 3          | rw      |   23 | er      | dfsd       | ret          | 12          | 32         |
+
 ===
+##数据库样例
+
 
 #第二章 接口说明#
 ##1、状态码定义
@@ -172,7 +206,7 @@ failed
     }
 }
 ```
-### /querypolicy
+### /queryattrexpress
 
 + 描述 ：根据用户的ID，查询与该用户相关的目录/文件对应的属性表达式
 
@@ -217,6 +251,131 @@ success
     }
 }
 ```
+### /querypolicy
+
++ 描述 ：根据用户的ID，查询相应的策略
+
++ method `POST`
+
++ request
+
+```
+{
+	"userId" : "12345434",           // 用户ID
+	"groupId" : "12097332",          // 组ID
+	"fileFolderId" : "1213432f"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+}
+```
++ response
+
+success
+
+```
+{
+    "code":[
+        {
+            "20000":"ok"
+        }
+    ],
+    "ret":[
+        {
+            "integrity":"1",
+            "allowCreateFloder":"1",
+            "allowShareFloder":"1",
+            "allowDownloadFile":"0",
+            "allowUploadFile":"0",
+            "allowDeleteFile":"1",
+            "strategyID":"1",
+            "allowDeleteFloder":"0",
+            "propertyExpression":"#username='a'&(password='12' $ ty pe='2')$!userID = '1'#",
+            "operateWays":"1"
+        },
+        {
+            "integrity":"0",
+            "allowCreateFloder":"1",
+            "allowShareFloder":"1",
+            "allowDownloadFile":"0",
+            "allowUploadFile":"0",
+            "allowDeleteFile":"1",
+            "strategyID":"414",
+            "allowDeleteFloder":"0",
+            "propertyExpression":"#username='a'#",
+            "operateWays":"0"
+        }
+        ...
+    ]
+}
+```
+
++ failed
+
+```
+{
+    "code":[
+        {
+            "20000":"ok"
+        }
+    ],
+    "ret":[
+        {
+            "40001":"用户不存在"
+        },
+        ...
+    ]    
+}
+```
+### /modifypolicy
+
++ 描述 ：修改一条策略
+
++ method `POST`
+
++ request
+
+```
+{
+	"strategyID":"1"
+	"allowCreateFloder":"0",
+	"allowShareFloder":"1",
+	"allowDeleteFloder":"0",
+	"allowUploadFile":"1",
+	"allowDownloadFile":"0",
+	"allowDeleteFile":"1",
+	"operateWays":"1",
+	"integrity":"1",
+	"propertyExpression":"#username='a'&(password='12' $ ty pe='2')$!userID = '1'#"
+}
+```
++ response
+
+success
+
+```
+{
+    "code":{
+        "20000":"ok"
+    }，
+    "ret":{
+        "20000":"插入/更新成功"
+    },    
+}
+```
+
++ failed
+
+```
+{
+    "code":{
+        "40000":"error"
+    },
+    "ret":{
+        "40001":"用户不存在"
+    }
+}
+```
+
+
+
 ### /insertpolicy
 
 + 描述 ：向数据库增加/更新一条策略
@@ -342,6 +501,7 @@ success
         "allowUploadFile",
         "allowDownloadFile"
     ]
+    ...
 }
 ```
 
