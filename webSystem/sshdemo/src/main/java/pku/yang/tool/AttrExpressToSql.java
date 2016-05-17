@@ -16,23 +16,23 @@ public class AttrExpressToSql {
 		if(str.startsWith("roleNum"))   return "u."+str;
 		if(str.startsWith("type"))		return "u."+str;
 		if("1".equals(type)){
-			if(str.startsWith("id"))    	return "s."+str;
-			if(str.startsWith("name"))		return "s."+str;
-			if(str.startsWith("department")) return "s."+str;
-			if(str.startsWith("courses"))	return "s."+str;
-			if(str.startsWith("teacherID")) return "s."+str;
-			if(str.startsWith("studygroup")) return "s."+str;
-			if(str.startsWith("academy"))	return "s."+str;
-			if(str.startsWith("age"))		return "s."+str;
-		}else{
-			if(str.startsWith("id")) 		return "t."+str;
+			if(str.startsWith("id"))    	return "t."+str;
 			if(str.startsWith("name"))		return "t."+str;
 			if(str.startsWith("department")) return "t."+str;
-			if(str.startsWith("title")) 	return "t."+str;
-			if(str.startsWith("duty"))		return "t."+str;
-			if(str.startsWith("studyGroup")) return "t."+str;
-			if(str.startsWith("courses")) 	return "t."+str;
+			if(str.startsWith("courses"))	return "t."+str;
+			if(str.startsWith("teacherID")) return "t."+str;
+			if(str.startsWith("studygroup")) return "t."+str;
+			if(str.startsWith("academy"))	return "t."+str;
 			if(str.startsWith("age"))		return "t."+str;
+		}else{
+			if(str.startsWith("id")) 		return "s."+str;
+			if(str.startsWith("name"))		return "s."+str;
+			if(str.startsWith("department")) return "s."+str;
+			if(str.startsWith("title")) 	return "s."+str;
+			if(str.startsWith("duty"))		return "s."+str;
+			if(str.startsWith("studyGroup")) return "s."+str;
+			if(str.startsWith("courses")) 	return "s."+str;
+			if(str.startsWith("age"))		return "s."+str;
 		}
 		if(str.startsWith("u.") || str.startsWith("s.") || str.startsWith("t.")){
 			return str;
@@ -79,8 +79,8 @@ public class AttrExpressToSql {
 			}			
 		}
 		
-		hqlMap.put("0", studentHql.append(" ) and u.userID = s.id"));
-		hqlMap.put("1", teacherHql.append(" ) and u.userID = t.id"));
+		hqlMap.put("0", studentHql.append(" ) and u.userID = s.id and u.type = '0'"));
+		hqlMap.put("1", teacherHql.append(" ) and u.userID = t.id and u.type = '1'"));
 		
 		return hqlMap;
 	}
