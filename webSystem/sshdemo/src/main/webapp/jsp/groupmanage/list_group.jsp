@@ -41,11 +41,11 @@
 														<table data-toggle="table" data-url="${ctx}/businessGroup/data" >
 														    <thead>
 														    <tr>								   
-														        <th data-field="id" data-sortable="true">群组ID</th>
+														    <!--   <th data-field="id" data-sortable="true">群组ID</th>  -->  
 														        <th data-field="name"  data-sortable="true">群组名</th>
 														        <th data-field="adminAttr" data-sortable="true">管理员属性</th>
 														        <th data-field="uAttr" data-sortable="true">用户属性</th>
-														        <th data-field="storageId" data-sortable="true">空间ID</th>
+														    <!--  <th data-field="storageId" data-sortable="true">空间ID</th>  -->
 														        <th data-field="ctime" data-sortable="true">创建时间</th>
 														        <th data-field="utime" data-sortable="true">更改时间</th>
 														        <th data-field="operation" data-sortable="true">操作</th>

@@ -194,6 +194,7 @@ public class BusinessGroupController {
 	
 	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
 	public String addGroup(
+			Model model,
 			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam String uAttrs,
@@ -212,7 +213,7 @@ public class BusinessGroupController {
 		AttributeToSql adminAttributeToSql = new AttributeToSql();
 		AttributeToSql userAttributeToSql = new AttributeToSql();
 		
-		String adminAttrss[] = adminAttrs.split("&");
+		String adminAttrss[] = adminAttrs.split("\\|\\|");
 		for(int i = 0; i< adminAttrss.length;i++){
 			if(adminAttrss[i] != null){
 				if(adminAttributeToSql.check(adminAttrss[i])){
@@ -220,12 +221,14 @@ public class BusinessGroupController {
 					adminIds += "," + adminAttributeToSql.getAdminIds(sql,sessionFactory.getCurrentSession());
 				}else{
 					// 输入错误
+					model.addAttribute("errorMessage","admin attribute input error");
+					return "error";
 				}
 			}
 		}
 		adminIds = adminIds.substring(1);
 		
-		String uAttrss[] = uAttrs.split("&");
+		String uAttrss[] = uAttrs.split("\\|\\|");
 		for(int i = 0 ; i< uAttrss.length;i++){
 			if(uAttrss[i]!=null){
 				if(userAttributeToSql.check(uAttrss[i])){
@@ -233,6 +236,8 @@ public class BusinessGroupController {
 					uids += "," + adminAttributeToSql.getUids(sql,sessionFactory.getCurrentSession());
 				}else{
 					// 输入错误
+					model.addAttribute("errorMessage","normal user attribute input error");
+					return "error";
 				}	
 			}
 		}
@@ -275,7 +280,9 @@ public class BusinessGroupController {
 	
 
 	@RequestMapping(value = "/updateGroup", method = RequestMethod.POST)
-	public String updateGroup(@RequestParam String id,
+	public String updateGroup(
+			Model model,
+			@RequestParam String id,
 			@RequestParam String name,
 			@RequestParam String uAttrs,
 			@RequestParam String storageId, 
@@ -294,7 +301,7 @@ public class BusinessGroupController {
 		AttributeToSql adminAttributeToSql = new AttributeToSql();
 		AttributeToSql userAttributeToSql = new AttributeToSql();
 		
-		String adminAttrss[] = adminAttrs.split("&");
+		String adminAttrss[] = adminAttrs.split("\\|\\|");
 		for(int i = 0; i< adminAttrss.length;i++){
 			if(adminAttrss[i] != null){
 				if(adminAttributeToSql.check(adminAttrss[i])){
@@ -302,12 +309,14 @@ public class BusinessGroupController {
 					adminIds += "," + adminAttributeToSql.getAdminIds(sql,sessionFactory.getCurrentSession());
 				}else{
 					// 输入错误
+					model.addAttribute("errorMessage","admin attribute input error");
+					return "error";
 				}
 			}
 		}
 		adminIds = adminIds.substring(1);
 		
-		String uAttrss[] = uAttrs.split("&");
+		String uAttrss[] = uAttrs.split("\\|\\|");
 		for(int i = 0 ; i< uAttrss.length;i++){
 			if(uAttrss[i]!=null){
 				if(userAttributeToSql.check(uAttrss[i])){
@@ -315,6 +324,8 @@ public class BusinessGroupController {
 					uids += "," + adminAttributeToSql.getUids(sql,sessionFactory.getCurrentSession());
 				}else{
 					// 输入错误
+					model.addAttribute("errorMessage","normal user attribute input error");
+					return "error";
 				}	
 			}
 		}
@@ -396,11 +407,11 @@ public class BusinessGroupController {
 		JSONArray dorjsonarray = new JSONArray();
 		for(int i=0;i<list.size();i++){
 			JSONObject jsonData = new JSONObject();
-			jsonData.put("id",list.get(i).getID());
+//			jsonData.put("id",list.get(i).getID());
 			jsonData.put("name", list.get(i).getName());
 			jsonData.put("adminAttr", list.get(i).getAdminAttrs());
 			jsonData.put("uAttr", list.get(i).getUAttrs());
-			jsonData.put("storageId", list.get(i).getStorageId());
+//			jsonData.put("storageId", list.get(i).getStorageId());
 			jsonData.put("ctime", list.get(i).getCtime());
 			jsonData.put("utime", list.get(i).getUtime());
 			

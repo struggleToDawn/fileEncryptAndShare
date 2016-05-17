@@ -23,17 +23,17 @@ public class BusinessGroup {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="adminId")
+	@Column(name="admin_id")
 	private String adminId;
 	
-	@Column(name="storageId",length=128)
+	@Column(name="storage_id",length=128)
 	private String storageId;
 	
 	
-	@Column(name="adminAttrs")
+	@Column(name="admin_attrs")
 	private String adminAttrs;
 	
-	@Column(name="uAttrs")
+	@Column(name="u_attrs")
 	private String uAttrs;
 	
 	@Column(name="uids")
