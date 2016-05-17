@@ -83,39 +83,34 @@ public class TokenController {
 	@ResponseBody 
 	@RequestMapping(value = "/checkToken", method = RequestMethod.GET)
 	public String checkToken(@RequestParam String token_id
-			) throws Exception {
+			) {
 		
 		 SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
-		    String time=DESUtil.getUidBytoken(token_id);  
-		    Date date = format.parse(time);  
-		    Long tokenTime = date.getTime();
-		    
-		    
-		    
-		    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-			String newTime = df.format(new Date());
-		    date = format.parse(newTime);  
-		    Long nnewTime = date.getTime();
-		    System.out.println(date.getTime());
-		
-		String message ="";
-		int code =0;
-		
-		if(nnewTime > tokenTime + 5*60*1000){
-			code = 1;
-			message = "time out";
-		}else{
-			code = 0;
-			message = "ok";
-		}
-		
-		
-			JSONObject jsonData = new JSONObject();
-			jsonData.put("code",code);
-			jsonData.put("data",message);
-					
-		return jsonData.toString();
-		
-//		return "home";
+		    String time;
+			try {
+				time = DESUtil.getUidBytoken(token_id);
+				  Date date = format.parse(time);  
+				    Long tokenTime = date.getTime();
+				    
+				    
+				    
+				    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+					String newTime = df.format(new Date());
+				    date = format.parse(newTime);  
+				    Long nnewTime = date.getTime();
+				  
+				String code ="0";
+				
+				if(nnewTime > tokenTime + 5*60*1000){
+					code = "1";
+				}else{
+					code ="0";
+				}
+				
+				return code;
+			} catch (Exception e) {
+				return "1";
+			}  
+		  
 	}
 }
