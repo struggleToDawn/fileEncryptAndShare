@@ -233,7 +233,7 @@ public class FolderController {
 					temp.put("fileid", filelist.get(i).getFile_id());
 					temp.put("parentid", filelist.get(i).getFolderId());
 					String exp = filelist.get(i).getExp_name();
-					temp.put("filename", filelist.get(i).getFile_name()+exp);
+					temp.put("filename", filelist.get(i).getFile_name()+"."+exp);
 					temp.put("type","file");
 					temp.put("date", filelist.get(i).getUpload_time());
 					temp.put("size",0);
@@ -310,7 +310,7 @@ public class FolderController {
 					temp.put("fileid", filelist.get(i).getFile_id());
 					temp.put("parentid", filelist.get(i).getFolderId());
 					String exp = filelist.get(i).getExp_name();
-					temp.put("filename", filelist.get(i).getFile_name()+exp);
+					temp.put("filename", filelist.get(i).getFile_name()+"."+exp);
 					temp.put("type","file");
 					temp.put("date", filelist.get(i).getUpload_time());
 					temp.put("size",0);

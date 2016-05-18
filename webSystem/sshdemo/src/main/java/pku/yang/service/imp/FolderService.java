@@ -104,6 +104,7 @@ public class FolderService implements IFolderService{
 			folder = folderdao.getByID(fatherId);
 			fatherId = folder.getFatherID();
 		}
+		
 		return folder.getFolderID();
 	}
 }
