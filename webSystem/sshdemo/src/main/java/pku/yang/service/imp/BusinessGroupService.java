@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import pku.yang.dao.IBusinessGroupDao;
 import pku.yang.dao.imp.BusinessGroupDao;
+import pku.yang.dao.imp.FileDao;
 import pku.yang.model.BusinessGroup;
 import pku.yang.model.Folder;
 import pku.yang.service.IBusinessGroupService;
+import pku.yang.tool.DESUtil;
 
 
 @Service
@@ -17,6 +19,8 @@ public class BusinessGroupService implements IBusinessGroupService{
 
 	@Autowired
 	private IBusinessGroupDao businessGroupDao;
+	@Autowired
+	private FileDao fileDao;
 
 	@Override
 	public	String addGroup(String name, String adminId, String storageId,
@@ -71,6 +75,24 @@ public class BusinessGroupService implements IBusinessGroupService{
 	public BusinessGroup findGroupInfoBySid(String sid) {
 		// TODO Auto-generated method stub
 		return businessGroupDao.getBySID(sid);
+	}
+
+
+
+	@Override
+	public String checkIsAdmind(String token, String fileId) {
+		// TODO Auto-generated method stub
+		try{
+			String uid = DESUtil.getUidBytoken(token);
+			String flag = fileId.substring(fileId.length()-1);
+			String id = fileId.substring(0, fileId.length()-1);
+			if(flag.equals("f")){
+				fileDao.getByID(id);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	

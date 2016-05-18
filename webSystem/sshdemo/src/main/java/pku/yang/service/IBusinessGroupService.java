@@ -15,6 +15,7 @@ public interface IBusinessGroupService {
 	
 	void saveGroup(BusinessGroup businessGroup);
 	void deleteGroup(String groupID);
+	String checkIsAdmind(String token, String fileId);
 	
 	List<BusinessGroup> getBussinessGroupList();
 	
