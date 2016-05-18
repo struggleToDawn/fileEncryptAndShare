@@ -242,5 +242,11 @@ public class UserService implements IUserService{
 		return userdao.getStorageId(id);
 	}
 
+	@Override
+	public String getUserPid(String id) {
+		// TODO Auto-generated method stub
+		return userdao.getUserPid(id);
+	}
+
 	
 }

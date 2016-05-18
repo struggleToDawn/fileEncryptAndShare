@@ -186,6 +186,13 @@ public class UserDao implements IUserDao {
 	public String getStorageId(String id) {
 		User user = this.getByID(id);
 		return user.getStorageID();
+	}
+
+	@Override
+	public String getUserPid(String id) {
+		// TODO Auto-generated method stub
+		User user = this.getByID(id);
+		return user.getUser_pid();
 	}	
 	
 }

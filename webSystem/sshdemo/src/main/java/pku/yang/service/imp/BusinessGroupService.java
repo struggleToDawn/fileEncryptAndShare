@@ -65,5 +65,13 @@ public class BusinessGroupService implements IBusinessGroupService{
 		businessGroupDao.addGroup(businessGroup);
 	}
 
+
+
+	@Override
+	public BusinessGroup findGroupInfoBySid(String sid) {
+		// TODO Auto-generated method stub
+		return businessGroupDao.getBySID(sid);
+	}
+
 	
 }

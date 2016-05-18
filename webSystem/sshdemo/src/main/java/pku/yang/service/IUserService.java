@@ -124,6 +124,8 @@ public interface IUserService {
 	
 	String getStorageId(String id);
 	
+	String getUserPid(String id);
+	
 	boolean deleteUserGroup(String id,String group);
 	
 	boolean addUserGroup(String id, String group);

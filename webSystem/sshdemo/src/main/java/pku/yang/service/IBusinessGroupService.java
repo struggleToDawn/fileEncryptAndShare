@@ -9,6 +9,7 @@ public interface IBusinessGroupService {
 
 
 	BusinessGroup findGroupInfo(String GroupID);
+	BusinessGroup findGroupInfoBySid(String sid);
 	String addGroup(String name, String adminId, String storageId,
 			String adminAttrs, String uAttrs ,String uids,String ctime);
 	

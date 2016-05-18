@@ -94,4 +94,16 @@ public class FolderService implements IFolderService{
 		return filelist;
 	}
 	//-----add by shengxiaoran-----//
+
+	@Override
+	public String getRootId(String folderId) {
+		// TODO Auto-generated method stub
+		Folder folder = folderdao.getByID(folderId);
+		String fatherId = folder.getFatherID();
+		while(!fatherId.equals("0") && !fatherId.equals("1") &&!fatherId.equals("2") ){
+			folder = folderdao.getByID(fatherId);
+			fatherId = folder.getFatherID();
+		}
+		return folder.getFolderID();
+	}
 }

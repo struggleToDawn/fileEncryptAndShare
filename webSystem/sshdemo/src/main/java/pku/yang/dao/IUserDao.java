@@ -25,4 +25,5 @@ public interface IUserDao {
 	String getUserGroup(String id);
 	String setUserGroup(String id, String userGroup);
 	String getStorageId(String id);
+	String getUserPid(String id);
 }

@@ -1,5 +1,6 @@
 package pku.yang.dao.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -48,6 +49,14 @@ public class BusinessGroupDao implements IBusinessGroupDao{
 	public BusinessGroup getByID(String id) {
 		BusinessGroup group = (BusinessGroup)hibernateTemplate.get(BusinessGroup.class, id);
 		return group;
+	}
+
+	@Override
+	public BusinessGroup getBySID(String sid) {
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		String hql = "from BusinessGroup as bg where bg.storageId like :sid ";		
+		ArrayList<BusinessGroup> bg =(ArrayList<BusinessGroup>) session.createQuery(hql).setString("sid", sid).list();
+		return bg.get(0);
 	}
 
 	

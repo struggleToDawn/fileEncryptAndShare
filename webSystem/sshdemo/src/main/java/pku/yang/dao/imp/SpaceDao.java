@@ -1,5 +1,6 @@
 package pku.yang.dao.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -48,6 +49,15 @@ public class SpaceDao implements ISpaceDao{
 		e.printStackTrace();
 		return null;
 		}
+	}
+
+	@Override
+	public Space getSpaceByRoot(String rootId) {
+	
+		Session session=hibernateTemplate.getSessionFactory().getCurrentSession();
+		String hql = "from Space as spa where spa.rootDirectory like :rootId ";		
+		ArrayList<Space> space =(ArrayList<Space>) session.createQuery(hql).setString("rootId", rootId).list();
+		return space.get(0);
 	}
 	
 }

@@ -9,5 +9,6 @@ public interface ISpaceDao {
 	String addSpace(Space space);
 	void deleteSpaceByID(String spaceId);
 	Space getSpaceByID(String spaceId);
+	Space getSpaceByRoot(String rootId);
 	List<Space> getSpaceList(String hql);
 }

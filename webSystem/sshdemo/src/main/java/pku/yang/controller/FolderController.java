@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import pku.yang.model.File;
 import pku.yang.model.Folder;
+import pku.yang.model.BusinessGroup;
+import pku.yang.model.Space;
+import pku.yang.service.IBusinessGroupService;
 import pku.yang.service.IFileService;
 import pku.yang.service.IFolderService;
+import pku.yang.service.ISpaceService;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -32,16 +36,47 @@ public class FolderController {
 	@Autowired
 	private IFileService fileService;
 	
-	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。
+	@Autowired
+	private IBusinessGroupService businessGroup;
+	
+	@Autowired
+	private ISpaceService spaceService;
+	
+	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。update by weishijia
 	@ResponseBody
 	@RequestMapping(value = "/setTPA", method = RequestMethod.GET)
 	public String setTPA(@RequestParam String token,
 			@RequestParam String fileid) {
-		Folder folder = folderService.findFolderInfo(fileid);
-		folder.setIntegrityType("1");
-		folderService.saveFolder(folder);
+		
+		
+		String uid = new String();
+		try{
+			uid = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		// 获取文件所在群组
+		String rootId  = folderService.getRootId(fileid);
+		Space space = spaceService.findByRootId(rootId);
+		String spaceId = space.getID();
+		BusinessGroup bGroup = businessGroup.findGroupInfoBySid(spaceId);
+		String adminIds = bGroup.getAdminId();
+		String[] adminId = adminIds.split(",");
+		
+		for(String id: adminId){
+			if(uid.equals(id)){ //是该群组的一个管理员
+				Folder folder = folderService.findFolderInfo(fileid);
+				folder.setIntegrityType("1");
+				folderService.saveFolder(folder);
+				JSONObject result = new JSONObject();
+				result.put("code", 0);
+				return result.toJSONString();
+			}
+		}
+		
 		JSONObject result = new JSONObject();
-		result.put("code", 0);
+		result.put("code", 1);
 		return result.toJSONString();
 	}
 	

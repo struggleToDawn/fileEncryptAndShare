@@ -11,5 +11,6 @@ public interface IBusinessGroupDao {
 	void deleteBusinessGroup(String file_id);
 	List<BusinessGroup> getList(String hql);
 	BusinessGroup  getByID(String id);
+	BusinessGroup  getBySID(String sid);
 
 }

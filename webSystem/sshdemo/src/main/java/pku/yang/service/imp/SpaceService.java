@@ -57,5 +57,12 @@ public class SpaceService implements ISpaceService{
 	}
 
 
+	@Override
+	public Space findByRootId(String id) {
+		// TODO Auto-generated method stub
+		return spaceDao.getSpaceByRoot(id);
+	}
+
+
 	
 }

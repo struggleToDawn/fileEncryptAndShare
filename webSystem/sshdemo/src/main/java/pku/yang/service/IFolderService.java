@@ -16,6 +16,8 @@ public interface IFolderService {
 
 	void deleteFolder(String folderID);
 	
+	String getRootId(String folderId);  //add by weishijia
+	
 	List<Folder> FolderList();
 	//-----add by shengxiaoran-----//
 	List<Folder> getFoldersByUserId(String user_id);

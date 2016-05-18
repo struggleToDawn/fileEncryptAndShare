@@ -43,5 +43,12 @@ public class FolderDao implements IFolderDao{
 		return null;
 		}
 		}
+
+	@Override
+	public String getFatherId(String id) {
+		// TODO Auto-generated method stub
+		Folder folder = (Folder)hibernateTemplate.get(Folder.class, id);
+		return folder.getFatherID();
+	}
 	
 }

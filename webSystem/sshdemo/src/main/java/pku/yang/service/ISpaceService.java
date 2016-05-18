@@ -11,6 +11,7 @@ public interface ISpaceService {
 	String addSpace(String name, int size, String root);
 	void deleteSpace(String spaceID);
 	Space findById(String id);
+	Space findByRootId(String id);
 	
 	List<Space> getSpaceList();
 	
