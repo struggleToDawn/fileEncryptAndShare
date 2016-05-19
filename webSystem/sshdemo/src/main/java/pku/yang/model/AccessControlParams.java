@@ -10,6 +10,7 @@ package pku.yang.model;
 public class AccessControlParams {
 	
 	private String userId;
+	private String token;
 	private String username;
 	private Integer groupId;
 	private String fileFolderId;
@@ -28,6 +29,12 @@ public class AccessControlParams {
 	
 	
 	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public String getPolicyId() {
 		return policyId;
 	}

@@ -15,15 +15,15 @@ import pku.yang.model.AccessControlParams;
 
 public interface IAccessControlService {
 	
-	public Map<String,String> queryAccess(String id,Integer groupId,String path,String privilege);
+	public Map<String,String> queryAccess(String token,Integer groupId,String path,String privilege);
 	
-	public Map<String,String> queryAccess(String id,Integer groupId,String path);
+	public Map<String,String> queryAccess(String token,Integer groupId,String path);
 	
-	public List<Map<String,String>> queryPolicy(String id,Integer groupId,String path,String function);
+	public List<Map<String,String>> queryPolicy(String token,Integer groupId,String path,String function);
 	
 	public int insertPolicy(AccessControlParams accessControlParams);
 	
-	public Map<String,String> deletePolicy(Integer policyId);
+	public Map<String,String> deletePolicy(Integer policyId,String token);
 	
 	public Map<String,List<String>> conflictdetection(AccessControlParams accessControlParams);
 	

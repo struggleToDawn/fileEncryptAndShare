@@ -21,7 +21,9 @@ import pku.yang.model.AccessControlParams;
 import pku.yang.model.Strategy;
 import pku.yang.model.User;
 import pku.yang.service.IAccessControlService;
+import pku.yang.service.IBusinessGroupService;
 import pku.yang.tool.AttrExpressToSql;
+import pku.yang.tool.DESUtil;
 
 /**
  * 访问控制服务层
@@ -33,6 +35,9 @@ import pku.yang.tool.AttrExpressToSql;
 
 @Service
 public class AccessControlService implements IAccessControlService {
+	
+	@Autowired
+	private IBusinessGroupService businessGroupService;
 	
 	@Autowired
 	private IAccessControlRepository accessControlRepository;
@@ -59,15 +64,15 @@ public class AccessControlService implements IAccessControlService {
 	}
 
 	@Override
-	public Map<String,String> queryAccess(String id,Integer groupId,String path,String privilege){
+	public Map<String,String> queryAccess(String token,Integer groupId,String path,String privilege){
 		errorMsg.clear();
 		if(privilege == null || "".endsWith(privilege)){
 			setErrorMsg("40002", "请求参数错误，权限为空或者名称书写不正确");
 			return null;
 		}
 		Map<String,String> resultMap= new HashMap<String, String>();
-		if(checkParams(id,groupId,path)){
-			beforeAction();
+		if(checkParams(token,groupId,path)){
+			String id = beforeAction(token);
 			Map<String,String> privilegeMap = queryPrivileges(id,groupId,path,privilege);
 			if(privilegeMap != null){
 				resultMap.put(privilege, privilegeMap.get(privilege));
@@ -78,18 +83,24 @@ public class AccessControlService implements IAccessControlService {
 	}
 	
 	@Override
-	public Map<String,String> queryAccess(String id,Integer groupId,String path){
+	public Map<String,String> queryAccess(String token,Integer groupId,String path){
 		errorMsg.clear();
-		if(checkParams(id,groupId,path)){
+		if(checkParams(token,groupId,path)){
+			String id = beforeAction(token);
 			return queryPrivileges(id,groupId,path,null);
 		}
 		return null;
 	}
 	
-	public List<Map<String,String>> queryPolicy(String id,Integer groupId,String path,String function){
+	public List<Map<String,String>> queryPolicy(String token,Integer groupId,String path,String function){
 		errorMsg.clear();
-		if(checkParams(id,groupId,path)){
-			return queryStrategys(id,groupId,path,function);
+		if(checkParams(token,groupId,path)){
+			String id = beforeAction(token);
+			//if("1".equals(businessGroupService.checkIsAdmin(token, path))){
+				return queryStrategys(id,groupId,path,function);
+			//}else{
+			//	setErrorMsg("40006", "无权限执行该操作");
+			//}
 		}
 		return null;
 	}
@@ -103,67 +114,76 @@ public class AccessControlService implements IAccessControlService {
 			setErrorMsg("40002", "请求参数错误，属性表达式为空或者名称书写不正确");
 			return 0;
 		}
-		if(checkParams(accessControlParams.getUserId(),accessControlParams.getGroupId(),accessControlParams.getFileFolderId())){
-			List<Strategy> strategies = new ArrayList<Strategy>();
-			List<AccessControl> accessControls = new ArrayList<AccessControl>();
-			
-			Strategy strategy = new Strategy();
-			Integer strategyID = null;
-			Strategy oldStrategy = null;
-			if((strategyID  = accessControlParams.getStrategyID()) != null){
-				 oldStrategy = strategyRepository.getOne(strategyID);
-				 
-			}
-			
-			Integer allowCreateFloder = accessControlParams.getAllowCreateFloder();	
-			Integer allowShareFloder = accessControlParams.getAllowShareFloder();	
-			Integer allowDeleteFloder = accessControlParams.getAllowDeleteFloder();	
-			Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
-			Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
-			Integer allowDeleteFile = accessControlParams.getAllowDeleteFile();	
-			Integer operateWays = accessControlParams.getOperateWays();	
-			Integer integrity = accessControlParams.getIntegrity();	
-			
-			strategy.setStrategyID(strategyID);
-			strategy.setAllowCreateFloder(allowCreateFloder);
-			strategy.setAllowShareFloder(allowShareFloder);
-			strategy.setAllowDeleteFloder(allowDeleteFloder);
-			strategy.setAllowUploadFile(allowUploadFile);
-			strategy.setAllowDownloadFile(allowDownloadFile);
-			strategy.setAllowDeleteFile(allowDeleteFile);
-			strategy.setOperateWays(operateWays);
-			strategy.setIntegrity(integrity);
-			strategy.setPropertyExpression(accessControlParams.getPropertyExpression());
-			
-			AccessControl accessControl = new AccessControl();
-			
-			if(oldStrategy != null){
-				strategy.setAccessControls(oldStrategy.getAccessControls());
+		if(checkParams(accessControlParams.getToken(),accessControlParams.getGroupId(),accessControlParams.getFileFolderId())){
+			if(conflictdetection(accessControlParams).size()!=0){
+				setErrorMsg("40007", "权限冲突");
+				return 0;
 			}else{
+			
+				String id = beforeAction(accessControlParams.getToken());
+				List<Strategy> strategies = new ArrayList<Strategy>();
+				List<AccessControl> accessControls = new ArrayList<AccessControl>();
 				
-				accessControl.setGroupId(accessControlParams.getGroupId());
-				accessControl.setPath(accessControlParams.getFileFolderId());
-				accessControl.getStrategys().add(strategy);
-				strategy.getAccessControls().add(accessControl);
-				accessControls.add(accessControl);
+				Strategy strategy = new Strategy();
+				Integer strategyID = null;
+				Strategy oldStrategy = null;
+				if((strategyID  = accessControlParams.getStrategyID()) != null){
+					 oldStrategy = strategyRepository.getOne(strategyID);
+					 
+				}
+				
+				Integer allowCreateFloder = accessControlParams.getAllowCreateFloder();	
+				Integer allowShareFloder = accessControlParams.getAllowShareFloder();	
+				Integer allowDeleteFloder = accessControlParams.getAllowDeleteFloder();	
+				Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
+				Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
+				Integer allowDeleteFile = accessControlParams.getAllowDeleteFile();	
+				Integer operateWays = accessControlParams.getOperateWays();	
+				Integer integrity = accessControlParams.getIntegrity();	
+				
+				strategy.setStrategyID(strategyID);
+				strategy.setAllowCreateFloder(allowCreateFloder);
+				strategy.setAllowShareFloder(allowShareFloder);
+				strategy.setAllowDeleteFloder(allowDeleteFloder);
+				strategy.setAllowUploadFile(allowUploadFile);
+				strategy.setAllowDownloadFile(allowDownloadFile);
+				strategy.setAllowDeleteFile(allowDeleteFile);
+				strategy.setOperateWays(operateWays);
+				strategy.setIntegrity(integrity);
+				strategy.setPropertyExpression(accessControlParams.getPropertyExpression());
+				
+				AccessControl accessControl = new AccessControl();
+				
+				if(oldStrategy != null){
+					strategy.setAccessControls(oldStrategy.getAccessControls());
+				}else{
+					
+					accessControl.setGroupId(accessControlParams.getGroupId());
+					accessControl.setPath(accessControlParams.getFileFolderId());
+					accessControl.getStrategys().add(strategy);
+					strategy.getAccessControls().add(accessControl);
+					accessControls.add(accessControl);
+				}
+				strategies.add(strategy);
+				
+				
+				if(oldStrategy == null){
+					accessControlDao.saveStratege(strategy);
+					accessControlDao.saveAccessControl(accessControl);
+				}else{
+					accessControlDao.mergeStratege(strategy);
+				}
+				return 1;
 			}
-			strategies.add(strategy);
-			
-			
-			if(oldStrategy == null){
-				accessControlDao.saveStratege(strategy);
-				accessControlDao.saveAccessControl(accessControl);
-			}else{
-				accessControlDao.mergeStratege(strategy);
-			}
-			return 1;
 		}
 		return 0;
 	}
 	
 	@Override
 	@Transactional
-	public Map<String,String> deletePolicy(Integer policyId) {
+	public Map<String,String> deletePolicy(Integer policyId,String token) {
+		errorMsg.clear();
+		String id = beforeAction(token);
 		Map<String,String> resultMap= new HashMap<String, String>();
 		Strategy strategy = strategyRepository.findOne(policyId);
 		if(strategy == null){
@@ -185,10 +205,16 @@ public class AccessControlService implements IAccessControlService {
 
 	@Override
 	public Map<String,List<String>> conflictdetection(AccessControlParams accessControlParams) {
-		
+		errorMsg.clear();
+		String id = beforeAction(accessControlParams.getToken());
 		Integer groupId = accessControlParams.getGroupId();
 		String path = accessControlParams.getFileFolderId();
 		String propertyExpression = accessControlParams.getPropertyExpression();
+		
+		if(id == null){
+			//setErrorMsg("40002", "请求参数错误，Token为空或者名称书写不正确");
+			return null;
+		}
 		
 		if(groupId == null){
 			setErrorMsg("40002", "请求参数错误，组ID为空或者名称书写不正确");
@@ -224,7 +250,10 @@ public class AccessControlService implements IAccessControlService {
 							privilegeConflictList = privilegeConflict(accessControlParams,strategy);
 							
 							if(privilegeConflictList.size() > 0){
-								conflictMap.put(user.getUser_pid(), privilegeConflictList);
+								if(!conflictMap.containsKey(strategy.getStrategyID()+"")){
+									conflictMap.put(strategy.getStrategyID()+"", privilegeConflictList);
+								}
+								
 							}
 						}
 					}
@@ -255,6 +284,11 @@ public class AccessControlService implements IAccessControlService {
 		Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
 		Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
 		Integer allowDeleteFile = accessControlParams.getAllowDeleteFile();	
+		Integer integrity = accessControlParams.getIntegrity();
+		Integer operateWays = accessControlParams.getOperateWays();
+		
+		
+		
 		if(strategy.getAllowCreateFloder() != allowCreateFloder){
 			privilegeConflictList.add("allowCreateFloder");
 		}
@@ -273,14 +307,20 @@ public class AccessControlService implements IAccessControlService {
 		if(strategy.getAllowDeleteFile() != allowDeleteFile){
 			privilegeConflictList.add("allowDeleteFile");
 		}
+		if(strategy.getIntegrity() != integrity){
+			privilegeConflictList.add("integrity");
+		}
+		if(strategy.getOperateWays() != operateWays){
+			privilegeConflictList.add("operateWays");
+		}
 		return privilegeConflictList;
 	}
 
 	
-	private boolean checkParams(String id,Integer groupId,String path){
+	private boolean checkParams(String token,Integer groupId,String path){
 			
-			if(id == null || "".endsWith(id)){
-				setErrorMsg("40002", "请求参数错误，用户ID为空或者名称书写不正确"); 
+			if(token == null || "".endsWith(token)){
+				setErrorMsg("40002", "请求参数错误，Token为空或者名称书写不正确"); 
 				return false;
 			}
 			if(groupId == null){
@@ -396,8 +436,16 @@ public class AccessControlService implements IAccessControlService {
 		return policys;
 	}
 	
-	private void beforeAction(){
-		accessControlDao.clear();
+	private String beforeAction(String token){
+		accessControlDao.getErrorMsg().clear();
+		String uid;
+		try {
+			uid = DESUtil.getUidBytoken(token);
+			return userDao.getUserPid(uid);
+		} catch (Exception e) {
+			setErrorMsg("40005", "Token参数错误，无法解析");
+		}
+		return null;
 	}
 	private void afterAction(){
 		if(accessControlDao.getErrorMsg().size() != 0){

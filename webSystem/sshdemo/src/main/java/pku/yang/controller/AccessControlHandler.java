@@ -35,16 +35,16 @@ public class AccessControlHandler {
 	
 
 	@ResponseBody
-	@RequestMapping("/queryaccess/{userId}/{groupId}/{fileFolderId}/{privilege}")
+	@RequestMapping("/queryaccess/{token}/{groupId}/{fileFolderId}/{privilege}")
 	public Map<String,Map<String,String>>  queryAccess(
-			@PathVariable("userId") 			String id,
+			@PathVariable("token") 				String token,
 			@PathVariable("groupId")			Integer groupid,
 			@PathVariable("fileFolderId") 		String path,
 			@PathVariable("privilege") 			String privilege)
 	{
 		
 		beforeAction();
-		Map<String, String> queryPrivileges = accessControlService.queryAccess(id, groupid, path, privilege); 
+		Map<String, String> queryPrivileges = accessControlService.queryAccess(token, groupid, path, privilege); 
 		return afterAction(queryPrivileges);
 		
 	}
@@ -56,7 +56,7 @@ public class AccessControlHandler {
 		beforeAction();
 		resultMap.clear(); 
 		Map<String, String> queryPrivileges = accessControlService.queryAccess(
-													 accessControlParams.getUserId(), 
+													 accessControlParams.getToken(), 
 													 accessControlParams.getGroupId(), 
 													 accessControlParams.getFileFolderId(),
 													 accessControlParams.getPrivilege());
@@ -64,14 +64,14 @@ public class AccessControlHandler {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/queryaccessall/{userId}/{groupId}/{fileFolderId}")
+	@RequestMapping("/queryaccessall/{token}/{groupId}/{fileFolderId}")
 	public Map<String,Map<String,String>> queryAccessAll(
-			@PathVariable("userId") 		String id,
-			@PathVariable("groupId") 	Integer groupid,
+			@PathVariable("token") 				String token,
+			@PathVariable("groupId") 			Integer groupid,
 			@PathVariable("fileFolderId") 		String path)
 	{
 		beforeAction();
-		Map<String, String> queryPrivileges = accessControlService.queryAccess(id, groupid, path);
+		Map<String, String> queryPrivileges = accessControlService.queryAccess(token, groupid, path);
 		return afterAction(queryPrivileges);
 	}
 	
@@ -80,21 +80,21 @@ public class AccessControlHandler {
 	public Map<String,Map<String,String>> queryAccessAll(AccessControlParams accessControlParams){
 		beforeAction();
 		Map<String, String> queryPrivileges = accessControlService.queryAccess(
-				 									accessControlParams.getUserId(), 
+				 									accessControlParams.getToken(), 
 				 									accessControlParams.getGroupId(), 
 				 									accessControlParams.getFileFolderId());
 		return afterAction(queryPrivileges);
 	}
 	
 	@ResponseBody
-	@RequestMapping("/queryattrexpress/{userId}/{groupId}/{fileFolderId}")
+	@RequestMapping("/queryattrexpress/{token}/{groupId}/{fileFolderId}")
 	public Map<String,List<Map<String,String>>> queryAttrExpress(
-			@PathVariable("userId") 		String id,
-			@PathVariable("groupId") 	Integer groupid,
+			@PathVariable("token") 				String token,
+			@PathVariable("groupId") 			Integer groupid,
 			@PathVariable("fileFolderId") 		String path)
 	{
 		beforeAction();
-		List<Map<String,String>> policys = accessControlService.queryPolicy(id,groupid,path,"queryattrexpress");
+		List<Map<String,String>> policys = accessControlService.queryPolicy(token,groupid,path,"queryattrexpress");
 		return afterAction(policys);
 	}
 	
@@ -103,7 +103,7 @@ public class AccessControlHandler {
 	public Map<String,List<Map<String,String>>> queryAttrExpress(AccessControlParams accessControlParams){
 		beforeAction();
 		List<Map<String,String>> policys = accessControlService.queryPolicy(
-													 accessControlParams.getUserId(), 
+													 accessControlParams.getToken(), 
 													 accessControlParams.getGroupId(), 
 													 accessControlParams.getFileFolderId(),
 													 "queryattrexpress");
@@ -116,7 +116,7 @@ public class AccessControlHandler {
 	public Map<String,List<Map<String,String>>> querypolicy(AccessControlParams accessControlParams){
 		beforeAction();
 		List<Map<String,String>> policys = accessControlService.queryPolicy(
-													 accessControlParams.getUserId(), 
+													 accessControlParams.getToken(), 
 													 accessControlParams.getGroupId(), 
 													 accessControlParams.getFileFolderId(),
 													 "querypolicy");
@@ -151,7 +151,9 @@ public class AccessControlHandler {
 	@RequestMapping(value="/deletepolicy")
 	public Map<String,Map<String,String>> deletePolicy(AccessControlParams accessControlParams){
 		 beforeAction();
-		 Map<String,String> ret = accessControlService.deletePolicy(Integer.parseInt(accessControlParams.getPolicyId()));
+		 Map<String,String> ret = accessControlService.deletePolicy(
+				 								Integer.parseInt(accessControlParams.getPolicyId()),
+				 								accessControlParams.getToken());
 		 return afterAction(ret);
 	}
 	
