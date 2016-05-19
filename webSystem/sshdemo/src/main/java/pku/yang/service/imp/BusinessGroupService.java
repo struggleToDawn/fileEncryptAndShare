@@ -98,7 +98,7 @@ public class BusinessGroupService implements IBusinessGroupService{
 
 
 	@Override
-	public String checkIsAdmind(String token, String fileId) {
+	public String checkIsAdmin(String token, String fileId) {
 		// TODO Auto-generated method stub
 		try{
 			String uid = DESUtil.getUidBytoken(token);
