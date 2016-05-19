@@ -3,7 +3,9 @@ package pku.yang.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,12 @@ import pku.yang.model.File;
 import pku.yang.model.Folder;
 import pku.yang.model.BusinessGroup;
 import pku.yang.model.Space;
+import pku.yang.service.IAccessControlService;
 import pku.yang.service.IBusinessGroupService;
 import pku.yang.service.IFileService;
 import pku.yang.service.IFolderService;
 import pku.yang.service.ISpaceService;
+import pku.yang.service.IUserService;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -41,6 +45,12 @@ public class FolderController {
 	
 	@Autowired
 	private ISpaceService spaceService;
+	
+	@Autowired
+	private IAccessControlService accessControlService;
+	
+	@Autowired
+	private IUserService userService;
 	
 	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。update by weishijia
 	@ResponseBody
@@ -131,9 +141,30 @@ public class FolderController {
 	@RequestMapping(value = "/Cancreatedirectory", method = RequestMethod.GET)
 	public String Cancreatedirectory(@RequestParam String token,
 			@RequestParam String parentid) {
+		
+		
+		try{
+			
+			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowCreateFloder");
+		
+			String res =  map.get("allowCreateFloder");
+			System.out.println(res);
+			JSONObject result = new JSONObject();
+			if(res.equals("0")){
+				result.put("code", 1);
+				result.put("data", "fail");	
+			}else{
+				result.put("code", 0);
+				result.put("data", "ok");
+			}
+			return result.toJSONString();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		JSONObject result = new JSONObject();
-		result.put("code", 0);
-		result.put("data", true);
+		result.put("code", 1);
+		result.put("data", "fail");	
 		return result.toJSONString();
 	}
 	
@@ -142,9 +173,28 @@ public class FolderController {
 	@RequestMapping(value = "/Candeletefile", method = RequestMethod.GET)
 	public String Candeletefile(@RequestParam String token,
 			@RequestParam String Fileid) {
+
+		try{
+			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFile");
+		
+			String res =  map.get("allowDeleteFile");
+			System.out.println(res);
+			JSONObject result = new JSONObject();
+			if(res.equals("0")){
+				result.put("code", 1);
+				result.put("data", "fail");	
+			}else{
+				result.put("code", 0);
+				result.put("data", "ok");
+			}
+			return result.toJSONString();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		JSONObject result = new JSONObject();
-		result.put("code", 0);
-		result.put("data", true);
+		result.put("code", 1);
+		result.put("data", "fail");	
 		return result.toJSONString();
 	}
 	
@@ -153,9 +203,28 @@ public class FolderController {
 	@RequestMapping(value = "/CandeleteDirctory", method = RequestMethod.GET)
 	public String CandeleteDirctory(@RequestParam String token,
 			@RequestParam String Fileid) {
+
+		try{
+			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFloder");
+		
+			String res =  map.get("allowDeleteFloder");
+			System.out.println(res);
+			JSONObject result = new JSONObject();
+			if(res.equals("0")){
+				result.put("code", 1);
+				result.put("data", "fail");	
+			}else{
+				result.put("code", 0);
+				result.put("data", "ok");
+			}
+			return result.toJSONString();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		JSONObject result = new JSONObject();
-		result.put("code", 0);
-		result.put("data", true);
+		result.put("code", 1);
+		result.put("data", "fail");	
 		return result.toJSONString();
 	}
 	
@@ -168,6 +237,8 @@ public class FolderController {
 		Folder folder = folderService.findFolderInfo(parentid);
 		String TPA = folder.getIntegrityType();
 		String ABE = folder.getShareType();
+		
+		
 		result.put("code", 0);
 		if(TPA.equals("1")){
 			result.put("TPA", "TPA");
@@ -178,6 +249,20 @@ public class FolderController {
 			result.put("ABE", "ABE");
 		}else{
 			result.put("ABE", "normal");
+		}
+		try{
+			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowUploadFile");
+		
+			String res =  map.get("allowUploadFile");
+			System.out.println(res);
+			if(res.equals("0")){
+				result.put("code", 1);
+			}else{
+				result.put("code", 0);
+			}
+			return result.toJSONString();
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return result.toJSONString();
 	}
@@ -195,6 +280,20 @@ public class FolderController {
 			result.put("data", "ABE");
 		}else{
 			result.put("data", "normal");
+		}
+		try{
+			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDownloadFile");
+		
+			String res =  map.get("allowDownloadFile");
+			System.out.println(res);
+			if(res.equals("0")){
+				result.put("code", 1);
+			}else{
+				result.put("code", 0);
+			}
+			return result.toJSONString();
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return result.toJSONString();
 	}

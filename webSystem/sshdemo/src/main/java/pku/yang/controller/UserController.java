@@ -226,7 +226,7 @@ public class UserController {
 			String  uid = 	(String) request.getSession().getAttribute("sessionname");
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String ctime = df.format(new Date());
-			String FolderId =  folderService.addRootFolder(uid, name, "0", ctime);
+			String FolderId =  folderService.addRootFolder(uid, name, "3", ctime);
 			String storage_id  = spaceService.addSpace(name, 23, FolderId);
 			
 			userService.addStudent(id, name, age, teacherID, department,
@@ -268,7 +268,7 @@ public class UserController {
 			String  uid = 	(String) request.getSession().getAttribute("sessionname");
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String ctime = df.format(new Date());
-			String FolderId =  folderService.addRootFolder(uid, name, "0", ctime);
+			String FolderId =  folderService.addRootFolder(uid, name, "3", ctime);
 			String storage_id  = spaceService.addSpace(name, 23, FolderId);
 			userService.addTeacher(id, name, age, title, duty, department,
 					studyGroup, courses ,storage_id);

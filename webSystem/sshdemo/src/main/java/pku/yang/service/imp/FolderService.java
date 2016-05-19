@@ -105,6 +105,10 @@ public class FolderService implements IFolderService{
 			fatherId = folder.getFatherID();
 		}
 		
+		if(fatherId.equals("1"))
 		return folder.getFolderID();
+		else{
+			return "0";
+		}
 	}
 }

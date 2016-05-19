@@ -108,10 +108,13 @@ public class BusinessGroupService implements IBusinessGroupService{
 			File file= 	fileDao.getByID(id);
 			id = file.getFolderId();
 			}
-			System.out.println(id);
+			System.out.println("file"+ id);
 			String rootId  = folderService.getRootId(id);
+			if(rootId.equals("0")) return "0";
+			System.out.println("rootId" + rootId);
 			Space space = spaceService.findByRootId(rootId);
 			String spaceId = space.getID();
+			System.out.println("spaceId" + spaceId);
 			BusinessGroup bGroup = findGroupInfoBySid(spaceId);
 			String adminIds = bGroup.getAdminId();
 			String[] adminId = adminIds.split(",");
@@ -123,6 +126,9 @@ public class BusinessGroupService implements IBusinessGroupService{
 			return "0";
 		}catch(Exception e){
 			e.printStackTrace();
+			
+		}
+		finally{
 			return "0";
 		}
 	}
