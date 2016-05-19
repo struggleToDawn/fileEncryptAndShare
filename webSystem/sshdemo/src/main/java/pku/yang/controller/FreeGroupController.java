@@ -73,7 +73,7 @@ public class FreeGroupController {
 		for (int i = 0; i < user_id.length; i++) {
 			System.out.println(user_id.length);
 			System.out.println(user_id[i] + " " + fg_id);
-			messageservice.add_mess(user_id[i], fg_id, "0");
+			messageservice.add_mess(user_id[i], fg_id, "1"); //should be 0
 			// 增加消息列表
 		}
 		int code=0;
@@ -152,8 +152,13 @@ public class FreeGroupController {
 	// 删除自由群组
 	@ResponseBody
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete_fg(String fg_id) {
-		
+	public String delete_fg(@RequestParam String token,@RequestParam String fg_id) {
+		String userId = "";
+		try{
+			userId = DESUtil.getUidBytoken(token);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
 		
 
