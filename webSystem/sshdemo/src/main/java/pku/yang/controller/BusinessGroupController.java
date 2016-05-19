@@ -68,7 +68,7 @@ public class BusinessGroupController {
 //			@RequestParam String adminAttrs
 			) {
 	
-		String result = businessGroup.checkIsAdmind("As6VkJPshb34jZ255nXEKw==", "014634826261380d");
+		String result = businessGroup.checkIsAdmin("As6VkJPshb34jZ255nXEKw==", "014634826261380d");
 	System.out.println(result);	
 //		AttributeToSql adminAttributeToSql = new AttributeToSql();
 //		adminAttributeToSql.getAdminIds("" , sessionFactory.getCurrentSession());
