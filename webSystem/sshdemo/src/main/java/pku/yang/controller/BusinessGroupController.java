@@ -210,7 +210,7 @@ public class BusinessGroupController {
 		}catch(Exception e){
 			JSONObject jsonData = new JSONObject();
 			jsonData.put("code", 1);
-			jsonData.put("data", "用户id不存在");
+			jsonData.put("data", "user don't exit");
 			
 			return jsonData.toJSONString();	
 		
