@@ -146,12 +146,12 @@ public class FolderController {
 		try{
 			
 			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowDeleteFile");
-		
+			
 			String res =  map.get("allowDeleteFile");
 			System.out.println("123123"+ res);
 			JSONObject result = new JSONObject();
 			if(res.equals("0")){
-				result.put("code", 0);
+				result.put("code", 1);
 				result.put("data", "fail");	
 			}else{
 				result.put("code", 0);
@@ -211,7 +211,7 @@ public class FolderController {
 			System.out.println(res);
 			JSONObject result = new JSONObject();
 			if(res.equals("0")){
-				result.put("code", 0);
+				result.put("code", 1);
 				result.put("data", "fail");	
 			}else{
 				result.put("code", 0);
@@ -256,7 +256,7 @@ public class FolderController {
 			String res =  map.get("allowUploadFile");
 			System.out.println(res);
 			if(res.equals("0")){
-				result.put("code", 0);
+				result.put("code", 1);
 			}else{
 				result.put("code", 0);
 			}
@@ -287,7 +287,7 @@ public class FolderController {
 			String res =  map.get("allowDownloadFile");
 			System.out.println(res);
 			if(res.equals("0")){
-				result.put("code", 0);
+				result.put("code", 1);
 			}else{
 				result.put("code", 0);
 			}
