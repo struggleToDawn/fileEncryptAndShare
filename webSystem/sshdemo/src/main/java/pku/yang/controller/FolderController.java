@@ -146,7 +146,7 @@ public class FolderController {
 		try{
 			
 			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowDeleteFile");
-			
+		
 			String res =  map.get("allowDeleteFile");
 			System.out.println("123123"+ res);
 			JSONObject result = new JSONObject();
