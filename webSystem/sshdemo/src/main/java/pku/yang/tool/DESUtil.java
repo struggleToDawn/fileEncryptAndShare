@@ -102,7 +102,7 @@ public class DESUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String source = "12";
+        String source = "1501211002";
         System.out.println("原文: " + source);
         String key = "A1B2C3D4E5F60708";
         String key1 = "A1B2C3D4E5F60708";

@@ -62,12 +62,14 @@ public class BusinessGroupController {
 	@ResponseBody 
 	@RequestMapping(value = "/ttt", method = RequestMethod.GET)
 	public String ttt(
-//			@RequestParam String token
+			@RequestParam String token
 //			@RequestParam String uAttrs,
 //			@RequestParam int storageId, 
 //			@RequestParam String adminAttrs
-			) throws Exception {
+			) {
 	
+		String result = businessGroup.checkIsAdmind("As6VkJPshb34jZ255nXEKw==", "014634826261380d");
+	System.out.println(result);	
 //		AttributeToSql adminAttributeToSql = new AttributeToSql();
 //		adminAttributeToSql.getAdminIds("" , sessionFactory.getCurrentSession());
 //		List<Student> list = sessionFactory.getCurrentSession().createSQLQuery("select * from student where courses='java' ").addEntity(Student.class).list();
@@ -82,15 +84,15 @@ public class BusinessGroupController {
 //		
 //		uid =  folderService.addRootFolder("123", "java", "1", createDate);
 //		
-		userService.addUserGroup("1501211004", "3,4,5");
+//		userService.addUserGroup("1501211004", "3,4,5");
 		
 //		
 //		List<String> list = new ArrayList<String>();
 //			
-		String a = "";
-		String userGroups = userService.getUserGroupString("1501211004");
-
-		return userGroups + ",12";
+//		String a = "";
+//		String userGroups = userService.getUserGroupString("1501211004");
+//
+//		return userGroups + ",12";
 		
 //		return "";
 //		
@@ -114,7 +116,7 @@ public class BusinessGroupController {
 //		
 //		businessGroup.addGroup(name,"3",22,adminAttrs,uAttrs,ctime);
 		
-//		return "home";
+		return "home";
 	}
 	
 	

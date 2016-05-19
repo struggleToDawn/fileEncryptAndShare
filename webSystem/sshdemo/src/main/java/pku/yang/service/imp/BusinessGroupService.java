@@ -5,12 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
+
 import pku.yang.dao.IBusinessGroupDao;
 import pku.yang.dao.imp.BusinessGroupDao;
 import pku.yang.dao.imp.FileDao;
 import pku.yang.model.BusinessGroup;
+import pku.yang.model.File;
 import pku.yang.model.Folder;
+import pku.yang.model.Space;
 import pku.yang.service.IBusinessGroupService;
+import pku.yang.service.IFileService;
+import pku.yang.service.IFolderService;
+import pku.yang.service.ISpaceService;
 import pku.yang.tool.DESUtil;
 
 
@@ -18,7 +25,18 @@ import pku.yang.tool.DESUtil;
 public class BusinessGroupService implements IBusinessGroupService{
 
 	@Autowired
+	private IFolderService folderService;
+	
+	@Autowired
+	private IFileService fileService;
+	
+	
+	@Autowired
+	private ISpaceService spaceService;
+	
+	@Autowired
 	private IBusinessGroupDao businessGroupDao;
+	
 	@Autowired
 	private FileDao fileDao;
 
@@ -87,12 +105,26 @@ public class BusinessGroupService implements IBusinessGroupService{
 			String flag = fileId.substring(fileId.length()-1);
 			String id = fileId.substring(0, fileId.length()-1);
 			if(flag.equals("f")){
-				fileDao.getByID(id);
+			File file= 	fileDao.getByID(id);
+			id = file.getFolderId();
 			}
+			System.out.println(id);
+			String rootId  = folderService.getRootId(id);
+			Space space = spaceService.findByRootId(rootId);
+			String spaceId = space.getID();
+			BusinessGroup bGroup = findGroupInfoBySid(spaceId);
+			String adminIds = bGroup.getAdminId();
+			String[] adminId = adminIds.split(",");
+			for(String uuid: adminId){
+				if(uid.equals(uuid)){ //是该群组的一个管理员
+					return "1";
+				}
+			}
+			return "0";
 		}catch(Exception e){
 			e.printStackTrace();
+			return "0";
 		}
-		return null;
 	}
 
 	
