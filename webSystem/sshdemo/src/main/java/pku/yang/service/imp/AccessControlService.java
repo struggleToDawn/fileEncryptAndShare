@@ -411,7 +411,7 @@ public class AccessControlService implements IAccessControlService {
 					setErrorMsg("50002","获取权限失败，属性表达式包含非法字符");
 				} 
 				if("1".equals(privilegeValue) && "0".equals(privileges.get(arrtibuteName))){
-					privileges.replace(arrtibuteName, "1") ;
+					privileges.put(arrtibuteName, "1") ;
 				}
 			}
 		return privileges;
