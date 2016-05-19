@@ -29,11 +29,16 @@ import com.alibaba.fastjson.JSONObject;
 import pku.yang.dao.IBusinessGroupDao;
 import pku.yang.dao.IUserDao;
 import pku.yang.model.BusinessGroup;
+import pku.yang.model.FreeGroup;
+import pku.yang.model.Message;
+import pku.yang.model.Space;
 import pku.yang.model.Student;
 import pku.yang.model.Teacher;
 import pku.yang.model.User;
 import pku.yang.service.IBusinessGroupService;
 import pku.yang.service.IFolderService;
+import pku.yang.service.IFreeGroupService;
+import pku.yang.service.IMessageService;
 import pku.yang.service.ISpaceService;
 import pku.yang.service.ITokenService;
 import pku.yang.service.IUserService;
@@ -56,6 +61,10 @@ public class BusinessGroupController {
 	private IUserDao userDao;
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private IMessageService messageservice;
+	@Autowired
+	private IFreeGroupService freeGroupService;
 
 
 	
@@ -174,10 +183,28 @@ public class BusinessGroupController {
 				json.put("size", 0);
 				json.put("type", "folder");
 				dorjsonarray.add(json);
+								
+				List<Message> list=messageservice.search_user_fg(uid);
+				int code=0;
+				JSONObject resultjson = new JSONObject();
+				for (int i = 0; i < list.size(); i++) {
+					JSONObject json1 = new JSONObject();
+					String fg_id=list.get(i).getFg_id();
+					json1.put("parentid", "2");
+					FreeGroup fg= freeGroupService.search_fg_info(fg_id);
+					json1.put("filename",fg.getFg_name());
+					Space space=spaceService.findById(fg.getStorgeid());     //fg.getStorgeid()
+					String rootid=space.getRoot();
+					json1.put("fileid",rootid);
+					json1.put("date", time);
+					json1.put("size", 0);
+					json.put("type", "folder");	
+					dorjsonarray.add(json1);
+				}				
 				
 				jsonData.put("code", 0);
 				jsonData.put("data", dorjsonarray);
-				
+			
 				return jsonData.toJSONString();	
 			}
 		}catch(Exception e){
