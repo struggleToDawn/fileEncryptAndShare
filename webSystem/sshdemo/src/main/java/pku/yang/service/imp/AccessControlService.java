@@ -72,10 +72,15 @@ public class AccessControlService implements IAccessControlService {
 		}
 		Map<String,String> resultMap= new HashMap<String, String>();
 		if(checkParams(token,groupId,path)){
-			String id = beforeAction(token);
-			Map<String,String> privilegeMap = queryPrivileges(id,groupId,path,privilege);
-			if(privilegeMap != null){
-				resultMap.put(privilege, privilegeMap.get(privilege));
+			
+			if("1".equals(businessGroupService.checkIsAdmin(token, path))){
+				resultMap.put(privilege, "1");
+			}else{
+				String id = beforeAction(token);
+				Map<String,String> privilegeMap = queryPrivileges(id,groupId,path,privilege);
+				if(privilegeMap != null){
+					resultMap.put(privilege, privilegeMap.get(privilege));
+				}
 			}
 			afterAction();
 		}
@@ -86,10 +91,21 @@ public class AccessControlService implements IAccessControlService {
 	public Map<String,String> queryAccess(String token,Integer groupId,String path){
 		errorMsg.clear();
 		if(checkParams(token,groupId,path)){
-			String id = beforeAction(token);
-			return queryPrivileges(id,groupId,path,null);
+			
+			if("1".equals(businessGroupService.checkIsAdmin(token, path))){
+				privileges.put("allowCreateFloder", "1");
+				privileges.put("allowShareFloder", "1");
+				privileges.put("allowDeleteFloder", "1");
+				privileges.put("allowUploadFile", "1");
+				privileges.put("allowDownloadFile", "1");
+				privileges.put("allowDeleteFile", "1");
+				return privileges;
+			}else{
+				String id = beforeAction(token);
+				return queryPrivileges(id,groupId,path,null);
+			}
 		}
-		return null;
+		return privileges;
 	}
 	
 	public List<Map<String,String>> queryPolicy(String token,Integer groupId,String path,String function){
@@ -395,7 +411,7 @@ public class AccessControlService implements IAccessControlService {
 					setErrorMsg("50002","获取权限失败，属性表达式包含非法字符");
 				} 
 				if("1".equals(privilegeValue) && "0".equals(privileges.get(arrtibuteName))){
-					privileges.replace(arrtibuteName, "1") ;
+					privileges.put(arrtibuteName, "1") ;
 				}
 			}
 		return privileges;
