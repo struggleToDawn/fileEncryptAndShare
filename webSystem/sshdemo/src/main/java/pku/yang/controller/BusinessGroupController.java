@@ -137,8 +137,9 @@ public class BusinessGroupController {
 	public String getServiceGroupFile(@RequestParam String token){
 		String uid = new String();
 		try{
-			uid = DESUtil.getUidBytoken(token);
 			
+			uid = DESUtil.getUidBytoken(token);
+			System.out.println(uid);
 //			uid = "1501211004";
 			
 			String userGroups = userService.getUserGroupString(uid);
@@ -147,7 +148,7 @@ public class BusinessGroupController {
 			JSONArray dorjsonarray = new JSONArray();
 			
 			JSONObject jsonData = new JSONObject();
-		
+			System.out.println(1);
 			if(userGroups.isEmpty()){
 				jsonData.put("code", 1);
 				jsonData.put("data", dorjsonarray);	
@@ -173,7 +174,7 @@ public class BusinessGroupController {
 						dorjsonarray.add(obj);			
 					}
 				}
-				
+				System.out.println(2);
 				String storageId = userService.getStorageId(uid);
 				JSONObject json = new JSONObject();
 				json.put("parentid", "3");
@@ -185,7 +186,7 @@ public class BusinessGroupController {
 				dorjsonarray.add(json);
 								
 				List<Message> list=messageservice.search_user_fg(uid);
-				int code=0;
+				
 				JSONObject resultjson = new JSONObject();
 				for (int i = 0; i < list.size(); i++) {
 					JSONObject json1 = new JSONObject();
@@ -213,7 +214,6 @@ public class BusinessGroupController {
 			jsonData.put("data", "user don't exit");
 			
 			return jsonData.toJSONString();	
-		
 			
 		}
 		

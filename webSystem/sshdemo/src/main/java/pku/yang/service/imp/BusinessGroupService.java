@@ -125,11 +125,8 @@ public class BusinessGroupService implements IBusinessGroupService{
 			}
 			return "0";
 		}catch(Exception e){
-			e.printStackTrace();
-			
-		}
-		finally{
 			return "0";
+			
 		}
 	}
 
