@@ -120,7 +120,7 @@
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d",     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"privilege" : " allowCreateFloder
@@ -171,7 +171,7 @@ failed
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d"     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
@@ -219,7 +219,7 @@ failed
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
@@ -262,7 +262,7 @@ success
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
@@ -337,7 +337,7 @@ success
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"strategyID":"1"
@@ -392,7 +392,7 @@ success
 
 ```
 {
-	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"groupId" : "1",          // 组ID
 	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"allowCreateFloder":"0",
@@ -444,7 +444,7 @@ success
 ```
 {
     "policyId":"10",
-    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
 	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
 ```
@@ -485,12 +485,12 @@ success
 
 ```
 {
-    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户ID
+    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
     "groupId":"1",
     "fileFolderId":"014634826261380d",
 	"propertyExpression":"#username=\'a\'#",
 	"allowCreateFloder": 1	,
-	"allowShareFloder":0,
+	"allowRenameFloder":0,
 	"allowDeleteFloder":1,
 	"allowUploadFile":0,
 	"allowDownloadFile":1,
@@ -507,7 +507,7 @@ success
 {
     "1":[                                //数字1表示与策略ID为1的策略冲突了，后面列出了哪些权限冲突
         "allowCreateFloder",
-        "allowShareFloder",
+        "allowRenameFloder",
         "allowDeleteFloder",
         "allowUploadFile",
         "allowDownloadFile"
