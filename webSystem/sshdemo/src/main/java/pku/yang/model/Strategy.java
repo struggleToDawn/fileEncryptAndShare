@@ -27,7 +27,7 @@ public class Strategy {
 	private Integer strategyID;			//访问策略ID
 	private String 	propertyExpression;	//属性表达式
 	private Integer allowCreateFloder;	//允许创建目录
-	private Integer allowShareFloder;	//允许共享目录
+	private Integer allowRenameFloder;	//允许共享目录
 	private Integer allowDeleteFloder;	//允许删除目录
 	private Integer allowUploadFile;	//允许上传文件
 	private Integer allowDownloadFile;	//允许下载文件
@@ -62,12 +62,12 @@ public class Strategy {
 		this.allowCreateFloder = allowCreateFloder;
 	}
 	
-	@Column(name="allow_share_floder")
-	public Integer getAllowShareFloder() {
-		return allowShareFloder;
+	@Column(name="allow_rename_floder")
+	public Integer getAllowRenameFloder() {
+		return allowRenameFloder;
 	}
-	public void setAllowShareFloder(Integer allowShareFloder) {
-		this.allowShareFloder = allowShareFloder;
+	public void setAllowRenameFloder(Integer allowRenameFloder) {
+		this.allowRenameFloder = allowRenameFloder;
 	}
 	
 	@Column(name="allow_delete_floder")

@@ -91,10 +91,9 @@ public class AccessControlService implements IAccessControlService {
 	public Map<String,String> queryAccess(String token,Integer groupId,String path){
 		errorMsg.clear();
 		if(checkParams(token,groupId,path)){
-			
 			if("1".equals(businessGroupService.checkIsAdmin(token, path))){
 				privileges.put("allowCreateFloder", "1");
-				privileges.put("allowShareFloder", "1");
+				privileges.put("allowRenameFloder", "1");
 				privileges.put("allowDeleteFloder", "1");
 				privileges.put("allowUploadFile", "1");
 				privileges.put("allowDownloadFile", "1");
@@ -151,7 +150,7 @@ public class AccessControlService implements IAccessControlService {
 				}else{
 					
 					Integer allowCreateFloder = accessControlParams.getAllowCreateFloder();	
-					Integer allowShareFloder = accessControlParams.getAllowShareFloder();	
+					Integer allowRenameFloder = accessControlParams.getAllowRenameFloder();	
 					Integer allowDeleteFloder = accessControlParams.getAllowDeleteFloder();	
 					Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
 					Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
@@ -161,7 +160,7 @@ public class AccessControlService implements IAccessControlService {
 					
 					strategy.setStrategyID(strategyID);
 					strategy.setAllowCreateFloder(allowCreateFloder);
-					strategy.setAllowShareFloder(allowShareFloder);
+					strategy.setAllowRenameFloder(allowRenameFloder);
 					strategy.setAllowDeleteFloder(allowDeleteFloder);
 					strategy.setAllowUploadFile(allowUploadFile);
 					strategy.setAllowDownloadFile(allowDownloadFile);
@@ -303,7 +302,7 @@ public class AccessControlService implements IAccessControlService {
 	
 		List<String> privilegeConflictList = new ArrayList<String>();
 		Integer allowCreateFloder = accessControlParams.getAllowCreateFloder();	
-		Integer allowShareFloder = accessControlParams.getAllowShareFloder();	
+		Integer allowRenameFloder = accessControlParams.getAllowRenameFloder();	
 		Integer allowDeleteFloder = accessControlParams.getAllowDeleteFloder();	
 		Integer allowUploadFile = accessControlParams.getAllowUploadFile();	
 		Integer allowDownloadFile = accessControlParams.getAllowDownloadFile();	
@@ -316,8 +315,8 @@ public class AccessControlService implements IAccessControlService {
 		if(strategy.getAllowCreateFloder() != allowCreateFloder){
 			privilegeConflictList.add("allowCreateFloder");
 		}
-		if(strategy.getAllowShareFloder() != allowShareFloder){
-			privilegeConflictList.add("allowShareFloder");
+		if(strategy.getAllowRenameFloder() != allowRenameFloder){
+			privilegeConflictList.add("allowRenameFloder");
 		}
 		if(strategy.getAllowDeleteFloder() != allowDeleteFloder){
 			privilegeConflictList.add("allowDeleteFloder");
@@ -362,7 +361,7 @@ public class AccessControlService implements IAccessControlService {
 		
 		privileges.clear();
 		privileges.put("allowCreateFloder", "0");
-		privileges.put("allowShareFloder", "0");
+		privileges.put("allowRenameFloder", "0");
 		privileges.put("allowDeleteFloder", "0");
 		privileges.put("allowUploadFile", "0");
 		privileges.put("allowDownloadFile", "0");
@@ -440,7 +439,7 @@ public class AccessControlService implements IAccessControlService {
 						}else{
 							policy.put("strategyID",strategy.getStrategyID()+"");
 							policy.put("allowCreateFloder",strategy.getAllowCreateFloder()+"");
-							policy.put("allowShareFloder", strategy.getAllowShareFloder()+"");
+							policy.put("allowRenameFloder", strategy.getAllowRenameFloder()+"");
 							policy.put("allowDeleteFloder", strategy.getAllowDeleteFloder()+"");
 							policy.put("allowUploadFile", strategy.getAllowUploadFile()+"");
 							policy.put("allowDownloadFile", strategy.getAllowDownloadFile()+"");
