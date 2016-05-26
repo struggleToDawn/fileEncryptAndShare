@@ -251,7 +251,7 @@ public class FolderController {
 			result.put("ABE", "normal");
 		}
 		try{
-			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowUploadFile");
+			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid+"d", "allowUploadFile");
 		
 			String res =  map.get("allowUploadFile");
 			System.out.println(res);
