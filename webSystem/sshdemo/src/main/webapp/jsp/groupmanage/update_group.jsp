@@ -40,7 +40,7 @@
 							<!--  		</div> -->
 									<div class="form-group col-lg-6">
 										<label class="col-lg-3 control-label">群组名：</label>
-										<div class="col-lg-9"><input type="text" class="form-control " id="name" name="name" value="${businessGroup.getAdminAttrs()}"></div>
+										<div class="col-lg-9"><input type="text" class="form-control " id="name" name="name" value="${businessGroup.getName()}"></div>
 									</div>
 									<div class="form-group col-lg-6">
 										<label class="col-lg-3 control-label">管理员属性：</label>
