@@ -29,7 +29,7 @@
 
 | access_control_id | group_id | path            |
 |-------------------|----------|-----------------|
-|                 2 |      123 | 24325435435344f |
+|                 2 |      1 | 014634826261380d |
 
 
 ###strategy
@@ -39,7 +39,7 @@
 | strategy_id | int(11) | 策略ID | primary key, index field |
 | allow_create_floder | int(11) | 是否允许创建目录 | 允许为1，不允许为0 |
 | allow_delete_floder | int(11) | 是否允许删除目录 | 允许为1，不允许为0 |
-| allow_share_floder  | int(11) | 是否允许分享目录 | 允许为1，不允许为0 |
+| allow_rename_floder  | int(11) | 是否允许重命名目录 | 允许为1，不允许为0 |
 | allow_upload_file   | int(11) | 是否允许上传文件 | 允许为1，不允许为0 |
 | allow_download_file | int(11) | 是否允许下载文件 | 允许为1，不允许为0 |
 | allow_delete_file   | int(11) | 是否允许删除文件 | 允许为1，不允许为0 |
@@ -49,9 +49,9 @@
 
 +数据表样例
 
-| strategy_id | allow_create_floder | allow_delete_file | allow_delete_floder | allow_download_file | allow_share_floder | allow_upload_file | integrity | operate_ways | property_expression                                      |
+| strategy_id | allow_create_floder | allow_delete_file | allow_delete_floder | allow_download_file | allow_rename_floder | allow_upload_file | integrity | operate_ways | property_expression                                      |
 |-------------|---------------------|-------------------|---------------------|---------------------|--------------------|-------------------|-----------|--------------|----------------------------------------------------------|
-|           1 |                   1 |                 1 |                   0 |                   0 |                  1 |                 0 |         1 |            1 | #username='a'&(password='12' $ ty pe='2')$!userID = '1'# |
+|           1 |                   1 |                 1 |                   0 |                   0 |                  1 |                 0 |         1 |            1 | #courses='java'&(age>'30' $ ty pe='0')$!userID = '1'# |
 
 ###access_control_strategy
 
@@ -76,13 +76,13 @@
 
 | pid | groups | password | role | storage_id | type | user_id | username |
 |-----|--------|----------|------|------------|------|---------|----------|
-| 1   | 123    | 12       |    1 | 1324       | 0    | 3       | a        |
+| 4028810a54be58200154be5a3d490003   | 4028810a54be58200154be5b3f360007,4028810a54be58200154be5b88150009,4028810a54be58200154be5cb061000b    | 666666       |    1 | 4028810a54be58200154be5a3d450002       | 1    | 1501211002       | tom        |
 
 2、用户对应的实际表（要么Student，要么Teacher），样例如下
 
-| student_id | academy | age  | courses | department | student_name | study_group | teacher_id |
+| teacher_id | title | age  | courses | department | teacher_name | duty | study_group |
 |------------|---------|------|---------|------------|--------------|-------------|------------|
-| 3          | rw      |   23 | er      | dfsd       | ret          | 12          | 32         |
+| 1501211002          | professor      |   45 |    java   |    Software college    | tom          | teacher          | hadoop         |
 
 ===
 
@@ -103,9 +103,12 @@
 2、"40002":"请求参数错误"
 3、"40003":"数据库操作失败"
 4、"40004":"属性表达式解析失败"
+5、"40005":"Token转化失败"
+6、"40006":"无权限执行该操作"
+7、"40007":"权限冲突"
 ```
 ##2、接口定义
- `接口中所有的userId实际指用户表中的pid字段,是唯一标识用户的，而不是表中的user_id字段`
+
 
 ### /queryaccess
 
@@ -117,11 +120,11 @@
 
 ```
 {
-	"userId" : "12345434",           // 用户ID
-	"groupId" : "12097332",          // 组ID
-	"fileFolderId" : "1213432f",     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d",     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"privilege" : " allowCreateFloder
-	               |allowShareFloder
+	               |allowRenameFloder
 	               |allowDeleteFloder
 	               |allowUploadFile
 	               |allowDownloadFile
@@ -140,7 +143,7 @@ success
         "20000":"ok"
     },
     "ret":{
-        "allowShareFloder":"1"
+        "allowRenameFloder":"1"
     }
 }
 ```
@@ -168,9 +171,9 @@ failed
 
 ```
 {
-	"userId" : "12345434",           // 用户ID
-	"groupId" : "12097332",          // 组ID
-	"fileFolderId" : "1213432f"     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d"     // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
 ```
 
@@ -185,7 +188,7 @@ success
     }
     "ret":{
         "allowCreateFloder":"0",
-        "allowShareFloder":"1",
+        "allowRenameFloder":"1",
         "allowDownloadFile":"1",
         "allowUploadFile":"1",
         "allowDeleteFile":"1",
@@ -210,17 +213,15 @@ failed
 
 + 描述 ：根据用户的ID，查询与该用户相关的目录/文件对应的属性表达式
 
-+ 申明：该接口只允许管理员调用，接口涉及到获取策略中的属性表达式，属绝密性质的接口，调用前请做判断
-
 + method `GET/POST`
 
 + request
 
 ```
 {
-	"userId" : "12345434",           // 用户ID
-	"groupId" : "12097332",          // 组ID
-	"fileFolderId" : "1213432f"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
 ```
 + response
@@ -233,7 +234,7 @@ success
         "20000":"ok"
     }
     "ret":{
-        "7":"#username='a'&(password='12' $ ro le='2')&!(userID = 'fd')#"  //键为策略ID，值为属性表达式
+        "7":"#courses='java'&(age>'30' $ ty pe='0')$!userID = '1'#"  //键为策略ID，值为属性表达式
         ......
     }
 }
@@ -255,17 +256,15 @@ success
 
 + 描述 ：根据用户的ID，查询相应的策略
 
-+ 申明：该接口只允许管理员调用，接口涉及到获取策略，属绝密性质的接口，调用前请做判断
-
 + method `POST`
 
 + request
 
 ```
 {
-	"userId" : "12345434",           // 用户ID
-	"groupId" : "12097332",          // 组ID
-	"fileFolderId" : "1213432f"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
 ```
 + response
@@ -283,25 +282,25 @@ success
         {
             "integrity":"1",
             "allowCreateFloder":"1",
-            "allowShareFloder":"1",
+            "allowRenameFloder":"1",
             "allowDownloadFile":"0",
             "allowUploadFile":"0",
             "allowDeleteFile":"1",
             "strategyID":"1",
             "allowDeleteFloder":"0",
-            "propertyExpression":"#username='a'&(password='12' $ ty pe='2')$!userID = '1'#",
+            "propertyExpression":"#courses='java'&(age>'30' $ ty pe='0')$!userID = '1'#",
             "operateWays":"1"
         },
         {
             "integrity":"0",
             "allowCreateFloder":"1",
-            "allowShareFloder":"1",
+            "allowRenameFloder":"1",
             "allowDownloadFile":"0",
             "allowUploadFile":"0",
             "allowDeleteFile":"1",
             "strategyID":"414",
             "allowDeleteFloder":"0",
-            "propertyExpression":"#username='a'#",
+            "propertyExpression":"#courses='java'&(age>'30' $ ty pe='0')$!userID = '1'#",
             "operateWays":"0"
         }
         ...
@@ -338,9 +337,12 @@ success
 
 ```
 {
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"strategyID":"1"
 	"allowCreateFloder":"0",
-	"allowShareFloder":"1",
+	"allowRenameFloder":"1",
 	"allowDeleteFloder":"0",
 	"allowUploadFile":"1",
 	"allowDownloadFile":"0",
@@ -390,11 +392,11 @@ success
 
 ```
 {
-	"userId" : "12345434",           // 用户ID
-	"groupId" : "12097332",          // 组ID
-	"fileFolderId" : "1213432f"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
+	"token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"groupId" : "1",          // 组ID
+	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 	"allowCreateFloder":"0",
-	"allowShareFloder":"1",
+	"allowRenameFloder":"1",
 	"allowDeleteFloder":"0",
 	"allowUploadFile":"1",
 	"allowDownloadFile":"0",
@@ -441,7 +443,9 @@ success
 
 ```
 {
-    "policyId":"10"
+    "policyId":"10",
+    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+	"fileFolderId" : "014634826261380d"      // 文件/目录ID（文件：文件本身的ID后加f，目录：目录本身的ID后加d）
 }
 ```
 + response
@@ -481,15 +485,18 @@ success
 
 ```
 {
-    "groupId":"123",
-    "fileFolderId":"24325435435344f",
+    "token" : "As6VkJPshb34jZ255nXEKw==",           // 用户token
+    "groupId":"1",
+    "fileFolderId":"014634826261380d",
 	"propertyExpression":"#username=\'a\'#",
 	"allowCreateFloder": 1	,
-	"allowShareFloder":0,
+	"allowRenameFloder":0,
 	"allowDeleteFloder":1,
 	"allowUploadFile":0,
 	"allowDownloadFile":1,
-	"allowDeleteFile":1
+	"allowDeleteFile":1,
+	"operateWays":"1",
+	"integrity":"1",
 }
 ```
 + response
@@ -500,7 +507,7 @@ success
 {
     "1":[                                //数字1表示与策略ID为1的策略冲突了，后面列出了哪些权限冲突
         "allowCreateFloder",
-        "allowShareFloder",
+        "allowRenameFloder",
         "allowDeleteFloder",
         "allowUploadFile",
         "allowDownloadFile"
@@ -770,7 +777,7 @@ success
 ##2、符号优先级说明
 |           |     $    |     &     |     !     |     (     |     )     |     #     |
 | --------- |:--------:|:---------:|:---------:| ---------:|:---------:| ---------:|
-|     $     |     >    |     <     |     <     |     <     |     >     |     >     |
+|     $     |     >    |     <     |     <     |     <     |     >     | >     |
 |     &     |     >    |     >     |     <     |     <     |     >     |     >     |
 |     !     |     >    |     >     |     >     |     <     |     >     |     >     |
 |     (     |     <    |     <     |     <     |     <     |     =     ||

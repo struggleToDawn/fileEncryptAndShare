@@ -18,7 +18,7 @@ public class AccessControlParams {
 	private Integer strategyID;
 	private String 	propertyExpression;	
 	private Integer allowCreateFloder;	
-	private Integer allowShareFloder;	
+	private Integer allowRenameFloder;	
 	private Integer allowDeleteFloder;	
 	private Integer allowUploadFile;	
 	private Integer allowDownloadFile;	
@@ -85,11 +85,11 @@ public class AccessControlParams {
 	public void setAllowCreateFloder(Integer allowCreateFloder) {
 		this.allowCreateFloder = allowCreateFloder;
 	}
-	public Integer getAllowShareFloder() {
-		return allowShareFloder;
+	public Integer getAllowRenameFloder() {
+		return allowRenameFloder;
 	}
-	public void setAllowShareFloder(Integer allowShareFloder) {
-		this.allowShareFloder = allowShareFloder;
+	public void setAllowRenameFloder(Integer allowRenameFloder) {
+		this.allowRenameFloder = allowRenameFloder;
 	}
 	public Integer getAllowDeleteFloder() {
 		return allowDeleteFloder;
