@@ -270,10 +270,16 @@ public class FreeGroupController {
 	
 	
 	//删除文件 token,fileid（判断文件owner），提供service根据fileid找到file对象
+		
+		
+	//	public String deleteFile(@RequestParam String token,
+		//		@RequestParam String fgfile_id,@RequestParam String fg_id)
+		
+		
 	@ResponseBody
 	@RequestMapping(value = "/deletefgfile", method = RequestMethod.GET)
 	public String deleteFile(@RequestParam String token,
-			@RequestParam String fgfile_id,@RequestParam String fg_id) {
+			@RequestParam String fgfile_id) {
 		JSONObject result = new JSONObject();
 		//--get user id--//
 		String uuid = "";
@@ -282,9 +288,10 @@ public class FreeGroupController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	//	FreegroupFile fgfile=fgfileService.search_fgfile_info(fgfile_id);
-	//	String fileId=fgfile.getFile_id();
-		File thesharefile=fileService.findFileInfo(fgfile_id);
+		
+		
+		//权限管理，请用下面的 begin 
+/*		File thesharefile=fileService.findFileInfo(fgfile_id);
 		
 		FreeGroup fg=freeGroupService.search_fg_info(fg_id);
 		String file_owner=thesharefile.getOwner();
@@ -304,6 +311,21 @@ public class FreeGroupController {
 			result.put("code", 1);
 			result.put("data", "can not delete");
 		}
+		*/
+		//end
+		
+		
+		
+		//放弃权限管理 begin
+		fileService.deleteFile(fgfile_id);
+		fgfileService.delete_fgfile(fgfile_id);
+		result.put("code", 0);
+		result.put("data", "success");
+		//end
+		
+		
+		
+		
 		return result.toJSONString();
 	}
 	

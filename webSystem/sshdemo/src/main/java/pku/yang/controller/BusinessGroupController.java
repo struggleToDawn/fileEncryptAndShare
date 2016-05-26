@@ -199,7 +199,7 @@ public class BusinessGroupController {
 					json1.put("fileid",rootid);
 					json1.put("date", time);
 					json1.put("size", 0);
-					json.put("type", "folder");	
+					json1.put("type", "folder");	
 					dorjsonarray.add(json1);
 				}				
 				
