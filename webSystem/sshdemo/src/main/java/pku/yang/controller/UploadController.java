@@ -52,6 +52,7 @@ public class UploadController {
 			}
 			path.append(generateFileName());
 			path.append(originalName.substring(originalName.lastIndexOf(".")));
+			System.out.println(path.toString());
 			File tempFile = new File(path.toString());
 			if (!tempFile.getParentFile().exists()) {
 				tempFile.getParentFile().mkdir();

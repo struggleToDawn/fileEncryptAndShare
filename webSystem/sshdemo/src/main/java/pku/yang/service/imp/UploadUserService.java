@@ -3,7 +3,9 @@ package pku.yang.service.imp;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -18,12 +20,20 @@ import pku.yang.model.Student;
 import pku.yang.model.Teacher;
 import pku.yang.model.User;
 import pku.yang.model.UserType;
+import pku.yang.service.IFolderService;
+import pku.yang.service.ISpaceService;
 import pku.yang.service.IUploadUserService;
+import pku.yang.service.IUserService;
 
 @Service
 public class UploadUserService implements IUploadUserService {
 	@Autowired
 	private IUserDao userdao;
+	
+	@Autowired
+	private ISpaceService spaceService;
+	@Autowired
+	private IFolderService folderService;
 
 	/*
 	 * (non-Javadoc)
@@ -79,8 +89,15 @@ public class UploadUserService implements IUploadUserService {
 			teacher.setDepartment(row.getCell(5).getStringCellValue());
 			teacher.setStudyGroup(row.getCell(6).getStringCellValue());
 			teacher.setCourses(row.getCell(7).getStringCellValue());
+			String  uid = "1000";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ctime = df.format(new Date());
+			String FolderId =  folderService.addRootFolder(uid, teacher.getName(), "3", ctime);
+			String storage_id  = spaceService.addSpace(teacher.getName(), 23, FolderId);
 			teachers.add(teacher);
-			users.add(new User(teacher));
+			User user = new User(teacher);
+			user.setStorageID(storage_id);
+			users.add(user);
 		}
 		return teachers;
 	}
@@ -105,8 +122,15 @@ public class UploadUserService implements IUploadUserService {
 			student.setAcademy(row.getCell(5).getStringCellValue());
 			student.setStudygroup(row.getCell(6).getStringCellValue());
 			student.setCourses(row.getCell(7).getStringCellValue());
+			String  uid = "1000";
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String ctime = df.format(new Date());
+			String FolderId =  folderService.addRootFolder(uid, student.getName(), "3", ctime);
+			String storage_id  = spaceService.addSpace(student.getName(), 23, FolderId);
 			students.add(student);
-			users.add(new User(student));
+			User user = new User(student);
+			user.setStorageID(storage_id);
+			users.add(user);
 		}
 		return students;
 	}
