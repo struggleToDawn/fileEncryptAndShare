@@ -21,15 +21,15 @@ public class AttributeToSql {
 	private SessionFactory sessionFactory;
 	
 	
-	private  static HashSet<String> studentSet = new HashSet(Arrays.asList("age", "number","name","courses","department","teacher","group","academy")) ;
+	private  static HashSet<String> studentSet = new HashSet(Arrays.asList("age", "number","name","project","department","teacher","group","academy")) ;
 	
-	private  static HashSet<String> teacherSet = new HashSet(Arrays.asList("age", "number","name","courses","department","duty","group","title")) ;
+	private  static HashSet<String> teacherSet = new HashSet(Arrays.asList("age", "number","name","project","department","duty","group","title")) ;
 
 	private  static HashMap<String,String> studentMap = new HashMap<String, String>(){{
         put("number", "student_id");  
         put("age", "age");  
         put("name", "student_name");  
-        put("courses", "courses");  
+        put("project", "courses");  
         put("group", "study_group");  
         put("teacher", "teacher_id");  
         put("academy", "academy");  
@@ -41,9 +41,10 @@ public class AttributeToSql {
         put("number", "teacher_id");  
         put("age", "age");  
         put("name", "teacher_name");  
-        put("courses", "courses");  
+        put("project", "courses");  
         put("group", "study_group");  
         put("title", "title");  
+        put("duty","duty");
         put("academy", "academy");  
         put("department", "department");  
         
@@ -59,12 +60,22 @@ public class AttributeToSql {
 	String[] attributes= studentAttribute.split(";");
 	
 	for(String s : attributes){
+		System.out.println(s);
 		String[] ss = s.split("=");
 		if(ss.length<2){
-			System.out.println("error");
+			
+			System.out.println(s);
+			System.out.println("error123123123");
 			return false;
 		}else{
-			this.map.put(ss[0],ss[1]);	
+			if(ss[1].equals("professor"))
+			{
+				this.map.put(ss[0], "student");
+			}else if(ss[1].equals("manage")){
+				this.map.put(ss[0], "teacher");
+			}else{
+				this.map.put(ss[0],ss[1]);		
+			}
 		}
 	}
 	

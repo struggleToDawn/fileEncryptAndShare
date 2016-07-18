@@ -3,7 +3,7 @@
 <%@include file="/common/header.jsp"%>
 <html>
 <head>
-	<title>云存储管理中心</title>
+	<title>大数据平台管理中心</title>
 	<%@include file="/common/meta.jsp"%>
 	</head>
 <body>
@@ -38,12 +38,12 @@
 								<label>用户类型</label>
 								<select class="form-control" name ="type" id="type" >
 									<option value="">全部</option>
-									<option value="0">学生</option>
-									<option value="1">教师</option>
+									<option value="0">技术专家</option>
+									<option value="1">科技管理人员</option>
 								</select>
 							</div>
 							<div class = "form-group col-lg-4">
-								<label>学号/职工号</label>
+								<label>编号</label>
 								<input class="form-control" type="text" name ="userID" value="${userID }">
 							</div>
 							<div class = "form-group col-lg-4">
@@ -59,9 +59,9 @@
 						<table data-toggle="table" >
 						    <thead>
 						    <tr>
-						        <th>学号/职工号</th>
+						        <th>编号</th>
 						        <th>姓名</th>
-						        <th>学生/教师</th>
+						        <th>类型</th>
 						        <th width="200px">操作</th>
 						    </tr>
 						    </thead>
@@ -73,10 +73,10 @@
 						    	<td>${user.userID }</td>
 						    	<td>${user.username }</td>
 						    	<td><c:if test="${user.type == '0' }">
-						    			学生
+						    			技术专家
 						    		</c:if>
 						    		<c:if test="${user.type == '1' }">
-						    			教师
+						    			科技管理人员
 						    		</c:if>
 						    		</td>
 						    	<td >

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <form id="s_form" class="form-horizontal" action="${ctx}/user/student" method="post" onsubmit="javascript:submitForm(this,'s')">
 	<div class="form-group col-lg-6" id = "div_id_s">
-		<label class="col-lg-3 control-label">学号：</label>
+		<label class="col-lg-3 control-label">编号：</label>
 		<div class="col-lg-9">
 			<input type="text" class="form-control " id="id" name="id" onchange="javascript:checkusr(this.value,'s');"
 				pattern="^[A-Za-z0-9]+$" required="required"  placeholder="只能输入数字和字母" value="${user.id }">
@@ -22,36 +22,30 @@
 				value="${user.age }">
 		</div>
 	</div>
+	
 	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">导师：</label>
-		<div class="col-lg-9">
-			<input type="text" class="form-control " id="teacherID"
-				name="teacherID" value="${user.teacherID }">
-		</div>
-	</div>
-	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">所属院系：</label>
+		<label class="col-lg-3 control-label">所属单位：</label>
 		<div class="col-lg-9">
 			<input type="text" class="form-control " id="department"
 				name="department" value="${user.department }">
 		</div>
 	</div>
 	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">所属学苑：</label>
+		<label class="col-lg-3 control-label">职称：</label>
 		<div class="col-lg-9">
 			<input type="text" class="form-control " id="academy" name="academy"
 				value="${user.academy }">
 		</div>
 	</div>
 	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">所属研究组：</label>
+		<label class="col-lg-3 control-label">研究领域：</label>
 		<div class="col-lg-9">
 			<input type="text" class="form-control " id="studyGroup"
 				name="studyGroup" value="${user.studygroup }">
 		</div>
 	</div>
 	<div class="form-group col-lg-6">
-		<label class="col-lg-3 control-label">所选课程：</label>
+		<label class="col-lg-3 control-label">负责的项目编号：</label>
 		<div class="col-lg-9">
 			<input type="text" class="form-control " id="courses" name="courses"
 				value="${user.courses }">

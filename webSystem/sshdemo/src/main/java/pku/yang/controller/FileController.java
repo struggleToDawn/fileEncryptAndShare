@@ -75,6 +75,8 @@ public class FileController {
 //			result.put("data", data);
 //			return result.toJSONString();
 //	}
+	
+
 	@ResponseBody
 	@RequestMapping(value = "/uploadfile", method = RequestMethod.GET)
 	public String uploadFile(@RequestParam String token,
@@ -100,11 +102,26 @@ public class FileController {
 		String[] nameStr = fullname.split("\\.");
 		Folder folder = new Folder();
 		folder = folderService.findFolderInfo(folderId);
+		JSONObject result = new JSONObject();
+		JSONArray data = new JSONArray();
+		//判断重名
+		List<File> filelist = fileService.FileList();
+		for(int i=0;i<filelist.size();i++){
+			if(filelist.get(i).getFolderId().equals(folderId)){
+				System.out.println(filelist.get(i).toString());
+				if(filelist.get(i).getFile_name().equals(nameStr[0])){
+					result.put("code", 1);
+					result.put("data", "Duplicate entry  for file name ");
+					return result.toJSONString();
+				}
+				
+			}
+		}
+		
 		String integrity_type = folder.getIntegrityType();
 		String share_type = folder.getShareType();
 		fileService.addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "",integrity_type,share_type);
-		JSONObject result = new JSONObject();
-		JSONArray data = new JSONArray();
+		
 		result.put("code",0);
 		JSONObject subData = new JSONObject();
 		subData.put("fileid", fileId);
@@ -142,6 +159,75 @@ public class FileController {
 		result.put("data", data);
 		return result.toJSONString();
 	}
+	
+	
+//	@ResponseBody
+//	@RequestMapping(value = "/uploadfile", method = RequestMethod.GET)
+//	public String uploadFile(@RequestParam String token,
+//			@RequestParam String folderId,
+//			@RequestParam String fullname) {
+//		//--generate upload time--//
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//		Date date = new Date();
+//		String uploadtime = format.format(date);
+//		//--generate file id--//
+//		String fileId = "1";
+//		fileId = fileId + Long.toString(date.getTime());
+//		int randomNumber = (int)(Math.random()*1000);
+//		fileId = fileId + Integer.toString(randomNumber);
+//		//--get user id--//
+//		String userId = "";
+//		try{
+//			userId = DESUtil.getUidBytoken(token);
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//		//--parse file name--//
+//		String[] nameStr = fullname.split("\\.");
+//		Folder folder = new Folder();
+//		folder = folderService.findFolderInfo(folderId);
+//		String integrity_type = folder.getIntegrityType();
+//		String share_type = folder.getShareType();
+//		fileService.addFile(fileId, nameStr[0], folderId, userId, uploadtime,nameStr[1], "",integrity_type,share_type);
+//		JSONObject result = new JSONObject();
+//		JSONArray data = new JSONArray();
+//		result.put("code",0);
+//		JSONObject subData = new JSONObject();
+//		subData.put("fileid", fileId);
+//		subData.put("filename", fullname);
+//		subData.put("uid", userId);
+//		data.add(subData);
+//		//-----获取文件列表-----//
+////		List<File> filelist = fileService.getFilesByUserId(userId);
+////		for(int i=0;i<filelist.size();i++){
+////			JSONObject temp = new JSONObject();
+////			temp.put("fileid", filelist.get(i).getFile_id());
+////			temp.put("parentid", filelist.get(i).getFolderId());
+////			temp.put("filename", filelist.get(i).getFile_name());
+////			temp.put("type","file");
+////			temp.put("date", filelist.get(i).getUpload_time());
+////			temp.put("size",0);
+////			temp.put("TPA",0);
+////			temp.put("share",0);
+////			data.add(temp);
+////		}
+////		//-----获取文件夹列表-----//
+////		List<Folder> folderlist = folderService.getFoldersByUserId(userId);
+////		for(int i=0;i<folderlist.size();i++){
+////			JSONObject temp = new JSONObject();
+////			temp.put("fileid", folderlist.get(i).getFolderID());
+////			temp.put("parentid", folderlist.get(i).getFatherID());
+////			temp.put("filename", folderlist.get(i).getName());
+////			temp.put("type","directory");
+////			temp.put("date", folderlist.get(i).getCreateDate());
+////			temp.put("size",0);
+////			temp.put("TPA",0);
+////			temp.put("share",0);
+////			data.add(temp);
+////		}
+//		result.put("data", data);
+//		return result.toJSONString();
+//	}
 	@ResponseBody
 	@RequestMapping(value = "/deletefile", method = RequestMethod.GET)
 	public String deleteFile(@RequestParam String token,

@@ -174,7 +174,7 @@ public class BusinessGroupController {
 						dorjsonarray.add(obj);			
 					}
 				}
-				System.out.println(2);
+
 				String storageId = userService.getStorageId(uid);
 				JSONObject json = new JSONObject();
 				json.put("parentid", "3");
@@ -258,6 +258,7 @@ public class BusinessGroupController {
 		adminIds = adminIds.substring(1);
 		
 		String uAttrss[] = uAttrs.split("\\|\\|");
+		
 		for(int i = 0 ; i< uAttrss.length;i++){
 			if(uAttrss[i]!=null){
 				if(userAttributeToSql.check(uAttrss[i])){

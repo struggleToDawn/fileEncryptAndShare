@@ -3,7 +3,7 @@
 <%@include file="/common/header.jsp"%>
 <html>
 <head>
-	<title>云存储管理中心</title>
+	<title>大数据平台管理中心</title>
 	<%@include file="/common/meta.jsp"%>
 	</head>
 <body>

@@ -213,9 +213,11 @@ public class UserController {
 			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam(defaultValue = "0") int age,
-			@RequestParam String teacherID, @RequestParam String department,
-			@RequestParam String academy, @RequestParam String studyGroup,
-			@RequestParam String courses) {
+			@RequestParam(defaultValue="") String teacherID, 
+			@RequestParam(defaultValue="") String department,
+			@RequestParam(defaultValue="") String academy, 
+			@RequestParam(defaultValue="") String studyGroup,
+			@RequestParam(defaultValue="") String courses) {
 	
 
 		if (userService.isExistUser(id)) {
@@ -254,12 +256,11 @@ public class UserController {
 			HttpServletRequest request, 
 			@RequestParam String name,
 			@RequestParam(defaultValue = "0") int age,
-			@RequestParam String title, @RequestParam String duty,
-			@RequestParam String department, @RequestParam String studyGroup,
-			@RequestParam String courses) {
-		
-		
-		
+			@RequestParam (defaultValue="")String title, 
+			@RequestParam(defaultValue="") String duty,
+			@RequestParam(defaultValue="") String department, 
+			@RequestParam(defaultValue="") String studyGroup,
+			@RequestParam(defaultValue="") String courses) {
 		if (userService.isExistUser(id)) {
 			userService.saveTeacher(id, name, age, title, duty, department,
 					studyGroup, courses);
