@@ -31,6 +31,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import pku.yang.tool.DESUtil;
+import pku.yang.tool.HttpTools;
+
 @Controller
 @RequestMapping("/folder")
 public class FolderController {
@@ -145,19 +147,31 @@ public class FolderController {
 		
 		try{
 			
-			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowCreateFloder");
-		
-			String res =  map.get("allowCreateFloder");
-			System.out.println("123123"+ res);
 			JSONObject result = new JSONObject();
-			if(res.equals("0")){
-				result.put("code", 1);
-				result.put("data", "fail");	
-			}else{
-				result.put("code", 0);
+		   	Integer access = HttpTools.getAccess(token, "1", parentid, "allowCreateFloder");
+		   	if(access == 1){
+		   		result.put("code", 0);
 				result.put("data", "ok");
-			}
-			return result.toJSONString();
+		   	}else{
+		   		result.put("code", 1);
+				result.put("data", "fail");	
+		   	}
+			
+		   	return result.toJSONString();
+			
+//			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid, "allowCreateFloder");
+//		
+//			String res =  map.get("allowCreateFloder");
+//			System.out.println("123123"+ res);
+//			JSONObject result = new JSONObject();
+//			if(res.equals("0")){
+//				result.put("code", 1);
+//				result.put("data", "fail");	
+//			}else{
+//				result.put("code", 0);
+//				result.put("data", "ok");
+//			}
+//			return result.toJSONString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -175,19 +189,35 @@ public class FolderController {
 			@RequestParam String Fileid) {
 
 		try{
-			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFile");
-		
-			String res =  map.get("allowDeleteFile");
-			System.out.println(res);
+			
+			
 			JSONObject result = new JSONObject();
-			if(res.equals("0")){
-				result.put("code", 1);
-				result.put("data", "fail");	
-			}else{
-				result.put("code", 0);
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDeleteFile");
+		   	if(access == 1){
+		   		result.put("code", 0);
 				result.put("data", "ok");
-			}
-			return result.toJSONString();
+		   	}else{
+		   		result.put("code", 1);
+				result.put("data", "fail");	
+		   	}
+			
+		   	return result.toJSONString();
+			
+			
+			
+//			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFile");
+//		
+//			String res =  map.get("allowDeleteFile");
+//			System.out.println(res);
+//			JSONObject result = new JSONObject();
+//			if(res.equals("0")){
+//				result.put("code", 1);
+//				result.put("data", "fail");	
+//			}else{
+//				result.put("code", 0);
+//				result.put("data", "ok");
+//			}
+//			return result.toJSONString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -205,19 +235,33 @@ public class FolderController {
 			@RequestParam String Fileid) {
 
 		try{
-			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFloder");
 		
-			String res =  map.get("allowDeleteFloder");
-			System.out.println(res);
 			JSONObject result = new JSONObject();
-			if(res.equals("0")){
-				result.put("code", 1);
-				result.put("data", "fail");	
-			}else{
-				result.put("code", 0);
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDeleteFloder");
+		   	if(access == 1){
+		   		result.put("code", 0);
 				result.put("data", "ok");
-			}
-			return result.toJSONString();
+		   	}else{
+		   		result.put("code", 1);
+				result.put("data", "fail");	
+		   	}
+			
+		   	return result.toJSONString();
+			
+			
+//			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDeleteFloder");
+//		
+//			String res =  map.get("allowDeleteFloder");
+//			System.out.println(res);
+//			JSONObject result = new JSONObject();
+//			if(res.equals("0")){
+//				result.put("code", 1);
+//				result.put("data", "fail");	
+//			}else{
+//				result.put("code", 0);
+//				result.put("data", "ok");
+//			}
+//			return result.toJSONString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -251,16 +295,29 @@ public class FolderController {
 			result.put("ABE", "normal");
 		}
 		try{
-			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid+"d", "allowUploadFile");
-		
-			String res =  map.get("allowUploadFile");
-			System.out.println(res);
-			if(res.equals("0")){
-				result.put("code", 1);
-			}else{
-				result.put("code", 0);
-			}
-			return result.toJSONString();
+			
+			
+
+		   	Integer access = HttpTools.getAccess(token, "1", parentid+"d", "allowUploadFile");
+		   	if(access == 1){
+		   		result.put("code", 0);
+				result.put("data", "ok");
+		   	}else{
+		   		result.put("code", 1);
+				result.put("data", "fail");	
+		   	}
+			
+		   	return result.toJSONString();
+//			Map<String,String> map = accessControlService.queryAccess(token, 1, parentid+"d", "allowUploadFile");
+//		
+//			String res =  map.get("allowUploadFile");
+//			System.out.println(res);
+//			if(res.equals("0")){
+//				result.put("code", 1);
+//			}else{
+//				result.put("code", 0);
+//			}
+//			return result.toJSONString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -282,16 +339,29 @@ public class FolderController {
 			result.put("data", "normal");
 		}
 		try{
-			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDownloadFile");
-		
-			String res =  map.get("allowDownloadFile");
-			System.out.println(res);
-			if(res.equals("0")){
-				result.put("code", 1);
-			}else{
-				result.put("code", 0);
-			}
-			return result.toJSONString();
+			
+			
+
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDownloadFile");
+		   	if(access == 1){
+		   		result.put("code", 0);
+				result.put("data", "ok");
+		   	}else{
+		   		result.put("code", 1);
+				result.put("data", "fail");	
+		   	}
+		   	return result.toJSONString();
+			
+//			Map<String,String> map = accessControlService.queryAccess(token, 1, Fileid, "allowDownloadFile");
+//		
+//			String res =  map.get("allowDownloadFile");
+//			System.out.println(res);
+//			if(res.equals("0")){
+//				result.put("code", 1);
+//			}else{
+//				result.put("code", 0);
+//			}
+//			return result.toJSONString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

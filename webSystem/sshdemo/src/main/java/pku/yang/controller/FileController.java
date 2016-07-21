@@ -74,6 +74,8 @@ public class FileController {
 //			}
 //			result.put("data", data);
 //			return result.toJSONString();
+	
+	
 //	}
 	
 
@@ -98,6 +100,9 @@ public class FileController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		
+		
 		//--parse file name--//
 		String[] nameStr = fullname.split("\\.");
 		Folder folder = new Folder();
@@ -128,6 +133,9 @@ public class FileController {
 		subData.put("filename", fullname);
 		subData.put("uid", userId);
 		data.add(subData);
+		
+		
+		
 		//-----获取文件列表-----//
 //		List<File> filelist = fileService.getFilesByUserId(userId);
 //		for(int i=0;i<filelist.size();i++){
@@ -233,6 +241,9 @@ public class FileController {
 	public String deleteFile(@RequestParam String token,
 			@RequestParam String fileId) {
 		JSONObject result = new JSONObject();
+		
+		
+		
 		//--get user id--//
 		String userId = "";
 		try{
@@ -251,6 +262,8 @@ public class FileController {
 			@RequestParam String fileId) {
 		JSONObject result = new JSONObject();
 		//--get user id--//
+		
+		
 		String userId = "";
 		try{
 			userId = DESUtil.getUidBytoken(token);
@@ -283,6 +296,8 @@ public class FileController {
 			@RequestParam String uploadtime,
 			@RequestParam String expname,
 			@RequestParam String cloudpath) {
+		
+		
 		System.out.println("Testlog: 111---addFile of FileController");
 		String integrity_type = "0";String share_type = "0";
 		fileService.addFile(id, name, folder, owner, uploadtime,expname, cloudpath,integrity_type,share_type);
@@ -305,6 +320,8 @@ public class FileController {
 		JSONObject resultjson = new JSONObject();
 		JSONArray dorjsonarray = new JSONArray();
 		for(int i=0;i<list.size();i++){
+			
+			
 			JSONObject json1 = new JSONObject();
 			json1.put("id",list.get(i).getFile_id());
 			json1.put("name", list.get(i).getFile_name());
