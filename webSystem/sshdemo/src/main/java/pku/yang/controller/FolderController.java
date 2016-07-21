@@ -148,7 +148,7 @@ public class FolderController {
 		try{
 			
 			JSONObject result = new JSONObject();
-		   	Integer access = HttpTools.getAccess(token, "1", parentid, "allowCreateFloder");
+		   	Integer access = HttpTools.getAccess(token, "1", parentid, "createFloder");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
@@ -192,7 +192,7 @@ public class FolderController {
 			
 			
 			JSONObject result = new JSONObject();
-		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDeleteFile");
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "deleteFile");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
@@ -237,7 +237,7 @@ public class FolderController {
 		try{
 		
 			JSONObject result = new JSONObject();
-		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDeleteFloder");
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "deleteFloder");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
@@ -298,7 +298,7 @@ public class FolderController {
 			
 			
 
-		   	Integer access = HttpTools.getAccess(token, "1", parentid+"d", "allowUploadFile");
+		   	Integer access = HttpTools.getAccess(token, "1", parentid+"d", "uploadFile");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
@@ -342,7 +342,7 @@ public class FolderController {
 			
 			
 
-		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "allowDownloadFile");
+		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "downloadFile");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
