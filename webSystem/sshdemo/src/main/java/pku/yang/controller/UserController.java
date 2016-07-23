@@ -78,7 +78,7 @@ public class UserController {
 		User user;
 		try {
 			user = userService.login(id, password);
-			if(user.getRole().isCommonUser||user.getRole().isGroupMng){
+			if(user.getRoleNum() == 0){
 				request.getSession().setAttribute("sessionname", id);
 				
 				JSONArray jsonarray = new JSONArray();
