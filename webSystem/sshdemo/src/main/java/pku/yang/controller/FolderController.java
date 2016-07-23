@@ -56,7 +56,7 @@ public class FolderController {
 	
 	//完整性可选设置，通过发送token，文件id和”setTPA”，对文件完整性进行设置，添加记录，并返回成功信息。update by weishijia
 	@ResponseBody
-	@RequestMapping(value = "/setTPA", method = RequestMethod.GET)
+	@RequestMapping(value = "/setTPA", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String setTPA(@RequestParam String token,
 			@RequestParam String fileid) {
 		
@@ -103,7 +103,7 @@ public class FolderController {
 	
 	//-----以下是正式的接口代码-----//
 	@ResponseBody
-	@RequestMapping(value = "/createdirectory", method = RequestMethod.GET)
+	@RequestMapping(value = "/createdirectory", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String createFolder(@RequestParam String token,
 			@RequestParam String filename,
 			@RequestParam String fatherId) {
@@ -140,7 +140,7 @@ public class FolderController {
 	//------add by caoke----//
 	//创建共享文件夹权限检查,发送token，父级目录id以及“Cancreatedirectory”，返回是否有管理员权限能够创建，//
 	@ResponseBody
-	@RequestMapping(value = "/Cancreatedirectory", method = RequestMethod.GET)
+	@RequestMapping(value = "/Cancreatedirectory", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String Cancreatedirectory(@RequestParam String token,
 			@RequestParam String parentid) {
 		
@@ -184,7 +184,7 @@ public class FolderController {
 	
 	//删除文件权限检查，发送文件id，token，“Candeletefile”关键字，返回是否有管理员权限能够删除//
 	@ResponseBody
-	@RequestMapping(value = "/Candeletefile", method = RequestMethod.GET)
+	@RequestMapping(value = "/Candeletefile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String Candeletefile(@RequestParam String token,
 			@RequestParam String Fileid) {
 
@@ -230,7 +230,7 @@ public class FolderController {
 	
 	//删除文件夹权限检查，发送文件夹id，token，“CandeleteDirctory”关键字，返回是否有管理员权限能够删除，若能删除，将文件夹下的所有文件都删除掉
 	@ResponseBody
-	@RequestMapping(value = "/CandeleteDirctory", method = RequestMethod.GET)
+	@RequestMapping(value = "/CandeleteDirctory", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String CandeleteDirctory(@RequestParam String token,
 			@RequestParam String Fileid) {
 
@@ -274,7 +274,7 @@ public class FolderController {
 	
 	//上传文件权限检查，发送父级目录id，token，“Canuploadfile”关键字，返回上传类型（ABE或TPA或普通）。
 	@ResponseBody
-	@RequestMapping(value = "/Canuploadfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/Canuploadfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String Canuploadfile(@RequestParam String token,
 			@RequestParam String parentid) {
 		JSONObject result = new JSONObject();//全都没有判错
@@ -326,7 +326,7 @@ public class FolderController {
 	
 	//下载文件权限检查，发送文件id，token，“Candownloadfile”关键字，返回下载文件的类型（ABE或普通）
 	@ResponseBody
-	@RequestMapping(value = "/Candownloadfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/Candownloadfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String Candownloadfile(@RequestParam String token,
 			@RequestParam String Fileid) {
 		JSONObject result = new JSONObject();
@@ -370,7 +370,7 @@ public class FolderController {
 	
 	//文件完整性验证权限检查，发送文件id，token，“checkfile”关键字，返回该文件是否支持完整性验证
 	@ResponseBody
-	@RequestMapping(value = "/checkfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String checkfile(@RequestParam String token,
 			@RequestParam String Fileid) {
 		JSONObject result = new JSONObject();
@@ -388,7 +388,7 @@ public class FolderController {
 	
 	//通过token以及“listAllFile”，返回该用户所有文件（包含所有空间文件）
 		@ResponseBody
-		@RequestMapping(value = "/listAllFile", method = RequestMethod.GET)
+		@RequestMapping(value = "/listAllFile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 		public String listAllFile(@RequestParam String token) {
 			JSONObject result = new JSONObject();
 			JSONArray data = new JSONArray();
@@ -453,7 +453,7 @@ public class FolderController {
 	
 	//发送文件id，“listfile”和token，返回文件id下的所有文件
 	@ResponseBody
-	@RequestMapping(value = "/listfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/listfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String listfile(@RequestParam String token,
 			@RequestParam String Fileid) {
 		/*String uid = new String();
@@ -538,7 +538,7 @@ public class FolderController {
 	 * @param integrityType
 	 * @return
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String saveTeacher(@RequestParam String id,
 			@RequestParam String name,
 			@RequestParam String fatherId,
@@ -566,7 +566,7 @@ public class FolderController {
 	 * @param size
 	 * @return
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String listFolder(Model model) {
 		int code=200;
 		List<Folder> list = folderService.FolderList();
@@ -597,7 +597,7 @@ public class FolderController {
 	 * @param size
 	 * @return
 	 */
-	@RequestMapping(value = "/rename", method = RequestMethod.GET)
+	@RequestMapping(value = "/rename", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String renameFolder(@RequestParam String id,
 			@RequestParam String name) {
 		Folder folder = folderService.findFolderInfo(id);
@@ -615,7 +615,7 @@ public class FolderController {
 	 * @param size
 	 * @return
 	 */
-	@RequestMapping(value = "/move", method = RequestMethod.GET)
+	@RequestMapping(value = "/move", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String moveFolder(@RequestParam String id,
 			@RequestParam String fatherID) {
 		Folder folder = folderService.findFolderInfo(id);
@@ -634,7 +634,7 @@ public class FolderController {
 	 */
 	
 	//删除文件夹，发送文件夹id，token，“deleteDirctory”关键字，返回删除文件夹之后的文件目录，并将文件夹下的所有文件都删除掉
-	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteDirctory", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteFolder(@RequestParam String id,
 			@RequestParam String token) {
 		/*String uid = new String();

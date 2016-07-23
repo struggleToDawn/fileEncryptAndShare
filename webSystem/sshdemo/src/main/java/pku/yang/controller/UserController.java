@@ -44,7 +44,7 @@ public class UserController {
 	@Autowired
 	private ITokenService tokenService;
 
-	@RequestMapping(value = "/adminLogin", method = RequestMethod.POST)
+	@RequestMapping(value = "/adminLogin", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String adminLogin(Model model, String id, String password,
 			HttpServletRequest request) {
 		User user;
@@ -72,7 +72,7 @@ public class UserController {
 	}
 	
 	@ResponseBody 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String login( String id, String password,
 			HttpServletRequest request) {
 		User user;
@@ -108,7 +108,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String logout(Model model, String id, String password,
 			HttpServletRequest request) {
 	
@@ -118,13 +118,13 @@ public class UserController {
 		
 	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/add", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String addUser(Model model) {
 		model.addAttribute("readonly", false);
 		return "usermanage/add_user";
 	}
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String getList(Model model) {
 		return this.listUser(model, "", "", "", 1, 10);
 	}
@@ -138,7 +138,7 @@ public class UserController {
 	 * @param size
 	 * @return user list
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/list", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String listUser(Model model, @RequestParam(defaultValue = "") String type,
 			@RequestParam(defaultValue = "") String name,
 			@RequestParam(defaultValue = "") String userID,
@@ -160,7 +160,7 @@ public class UserController {
 		return "usermanage/list_user";
 	}
 	
-	@RequestMapping(value = "/edit/{userID}/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit/{userID}/{type}", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String editUser(Model model, @PathVariable String userID,
 			@PathVariable String type){
 		if (type.equals("0")) {
@@ -181,7 +181,7 @@ public class UserController {
 	 * @param type
 	 * @return
 	 */
-	@RequestMapping(value = "/info/{userID}/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/info/{userID}/{type}", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String UserInfo(Model model, @PathVariable String userID,
 			@PathVariable String type) {
 		if (type.equals("0")) {
@@ -208,7 +208,7 @@ public class UserController {
 	 * @param courses
 	 * @return
 	 */
-	@RequestMapping(value = "/student", method = RequestMethod.POST)
+	@RequestMapping(value = "/student", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String saveStudent(Model model,@RequestParam String id,
 			HttpServletRequest request, 
 			@RequestParam String name,
@@ -251,7 +251,7 @@ public class UserController {
 	 * @param courses
 	 * @return
 	 */
-	@RequestMapping(value = "/teacher", method = RequestMethod.POST)
+	@RequestMapping(value = "/teacher", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String saveTeacher(Model model,@RequestParam String id,
 			HttpServletRequest request, 
 			@RequestParam String name,
@@ -284,7 +284,7 @@ public class UserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/delete/{userID}/{type}", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete/{userID}/{type}", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteUser(@PathVariable String userID,@PathVariable String type) {
 		userService.deleteUser(userID,type);
 		JSONObject jsonData = new JSONObject();
@@ -294,7 +294,7 @@ public class UserController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value="/isExist/{userID}", method = RequestMethod.GET)
+	@RequestMapping(value="/isExist/{userID}", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String isExist(@PathVariable String userID){
 		JSONObject jsonData = new JSONObject();
 		if(userService.isExistUser(userID)){

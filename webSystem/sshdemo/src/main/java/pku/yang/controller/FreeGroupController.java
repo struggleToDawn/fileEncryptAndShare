@@ -56,7 +56,7 @@ public class FreeGroupController {
 	
 	// 创建自由群组
 	@ResponseBody
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String add_fg(String token,String fg_name, String fg_userlist,
 			HttpServletRequest request) throws Exception {
 		String uuid=DESUtil.getUidBytoken(token);
@@ -89,7 +89,7 @@ public class FreeGroupController {
 	}
 
 	// 添加自由群组用户
-	@RequestMapping(value = "/add_user", method = RequestMethod.POST)
+	@RequestMapping(value = "/add_user", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	String add_user(@RequestParam String fg_id, @RequestParam String user_id) {
 		freeGroupService.add_user(fg_id, user_id);
 		return "freegroupmanage/add_user";
@@ -97,7 +97,7 @@ public class FreeGroupController {
 
 	//得到该用户所属的所有自由群组
 	@ResponseBody
-	@RequestMapping(value = "/fgOfUser", method = RequestMethod.GET)
+	@RequestMapping(value = "/fgOfUser", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String fgOfUser(@RequestParam String token) throws Exception 
 	{
 		//String uuid=DESUtil.getUidBytoken(token);
@@ -127,7 +127,7 @@ public class FreeGroupController {
 	
 	//所有的自由群组列表，暂时没用
 	@ResponseBody
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String listFg(Model model) {
 		int code = 0;
 		List<FreeGroup> list = freeGroupService.fg_list();
@@ -151,7 +151,7 @@ public class FreeGroupController {
 
 	// 删除自由群组
 	@ResponseBody
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String delete_fg(@RequestParam String token,@RequestParam String fg_id) {
 		String userId = "";
 		try{
@@ -249,7 +249,7 @@ public class FreeGroupController {
 	//文件夹和文件？？？
 		//分享文件,类似上传  token,parentid,fileid，通过fileid可以定位到原文件，然后保存一条记录
 		@ResponseBody
-		@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET)
+		@RequestMapping(value = "/sharefiletofg", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 		public String sharefile(@RequestParam String token,@RequestParam String fileid,
 				@RequestParam String folderid) {
 			String uuid = "";
@@ -277,7 +277,7 @@ public class FreeGroupController {
 		
 		
 	@ResponseBody
-	@RequestMapping(value = "/deletefgfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/deletefgfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteFile(@RequestParam String token,
 			@RequestParam String fgfile_id) {
 		JSONObject result = new JSONObject();
@@ -333,7 +333,7 @@ public class FreeGroupController {
 	//下载文件token,fileid
 	//
 	@ResponseBody
-	@RequestMapping(value = "/downloadfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/downloadfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String downloadFile(@RequestParam String token,
 			@RequestParam String fgfile_id) {
 		JSONObject result = new JSONObject();

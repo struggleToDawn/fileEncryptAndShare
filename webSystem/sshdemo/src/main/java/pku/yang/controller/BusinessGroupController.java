@@ -133,7 +133,7 @@ public class BusinessGroupController {
 	
 	
 	@ResponseBody 
-	@RequestMapping(value="getServiceGroupFile",method=RequestMethod.GET)
+	@RequestMapping(value="getServiceGroupFile",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public String getServiceGroupFile(@RequestParam String token){
 		String uid = new String();
 		try{
@@ -221,7 +221,7 @@ public class BusinessGroupController {
 	}
 	
 	
-	@RequestMapping(value = "/addGroup", method = RequestMethod.POST)
+	@RequestMapping(value = "/addGroup", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String addGroup(
 			Model model,
 			HttpServletRequest request, 
@@ -309,7 +309,7 @@ public class BusinessGroupController {
 	
 	
 
-	@RequestMapping(value = "/updateGroup", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateGroup", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String updateGroup(
 			Model model,
 			@RequestParam String id,
@@ -429,7 +429,7 @@ public class BusinessGroupController {
 	}
 
 	@ResponseBody 
-	@RequestMapping(value = "/data", method = RequestMethod.GET)
+	@RequestMapping(value = "/data", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String getData( ) {
 	
 		List<BusinessGroup> list = businessGroup.getBussinessGroupList();
@@ -455,14 +455,14 @@ public class BusinessGroupController {
 	}
 
 	
-	@RequestMapping(value ="/getList" , method = RequestMethod.GET)
+	@RequestMapping(value ="/getList" , method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String getList(){
 		
 		return "groupmanage/list_group";
 	}
 	
 	
-	@RequestMapping(value ="/update" , method = RequestMethod.GET)
+	@RequestMapping(value ="/update" , method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String update(Model model,@RequestParam String id){
 		
 		BusinessGroup groupModel = businessGroup.findGroupInfo(id);
@@ -471,7 +471,7 @@ public class BusinessGroupController {
 		return "groupmanage/update_group";
 	}
 	
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteFolder(@RequestParam String id) {
 		businessGroup.deleteGroup(id);
 		return "groupmanage/list_group";

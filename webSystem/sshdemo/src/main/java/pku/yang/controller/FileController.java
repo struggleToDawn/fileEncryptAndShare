@@ -80,7 +80,7 @@ public class FileController {
 	
 
 	@ResponseBody
-	@RequestMapping(value = "/uploadfile", method = RequestMethod.GET)
+	@RequestMapping(value = "/uploadfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String uploadFile(@RequestParam String token,
 			@RequestParam String folderId,
 			@RequestParam String fullname) {
@@ -237,7 +237,7 @@ public class FileController {
 //		return result.toJSONString();
 //	}
 	@ResponseBody
-	@RequestMapping(value = "/deletefile", method = RequestMethod.GET)
+	@RequestMapping(value = "/deletefile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteFile(@RequestParam String token,
 			@RequestParam String fileId) {
 		JSONObject result = new JSONObject();
@@ -257,7 +257,7 @@ public class FileController {
 		return result.toJSONString();
 	}
 	@ResponseBody
-	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/downloadfile", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String downloadFile(@RequestParam String token,
 			@RequestParam String fileId) {
 		JSONObject result = new JSONObject();
@@ -288,7 +288,7 @@ public class FileController {
 	 * @param cloudpath
 	 * @return
 	 */
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST ,produces = "text/html;charset=UTF-8")
 	public String saveFile(@RequestParam String id,
 			@RequestParam String name,
 			@RequestParam String folder,
@@ -312,7 +312,7 @@ public class FileController {
 	 * @param name
 	 * @return
 	 */
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String listFile(Model model) {
 		int code=200;
 		List<File> list = fileService.FileList();
@@ -344,7 +344,7 @@ public class FileController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String deleteFolder(@RequestParam String id) {
 		fileService.deleteFile(id);
 		return "filemanage/add_file";
