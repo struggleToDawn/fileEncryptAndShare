@@ -328,7 +328,8 @@ public class FolderController {
 	@ResponseBody
 	@RequestMapping(value = "/Candownloadfile", method = RequestMethod.GET ,produces = "text/html;charset=UTF-8")
 	public String Candownloadfile(@RequestParam String token,
-			@RequestParam String Fileid) {
+			@RequestParam String Fileid,
+			@RequestParam String parentid) {
 		JSONObject result = new JSONObject();
 		File file = fileService.findFileInfo(Fileid);
 		String abe = file.getShareType();
@@ -342,7 +343,7 @@ public class FolderController {
 			
 			
 
-		   	Integer access = HttpTools.getAccess(token, "1", Fileid, "downloadFile");
+		   	Integer access = HttpTools.getAccess(token, "1", parentid, "downloadFile");
 		   	if(access == 1){
 		   		result.put("code", 0);
 				result.put("data", "ok");
